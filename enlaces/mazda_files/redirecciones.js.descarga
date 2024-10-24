@@ -1,0 +1,23 @@
+function redirigirURL() {
+    // Objeto que mapea URLs de origen a URLs de destino
+    const redirecciones = {
+      "https://www.mazda.com.co/diseno/kodo---alma-del-movimiento/": "https://www.mazda.com.co/por-que-mazda/diseno-kodo/",
+      "https://www.mazda.com.co/tecnologia/tecnologia-skyactiv/": "https://www.mazda.com.co/hibridos-seccion",
+      "https://www.mazda.com.co/Principal/conocenos/": "https://www.mazda.com.co/por-que-mazda/diseno-kodo/",
+      "https://www.mazda.com.co/servicio-al-cliente/campanas-de-servicio/": "https://www.mazda.com.co/propietarios/Servicio/"
+    };
+  
+    // URL actual de la página
+    const urlActual = window.location.href;
+  
+    // Comprobar si la URL actual tiene una redirección en el objeto
+    if (redirecciones[urlActual]) {
+      // Redirigir a la nueva URL
+      window.location.href = redirecciones[urlActual];
+    }
+  }
+  
+  // Esperar a que se cargue la página completamente
+  document.addEventListener('DOMContentLoaded', function() {
+    redirigirURL();
+  });

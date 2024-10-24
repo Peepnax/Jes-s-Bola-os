@@ -1,0 +1,132 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.titeVehiculeMenu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+    font-size: 25px;
+    text-transform: uppercase;
+    box-sizing: border-box;
+    margin: 0;
+    flex-direction: column;
+}
+.textIntroduccionVehi{
+    text-transform: lowercase;
+    text-align: center;
+    width: 60%;
+}
+.textIntroduccionVehi:first-letter{
+    text-transform: uppercase;
+}
+
+.CategoriVehi {
+    padding: 40px;
+}
+
+.hrLineSup {
+    border-color: #910A2D!important;
+}
+.divider, hr{
+    background-color: #910A2D!important;
+    width: 100%;
+    max-width: 100%!important;
+    margin-left: auto;
+    margin-right: auto;
+    height: 1px;
+    padding: 0;
+    border: 0;
+    opacity: 1!important;
+    margin-top: 0px!important;
+    margin-bottom: 0px!important;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.CategoriVehiTitle {
+    padding-top: 20px;
+}
+
+.contentCardMenuVehi {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 90%;
+    margin-left: 60px;
+    gap: 50px;
+    flex-wrap: wrap;
+}
+
+.cardVehiMenu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 300px;
+    border: solid 1px #4f4f4f;
+    border-radius: 4px;
+    padding: 40px;
+}
+
+.cardVehiMenu:hover {
+    box-shadow: 2px 12px 15px #999;
+    transform: translateY(-2px);
+}
+
+.titleShowroomCar {
+    font-size: 16px;
+    margin-bottom: 0!important;
+}
+
+.ctaKnowMore {
+    background: #000;
+    padding: 11px 20px;
+    color: #fff;
+    font-size: 15px;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.ctaKnowMore:hover {
+    background: #910A2D;
+    padding: 11px 20px;
+    color: #fff;
+    font-size: 15px;
+    margin-top: 20px;
+}
+
+.noDecoration {
+    text-decoration: none;
+}
+
+.anAdvisor {
+    border-bottom: solid 2px #000;
+    text-align: center;
+    padding-top: 10px;
+    cursor: pointer;
+    color: #000;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+.anAdvisor:hover {
+    border-bottom: solid 2px #910A2D;
+    text-align: center;
+    padding-top: 10px;
+}
+
+.wtImgCar{
+    width: 300px;
+}
+.ctsFlexAct{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}

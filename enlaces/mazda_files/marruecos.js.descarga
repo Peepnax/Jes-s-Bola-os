@@ -1,0 +1,43 @@
+// Función para el botón de volver arriba
+(function () {
+    document.addEventListener("DOMContentLoaded", function () {
+        const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+
+        window.onscroll = function () {
+            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                scrollToTopBtn.style.display = "block";
+            } else {
+                scrollToTopBtn.style.display = "none";
+            }
+        };
+
+        scrollToTopBtn.addEventListener('click', function () {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    });
+}());
+
+// Función para configurar los videos de la sección
+(function () {
+    document.addEventListener("DOMContentLoaded", function () {
+        const videosMarruecos = document.querySelectorAll('.video_marruecos');
+
+        function setVideoAttributes(video) {
+            video.setAttribute('playsinline', '');
+            video.setAttribute('autoplay', '');
+            video.setAttribute('muted', '');
+            video.setAttribute('loop', '');
+            video.muted = true;
+            video.play().catch(function (error) {
+                console.log('Error al reproducir el video:', error);
+            });
+        }
+
+        videosMarruecos.forEach(function (video) {
+            setVideoAttributes(video);
+        });
+    });
+}());

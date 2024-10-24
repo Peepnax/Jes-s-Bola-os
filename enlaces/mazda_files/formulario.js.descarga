@@ -1,0 +1,433 @@
+//let ipScript = "18.214.74.16";
+getIP = function () {
+	var script = document.createElement("script");
+	script.type = "text/javascript";
+
+	script.src = "https://api.ipify.org?format=jsonp&callback=DisplayIP"
+	try {
+		document.getElementsByTagName("head")[0].appendChild(script);
+	} catch (err) {
+		console.log(err);
+	}
+};
+getIP();
+
+function DisplayIP(response) {
+	ipScript = response.ip;
+}
+
+(function () {
+	document.addEventListener("DOMContentLoaded", function () {
+		const formularioManual = document.getElementById('formularioManual');
+		const inputsManual = document.querySelectorAll('#formularioManual input');
+		const selectManual = document.querySelectorAll('#formularioManual select');
+
+		const expresionesRegulares = {
+
+			nombre: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.
+			apellido: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, // Letras y espacios, pueden llevar acentos.	
+			correo: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+			telefono: /^3\d{9}$/, // 7 a 10 numeros.
+			consulta: /^[a-zA-ZÀ-ÿ\s]/, // solo letras
+			vehiculo: /^[a-zA-Z0-9\s!"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~]+$/, // nuemros letras y caracteres 
+			modelo: /.+/, // solo numeros
+			placa: /^[a-zA-Z]{3}\d{3}$/
+		}
+
+		const camposManual = {
+			nombre: false,
+			apellido: false,
+			correo: false,
+			telefono: false,
+			consulta: false,
+			vehiculo: false,
+			modelo: false,
+			placa: false,
+		}
+
+		document.getElementById('placa').addEventListener('input', function (e) {
+			let value = e.target.value.toUpperCase(); // Convertir a mayúsculas si es necesario
+			value = value.replace(/[^a-zA-Z0-9]/g, ''); // Eliminar caracteres no alfanuméricos
+
+			if (value.length > 6) {
+				value = value.slice(0, 6); // Limitar a 6 caracteres
+			}
+
+			e.target.value = value.replace(/^([a-zA-Z]{0,3})(\d{0,3})$/, function (match, p1, p2) {
+				return p1 + p2;
+			});
+		});
+
+		const Carros_array = [
+			{ id: 8, name: 'MAZDA 2 SPORT', value: 8 },
+			{ id: 26, name: 'MAZDA 2 SEDÁN', value: 26 },
+			{ id: 6, name: 'MAZDA 3', value: 6 },
+			{ id: 1, name: 'MAZDA 6', value: 1 },
+			{ id: 25, name: 'MAZDA CX-3', value: 25 },
+			{ id: 27, name: 'MAZDA CX-30', value: 27 },
+			{ id: 29, name: 'MAZDA MX-30', value: 29 },
+			{ id: 4, name: 'MAZDA CX-5', value: 4 },
+			{ id: 28, name: 'MAZDA CX-50', value: 28 },
+			{ id: 30, name: 'MAZDA CX-60', value: 30 },
+			{ id: 3, name: 'MAZDA CX-9', value: 3 },
+			{ id: 31, name: 'MAZDA CX-90', value: 31 },
+			{ id: 2, name: 'MAZDA MX-5', value: 2 },
+		];
+
+		const Modelos_array = [
+			// Mazda 2 Sport
+			{ id_modelo: 8, year: "2008 - 2010", value: '2008 - 2010' },
+			{ id_modelo: 8, year: "2011 - 2015", value: '2011 - 2015' },
+			{ id_modelo: 8, year: "2015 - 2017", value: '2015 - 2017' },
+			{ id_modelo: 8, year: "2018 - 2019", value: '2018 - 2019' },
+			{ id_modelo: 8, year: "2020 - 2021", value: '2020 - 2021' },
+			{ id_modelo: 8, year: "2022 - 2023", value: '2022 - 2023' },
+			{ id_modelo: 8, year: "2024 - 2025", value: '2024 - 2025' },
+			// Mazda 2 Sedan
+			{ id_modelo: 26, year: "2011 - 2013", value: '2011 - 2013' },
+			{ id_modelo: 26, year: "2013 - 2015", value: '2013 - 2015' },
+			{ id_modelo: 26, year: "2018 - 2019", value: '2018 - 2019' },
+			{ id_modelo: 26, year: "2020 - 2021", value: '2020 - 2021' },
+			{ id_modelo: 26, year: "2022 - 2023", value: '2022 - 2023' },
+			{ id_modelo: 26, year: "2024 - 2025", value: '2024 - 2025' },
+			// Mazda 3
+			{ id_modelo: 6, year: "2010 - 2012", value: '2010 - 2012' },
+			{ id_modelo: 6, year: "2012 - 2014", value: '2012 - 2014' },
+			{ id_modelo: 6, year: "2015 - 2016", value: '2015 - 2016' },
+			{ id_modelo: 6, year: "2017 - 2019", value: '2017 - 2019' },
+			{ id_modelo: 6, year: "2020 - 2021", value: '2020 - 2021' },
+			{ id_modelo: 6, year: "2022 - 2023", value: '2022 - 2023' },
+			{ id_modelo: 6, year: "2024 - 2025", value: '2024 - 2025' },
+			// Mazda 6
+			{ id_modelo: 1, year: "2010 - 2011", value: '2010 - 2011' },
+			{ id_modelo: 1, year: "2012 - 2014", value: '2012 - 2014' },
+			{ id_modelo: 1, year: "2015 - 2016", value: '2015 - 2016' },
+			{ id_modelo: 1, year: "2017 - 2019", value: '2017 - 2019' },
+			{ id_modelo: 1, year: "2020", value: '2020' },
+			// Mazda CX-3
+			{ id_modelo: 25, year: "2017 - 2018", value: '2017 - 2018' },
+			{ id_modelo: 25, year: "2019", value: '2019' },
+			// Mazda CX-30
+			{ id_modelo: 27, year: "2021", value: '2021' },
+			{ id_modelo: 27, year: "2022 - 2023", value: '2022 - 2023' },
+			{ id_modelo: 27, year: "2024 - 2025", value: '2024 - 2025' },
+			// Mazda MX-30
+			{ id_modelo: 29, year: "2023", value: '2023' },
+			// Mazda CX-5
+			{ id_modelo: 4, year: "2012", value: '2012' },
+			{ id_modelo: 4, year: "2013 - 2014", value: '2013 - 2014' },
+			{ id_modelo: 4, year: "2015 - 2017", value: '2015 - 2017' },
+			{ id_modelo: 4, year: "2018", value: '2018' },
+			{ id_modelo: 4, year: "2019", value: '2019' },
+			{ id_modelo: 4, year: "2020", value: '2020' },
+			{ id_modelo: 4, year: "2021", value: '2021' },
+			{ id_modelo: 4, year: "2022 - 2024", value: '2022 - 2024' },
+			{ id_modelo: 4, year: "2024 - 2025", value: '2024 - 2025' },
+			// Mazda CX-50
+			{ id_modelo: 28, year: "2023", value: '2023' },
+			// Mazda CX-60
+			{ id_modelo: 30, year: "2024 - 2025", value: '2024' },
+			// Mazda CX-9
+			{ id_modelo: 3, year: "2014 - 2016", value: '2014 - 2016' },
+			{ id_modelo: 3, year: "2017 - 2018", value: '2017 - 2018' },
+			{ id_modelo: 3, year: "2019 - 2020", value: '2019 - 2020' },
+			{ id_modelo: 3, year: "2021", value: '2021' },
+			{ id_modelo: 3, year: "2022 - 2024", value: '2022 - 2024' },
+			// Mazda CX-90
+			{ id_modelo: 31, year: "2024 - 2025", value: '2024' },
+			// Mazda MX-5
+			{ id_modelo: 2, year: "2018", value: '2018' },
+			{ id_modelo: 2, year: "2019", value: '2019' },
+			{ id_modelo: 2, year: "2020", value: '2020' },
+			{ id_modelo: 2, year: "2021 - 2022", value: '2021 - 2022' },
+			{ id_modelo: 2, year: "2023 - 2024", value: '2023 - 2024' },
+			{ id_modelo: 2, year: "2025", value: '2025' }
+		]
+
+		const vehiculoSelect = document.getElementById('vehiculo');
+		const modeloSelect = document.getElementById('modelo');
+
+		function cargarVehiculos() {
+			vehiculoSelect.innerHTML = '<option disabled selected value="">Seleccionar una opción</option>'; // Limpia el select primero
+			Carros_array.forEach(function (carro) {
+				let option = document.createElement('option');
+				option.value = carro.id;
+				option.textContent = carro.name;
+				vehiculoSelect.appendChild(option);
+			});
+		}
+
+		function cargarModelosPorVehiculo(idVehiculo) {
+			modeloSelect.innerHTML = '<option disabled selected value="">Seleccionar una opción</option>'; // Limpia el select primero
+			const modelosFiltrados = Modelos_array.filter(modelo => modelo.id_modelo === parseInt(idVehiculo));
+			modelosFiltrados.forEach(function (modelo) {
+				let option = document.createElement('option');
+				option.value = modelo.year;
+				option.textContent = modelo.year;
+				modeloSelect.appendChild(option);
+			});
+		}
+
+		cargarVehiculos(); // Llama esta función una vez para llenar el select de vehículos
+
+		vehiculoSelect.addEventListener('change', function () {
+			cargarModelosPorVehiculo(this.value);
+		});
+
+		const validarFormularioManual = (e) => {
+			const valorConsulta = e.target.value;
+			switch (e.target.name) {
+				case "apellido":
+					validarCampo(expresionesRegulares.apellido, e.target, 'apellido');
+					break;
+				case "nombre":
+					validarCampo(expresionesRegulares.nombre, e.target, 'nombre');
+					break;
+				case "correo":
+					validarCampo(expresionesRegulares.correo, e.target, 'correo');
+					break;
+				case "telefono":
+					validarCampo(expresionesRegulares.telefono, e.target, 'telefono');
+					break;
+				case "consulta":
+					validarCampo(expresionesRegulares.consulta, e.target, 'consulta');
+
+					const elemento = document.querySelector('.placa');
+					const elementoID = document.querySelector('#placa');
+
+					// Verifica el valor de valorConsulta y ajusta el estilo y el atributo requerido en consecuencia
+					valorConsulta === "Soy usuario / propietario de Mazda" ? (
+						elemento.style.display = 'block',
+						elementoID.setAttribute('required', 'required')
+					) : (
+						elemento.style.display = 'none',
+						elementoID.removeAttribute('required')
+					);
+					break;
+				case "placa":
+					validarCampo(expresionesRegulares.placa, e.target, 'placa');
+					break;
+				case "vehiculo":
+					validarCampo(expresionesRegulares.vehiculo, e.target, 'vehiculo');
+					break;
+				case "modelo":
+					validarCampo(expresionesRegulares.modelo, e.target, 'modelo');
+					break;
+			}
+		}
+
+
+
+		const validarCampo = (expresion, input, campo) => {
+			if (expresion.test(input.value)) {
+				document.getElementById(`grupo__${campo}`).classList.remove('formulario__grupo-incorrecto');
+				document.getElementById(`grupo__${campo}`).classList.add('formulario__grupo-correcto');
+				document.querySelector(`#grupo__${campo} i`).classList.add('fa-check-circle');
+				document.querySelector(`#grupo__${campo} i`).classList.remove('fa-times-circle');
+				document.querySelector(`#grupo__${campo} .formulario__input-error`).classList.remove('formulario__input-error-activo');
+				camposManual[campo] = true;
+			} else {
+				document.getElementById(`grupo__${campo}`).classList.add('formulario__grupo-incorrecto');
+				document.getElementById(`grupo__${campo}`).classList.remove('formulario__grupo-correcto');
+				document.querySelector(`#grupo__${campo} i`).classList.add('fa-times-circle');
+				document.querySelector(`#grupo__${campo} i`).classList.remove('fa-check-circle');
+				document.querySelector(`#grupo__${campo} .formulario__input-error`).classList.add('formulario__input-error-activo');
+				camposManual[campo] = false;
+			}
+		}
+
+		function formatDateAndHour(date) {
+			let year = date.getFullYear();
+			let month = date.getMonth() + 1;
+			let day = date.getDate()
+
+			let hours = date.getHours();
+			let minutes = date.getMinutes()
+			let seconds = date.getSeconds();
+			let ampm = hours >= 12 ? 'PM' : 'AM';
+			hours = hours % 12;
+			hours = hours ? hours : 12; // the hour '0' should be '12'
+			minutes = minutes < 10 ? '0' + minutes : minutes;
+			seconds = seconds < 10 ? '0' + seconds : seconds;
+			let strDate = month + '/' + day + '/' + year;
+			let strTime = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
+			return strDate + ' ' + strTime;
+		}
+
+		let UtmFuente = "";
+		let UtmMedio = "";
+		let UtmCampana = "";
+
+		if (window.location.search !== "") {
+			const paramsURL = window.location.search.substring(1); // Elimina el '?' del principio
+			const arrayParamas = paramsURL.split('&');
+
+			const params = {};
+			arrayParamas.forEach(param => {
+				const [key, value] = param.split('=');
+				params[key] = value;
+			});
+
+			// Asignar los valores si existen
+			UtmFuente = params["utm_source"] || UtmFuente;
+			UtmMedio = params["utm_medium"] || UtmMedio;
+			UtmCampana = params["utm_campaign"] || UtmCampana;
+		}
+
+		console.log({ UtmFuente, UtmMedio, UtmCampana });
+
+		let DateCreated = formatDateAndHour(new Date);
+
+		let token = Math.random().toString(12).substring(2, 23) + Math.random().toString(12).substring(2, 23);
+
+		inputsManual.forEach((input) => {
+			input.addEventListener('keyup', validarFormularioManual);
+			input.addEventListener('blur', validarFormularioManual);
+		});
+		selectManual.forEach((selectManual) => {
+			selectManual.addEventListener('blur', validarFormularioManual)
+			selectManual.addEventListener('change', validarFormularioManual);
+		});
+
+
+		formularioManual.addEventListener('submit', async (e) => {
+			e.preventDefault();
+
+			async function sendProcess() {
+				// Obtén los valores de los campos DENTRO de esta función
+				const nombres = document.getElementById("nombre").value;
+				const apellidos = document.getElementById("apellido").value;
+				const celular = document.getElementById("telefono").value;
+				const email = document.getElementById("correo").value;
+				const autorizaTratamientoDatos = document.getElementById('terminos');
+				const placa = document.getElementById('placa').value;
+				const modelo = document.getElementById('vehiculo').value;
+				const motivoConsultaManual = document.getElementById('consulta').value;
+				const modeloManualPropietario = document.getElementById('modelo').value;
+
+				// Prepara el cuerpo del mensaje SOAP
+				const soapMessage = `
+		 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:int="http://services.informatica.com/rt/InteraccionDigital_ManualPropietario">
+		   <soapenv:Header/>
+		   <soapenv:Body>
+			 <int:InteraccionDigital_ManualPropietarioRequest>
+			   <ServiceInput>
+
+				 <!-- Asegúrate de que estos nombres de campos coincidan con los esperados por el servicio -->
+
+				 <identificadorUnico>${token}</identificadorUnico>
+				 <origen>Página web</origen>
+				 <tipo>Contáctenos</tipo>
+				 <nombres>${nombres}</nombres>
+				 <apellidos>${apellidos}</apellidos>
+				 <celular>${celular}</celular>
+				 <email>${email}</email>
+				 <comentarios>Descargar manual propietario</comentarios>
+				 <autorizaTratamientoDatos>${autorizaTratamientoDatos.checked ? true : false}</autorizaTratamientoDatos>
+				 <fechaInscripcion>${DateCreated}</fechaInscripcion>
+				 <direccionIP>${ipScript}</direccionIP>
+				 <utmFuente>${UtmFuente}</utmFuente>
+				 <utmMedio>${UtmMedio}</utmMedio>
+				 <utmCampana>${UtmCampana}</utmCampana>
+				 <placa>${placa}</placa>
+				 <modelo>${modelo}</modelo>
+				 <idFormulario>ManualPropietario</idFormulario>
+				 <motivoConsultaManual>${motivoConsultaManual}</motivoConsultaManual>
+				 <modeloManualPropietario>${modeloManualPropietario}</modeloManualPropietario>
+
+				 <tipoDocumento></tipoDocumento>
+				 <documento></documento>
+				 <ciudad></ciudad>
+				 <departamento></departamento>
+				 <modelosInteres></modelosInteres>
+				 <ciudadConcesionario></ciudadConcesionario>
+				 <concesionario></concesionario>
+				 <sucursal></sucursal>
+				 <fechaServicio></fechaServicio>
+				 <servicio></servicio>
+				 <version></version>
+				 <kilometraje></kilometraje>
+				 <idLlamada></idLlamada>
+				 <engagementScore></engagementScore>
+				 <medioContacto></medioContacto>
+				 <solicitud></solicitud>
+
+			   </ServiceInput>
+			 </int:InteraccionDigital_ManualPropietarioRequest>
+		   </soapenv:Body>
+		 </soapenv:Envelope>
+	   `;
+
+				try {
+					let url = `https://na1.ai.dm-us.informaticacloud.com/active-bpel/public/soap/8dbkbsGxnQ1hgifVKsPnOC/InteraccionDigital_ManualPropietario`;
+					const settings = {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'text/xml;charset=UTF-8',
+							'SOAPAction': '', // Establece esto si el servicio lo requiere
+						},
+						body: soapMessage,
+					};
+
+					const fetchResponse = await fetch(url, settings);
+					const responseText = await fetchResponse.text(); // La respuesta será texto (XML), no JSON
+
+					console.log('Response Status:', fetchResponse.status); // Imprime el código de estado
+					console.log('Response Text:', responseText); // Imprime el texto de la respuesta
+
+
+					if (fetchResponse.ok) {
+						// Si el código de estado es 200, la solicitud fue exitosa
+						window.location.href = "https://www.mazda.com.co/propietarios/manual-mazda-propietario/tank-you-page/";
+						// Oculta el mensaje de error si es necesario
+						document.querySelector('.formulario__mensaje').style.opacity = 0;
+						formularioManual.reset();
+					} else {
+						// Manejo de la respuesta en caso de error
+						document.getElementById('formulario__mensaje').classList.add('formulario__mensaje-activo');
+					}
+
+
+				} catch (error) {
+					console.error('Error:', error);
+					document.querySelector('.formulario__mensaje').innerText = 'Error al conectar con el servidor';
+					document.querySelector('.formulario__mensaje').style.opacity = 1;
+				}
+			}
+
+			const terminosManual = document.getElementById('terminos');
+			const motivoConsultaManual = document.getElementById('consulta').value;
+			const Placa = document.getElementById('placa').value;
+			let placa = /^[a-zA-Z]{3}\d{3}$/;
+			if (camposManual.nombre && camposManual.apellido && camposManual.correo && camposManual.consulta && camposManual.vehiculo && camposManual.modelo && camposManual.telefono && terminosManual.checked) {
+
+				if (motivoConsultaManual === "Soy usuario / propietario de Mazda") {
+					if (!placa.test(Placa)) {
+						document.getElementById('formulario__mensaje').classList.add('formulario__mensaje-activo');
+						return;
+					}
+				}
+
+				sendProcess();
+				formularioManual.reset();
+				//window.location.href = "https://www.mazda.com.co/propietarios/manual-mazda-propietario/tank-you-page/";
+				document.getElementById('formulario__mensaje-exito').classList.add('formulario__mensaje-exito-activo');
+
+				document.getElementById('formulario__mensaje-exito').classList.remove('formulario__mensaje-exito-activo');
+				
+
+
+
+				document.getElementById('formulario__mensaje').classList.remove('formulario__mensaje-activo');
+
+				document.querySelectorAll('.formulario__grupo-correcto').forEach((icono) => {
+					icono.classList.remove('formulario__grupo-correcto');
+				});
+
+			} else {
+				event.preventDefault(); // Evita el envío del formulario si hay campos no válidos
+				document.getElementById('formulario__mensaje').classList.add('formulario__mensaje-activo');
+			}
+		});
+	});
+}());

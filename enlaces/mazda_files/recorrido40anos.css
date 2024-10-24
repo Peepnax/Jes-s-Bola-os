@@ -1,0 +1,76 @@
+/* * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+} */
+html {
+    scroll-behavior: smooth;
+}
+
+.containerFullImg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    width: 100%;
+    flex-direction: column;
+    position: relative;
+}
+
+.flechaReturn{
+    width: 80px;
+    position: fixed;
+    bottom: 40px;
+    right: 20px;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    right: 80%;
+}
+.flechaReturn img{
+    width: 100%;
+}
+
+
+img {
+    /*display: block;*/
+    margin: 0;
+    padding: 0;
+}
+
+.containerCapItems {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #1a1a1a;
+    flex-direction: column;
+}
+
+.containerCapItems a {
+    text-decoration: none;
+    color: #907848;
+}
+
+.containerCapItems p {
+    color: #907848;
+    line-height: 3;
+    font-size: 30px;
+    text-decoration: underline;
+    text-decoration-color: #907848;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 15px;
+    cursor: pointer;
+}
+
+.containerCapItems p:hover {
+    color: #a9771a;
+    text-decoration-color: #c49131;
+}
+
+@media only screen and (max-width: 900px) {
+    .containerCapItems p {
+        font-size: 20px;
+    }
+}

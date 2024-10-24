@@ -1,0 +1,7 @@
+document.addEventListener("DOMContentLoaded",function(){let e=document.querySelector(".mxp-main-second-level-13vyh"),o=`
+        <picture class="imgFooterLogo"> <a
+        href="https://www.mazda.com.co/noticias/general/mazda-de-colombia-recibe-certificacion-como-great-place-to-work-por-su-sobresaliente-clima-organizacional/">
+        <img src="https://www.mazda.com.co/globalassets/homepage/logo/logo-80px.png" alt="Mazda de Colombia - Great Place to Work">
+    </a>
+</picture>
+`,a=document.createElement("div");a.classList.add("containerImgFooter"),a.innerHTML=o,e.appendChild(a)});

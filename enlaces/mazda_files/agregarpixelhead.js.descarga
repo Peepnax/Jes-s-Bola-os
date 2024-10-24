@@ -1,0 +1,23 @@
+function agregarPixelGTMEnHead() {
+  // Crear un comentario para identificar el inicio del script de Google Tag Manager
+  var comentarioInicioGTM = document.createComment('Google Tag Manager');
+
+  // Crear el script para Google Tag Manager
+  var scriptGTM = document.createElement('script');
+  scriptGTM.type = 'text/javascript';
+  scriptGTM.text = "(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(), event:'gtm.js'}); var f=d.getElementsByTagName(s)[0], j=d.createElement(s), dl=l!='dataLayer'?'&l='+l:''; j.async=true; j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl; f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-KT5ZBLS');";
+
+  // Crear un comentario para identificar el final del script de Google Tag Manager
+  var comentarioFinGTM = document.createComment('End Google Tag Manager');
+
+  // Insertar el comentario de inicio, el script, y el comentario de fin en el head
+  document.head.appendChild(comentarioInicioGTM);
+  document.head.appendChild(scriptGTM);
+  document.head.appendChild(comentarioFinGTM);
+
+  // Log para verificar que el script se ha añadido
+  console.log("Script de Google Tag Manager añadido al head");
+}
+
+// Llamar a la función cuando el documento esté listo
+window.addEventListener('DOMContentLoaded', agregarPixelGTMEnHead);

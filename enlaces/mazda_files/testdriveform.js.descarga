@@ -1,0 +1,736 @@
+//let ipScript = "18.214.74.16";
+getIP = function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+
+    script.src = "https://api.ipify.org?format=jsonp&callback=DisplayIP"
+    try {
+        document.getElementsByTagName("head")[0].appendChild(script);
+    } catch (err) {
+        console.log(err);
+    }
+};
+getIP();
+
+function DisplayIP(response) {
+    ipScript = response.ip;
+}
+var markers = [];
+var map;
+(function () {
+    angular.module("appTest", [])
+        .controller('ValidationController', ['$scope', '$http', function ($scope, $http) {
+            var ip = false;
+            $scope.pattern_email = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            $scope.pattern_phone = /^([0-9]{7})$|(^[0-9]{10})$/
+            $scope.flag_redir = false;
+            $scope.modelCarInit = "";
+
+            const formularioTestDrive = document.getElementById('testdriveForm');
+
+            let UtmFuente = "";
+            let UtmMedio = "";
+            let UtmCampana = "";
+
+            if (window.location.search !== "") {
+                const paramsURL = window.location.search.substring(1); // Elimina el '?' del principio
+                const arrayParamas = paramsURL.split('&');
+
+                const params = {};
+                arrayParamas.forEach(param => {
+                    const [key, value] = param.split('=');
+                    params[key] = value;
+                });
+
+                // Asignar los valores si existen
+                UtmFuente = params["utm_source"] || UtmFuente;
+                UtmMedio = params["utm_medium"] || UtmMedio;
+                UtmCampana = params["utm_campaign"] || UtmCampana;
+            }
+
+            $scope.tieneClase = true
+            $scope.tieneClaseMail = true
+
+            $scope.contactOptions = [
+                { name: 'LLAMADA', seleccionada: false },
+                { name: 'E-MAIL', seleccionada: false },
+                { name: 'WHATSAPP', seleccionada: false }
+            ];
+
+            //this is for check options contact.
+            $scope.llamada = false;
+            $scope.whatsapp = false;
+            $scope.mail = false;
+            $scope.almenosUnaSeleccinadaTel = false;
+            $scope.almenosUnaSeleccinadaAyuda = false;
+
+
+
+            $scope.numlength = 10;
+
+            // Función para actualizar las variables de validación cuando cambian los checkboxes
+            $scope.actualizarValidacion = function () {
+                $scope.llamada = $scope.contactOptions[0].seleccionada; // Opción 1                
+                $scope.whatsapp = $scope.contactOptions[2].seleccionada; // Opción 3
+                $scope.mail = $scope.contactOptions[1].seleccionada; // Opción 3
+
+                $scope.almenosUnaSeleccinadaTel = $scope.llamada || $scope.whatsapp || $scope.mail;
+
+                // Campo de texto requerido solo si las opciones 1 y 3 están seleccionadas
+                $scope.opcion1y3Seleccionadas = ($scope.llamada && $scope.whatsapp || $scope.llamada || $scope.whatsapp);
+                $scope.opcion2Seleccionadas = $scope.mail;
+                $scope.tieneClase = $scope.llamada || $scope.whatsapp;
+                $scope.tieneClaseMail = $scope.mail;
+                $scope.numlength = $scope.whatsapp ? 10 : 10;
+
+                // Establecer la validez del campo de texto
+                $scope.registerTest.dataTest.privateTelephone.$setValidity('required', $scope.opcion1y3Seleccionadas);
+                $scope.registerTest.dataTest.privateEmail.$setValidity('required', $scope.opcion2Seleccionadas);
+
+            };
+
+
+
+            $scope.HowCanWeHelps = [
+                { name: 'Agendar un test drive', seleccionada: false },
+                { name: 'Solicitar cotización', seleccionada: false },
+                { name: 'Conocer más del vehículo', seleccionada: false },
+                { name: 'Solicitar crédito', seleccionada: false }
+            ];
+
+            $scope.verificarSeleccion = function () {
+                // Filtra y mapea las opciones seleccionadas para obtener sus nombres
+                $scope.dataTest.solicitud = $scope.HowCanWeHelps
+                    .filter(function (item) {
+                        return item.seleccionada;
+                    })
+                    .map(function (item) {
+                        // Si la opción es "Solicitar crédito", cámbiala a "Estudio de crédito"
+                        if (item.name === 'Solicitar crédito') {
+                            return 'Estudio de crédito';
+                        }
+                        return item.name;
+                    })
+                    .join(';');  // Une los nombres con ';'
+
+                // Actualiza el estado de si al menos una opción está seleccionada
+                $scope.almenosUnaSeleccinadaAyuda = $scope.dataTest.solicitud.length > 0;
+            };
+
+
+            $scope.resetForm = function () {
+                $scope.dataTest = {};
+                $scope.HowCanWeHelps.forEach(function (help) {
+                    help.seleccionada = false;
+                });
+                $scope.almenosUnaSeleccinadaAyuda = false;
+
+                // Resetear los estados del formulario
+                $scope.registerTest.$setPristine();
+                $scope.registerTest.$setUntouched();
+
+                // Si estás usando jQuery para reiniciar el formulario HTML
+                if (formularioTestDrive) {
+                    formularioTestDrive.reset();
+                }
+            };
+
+
+            $scope.citys_array = [
+                { id: 1, name: 'Armenia', lat: 4.531812, long: -75.661618 },
+                { id: 2, name: 'Barrancabermeja', lat: 7.061981, long: -73.853169 },
+                { id: 3, name: 'Barranquilla', lat: 10.987598, long: -74.816090, },
+                { id: 4, name: 'Bogotá D.C', lat: 4.694807, long: -74.075512 },
+                { id: 5, name: 'Bucaramanga', lat: 7.115332, long: -73.138657 },
+                { id: 6, name: 'Cali', lat: 3.407056, long: -76.535620 },
+                { id: 7, name: 'Cartagena', lat: 10.389013, long: -75.476145 },
+                { id: 24, name: 'Chía', lat: 4.865442, long: -74.050746 },
+                { id: 8, name: 'Cúcuta', lat: 7.896231, long: -72.496463 },
+                { id: 9, name: 'Ibagué', lat: 4.443425, long: -75.241532 },
+                { id: 10, name: 'Manizales', lat: 5.062515, long: -75.540603 },
+                { id: 11, name: 'Medellín', lat: 6.191167, long: -75.570136 },
+                { id: 12, name: 'Montería', lat: 8.760618, long: -75.899163 },
+                { id: 13, name: 'Neiva', lat: 2.956701, long: -75.302431 },
+                { id: 14, name: 'Pasto', lat: 1.206503, long: -77.277394 },
+                { id: 15, name: 'Pereira', lat: 4.808605, long: -75.690662 },
+                { id: 16, name: 'Popayán', lat: 2.445980, long: -76.625133 },
+                { id: 17, name: 'Santa Marta', lat: 11.233026, long: -74.196095 },
+                { id: 18, name: 'Sincelejo', lat: 9.317452, long: -75.402784 },
+                { id: 19, name: 'Tunja', lat: 5.574595, long: -73.361096 },
+                { id: 21, name: 'Valledupar', lat: 10.483999, long: -73.253697 },
+                { id: 22, name: 'Villavicencio', lat: 4.160876, long: -73.643489 },
+                { id: 23, name: 'Yopal', lat: 5.357599, long: -72.401148 },
+
+
+            ];
+            $scope.concecionarios_random = [];
+            $scope.concecionarios = [
+                //Armenia
+                { id_city: 1, cod_conce: 420, cod_suc: 2, name: "Colautos (Carrera 14 No. 44-03)", lat: 4.573142, lng: -75.647027, telefono: "(606)7314210", urlWeb: "https://colautosdelcafe.com/", email: "servicioalcliente@colautos.co", dir: "Carrera 14, No. 44-03 ARMENIA CO" },
+                //Barrancabermeja
+                { id_city: 2, cod_conce: 270, cod_suc: 4, name: "Mayorautos (Km 1 Via Bucaramanga - El Reten)", lat: 7.04387824, lng: -73.8247959, telefono: "18000413642", urlWeb: "http://www.mayorautos.com/", email: "servicioalcliente@colautos.co", dir: "Km 1 Via Bucaramanga El Reten BARRANCABERMEJA CO" },
+                //Barranquilla
+                { id_city: 3, cod_conce: 560, cod_suc: 1, name: "Autoland (Calle 76 No. 54 -Esquina)", lat: 11.003182, lng: -74.804691, telefono: "#848 Opc.4 - WhatsApp: 300-912-0618", urlWeb: "https://www.autoland.com.co/", email: "citas@autoland.com.co", dir: "Cra. 54 No. Calle 76. Esquina" },
+                //Bogotá
+                { id_city: 4, cod_conce: 385, cod_suc: 2, name: "Jorge Cortés (Carrera 7 # 75 - 21)", lat: 4.657931, lng: -74.053786, telefono: "60(1) 650-0600", urlWeb: "https://www.jorgecortes.com.co/mazda", email: "sac@jcycia.co", dir: "Carrera 7 No. 74C-21C" },
+                { id_city: 4, cod_conce: 330, cod_suc: 4, name: "Alciautos (Av. Boyacá No. 19 - 32)", lat: 4.6522374075108015, lng: -74.12351569199599, telefono: "60(1) 307-2020", urlWeb: "https://alciautosmazda.com/", email: "info@alciautos.com.co", dir: "Avenida Boyacá No. 19-32" },
+                { id_city: 4, cod_conce: 330, cod_suc: 2, name: "Alciautos (CC. Centro Mayor - Calle 38A Sur # 34D - 51)", lat: 4.592419, lng: -74.124634, telefono: "60(1) 307-2020", urlWeb: "https://alciautosmazda.com/", email: "info@alciautos.com.co", dir: "Calle 38A Sur No. 34D-51, C.C. Centro Mayor Carmúltiple, Local 1-120" },
+                { id_city: 4, cod_conce: 330, cod_suc: 1, name: "Alciautos (Autopista norte - Calle 134A # 45 - 95)", lat: 4.719549, lng: -74.052471, telefono: "60(1) 307-2020", urlWeb: "https://alciautosmazda.com/", email: "info@alciautos.com.co", dir: "Calle 134A No. 45-95, Autopista Norte Bogotá" },
+                { id_city: 4, cod_conce: 350, cod_suc: 1, name: "Madiautos (Avenida Carrera 70 # 96 - 05)", lat: 4.692532, lng: -74.078343, telefono: "60(1) 915-7006", urlWeb: "https://mazda.madiautos.com.co/", email: "servicioalcliente@madiautos.com", dir: "Carrera 70 No. 96-05" },
+                { id_city: 4, cod_conce: 340, cod_suc: 1, name: "CasaToro (Carrera 7 # 127C - 25)", lat: 4.705770, lng: -74.028784, telefono: "60(1) 743-0815", urlWeb: "https://mazda.casatoro.com/", email: "", dir: "Carrera 7 No. 127C-25" },
+                { id_city: 4, cod_conce: 340, cod_suc: 2, name: "CasaToro (Carrera 30 # 22B - 51)", lat: 4.622904, lng: -74.084966, telefono: "60(1) 743-0815", urlWeb: "https://www.casatoro.com/", email: "nuestroclienteespecial@casatoro.com", dir: "Carrera 30 No. 22B-51" },
+                { id_city: 4, cod_conce: 375, cod_suc: 1, name: "Kyoto Motors (Avenida Carrera 68 con 20)", lat: 4.644654, lng: -74.111484, telefono: "60(1) 447-3801", urlWeb: "http://www.kyotomotors.com.co/", email: "servicioalcliente@kyotomotors.com.co", dir: "Avenida Carrera 68 No. 20-41" },
+                { id_city: 4, cod_conce: 340, cod_suc: 7, name: "Casatoro (Calle 170 con Avenida Boyacá)", lat: 4.76127, lng: -74.06513, telefono: " #525/ 316-525-2494", urlWeb: "https://mazda.casatoro.com/", email: "nuestroclienteespecial@casatoro.com", dir: "Avenida Boyacá No. 170-51" },
+                { id_city: 4, cod_conce: 385, cod_suc: 1, name: "Jorge Cortés (Avenida Suba # 97A - 60)", lat: 4.686815, lng: -74.063637, telefono: "60(1) 650-0600", urlWeb: "https://www.jorgecortes.com.co/mazda", email: "sac@jcycia.co", dir: "Avenida Suba No. 97A-60" },
+                //Bucaramanga 
+                { id_city: 5, cod_conce: 270, cod_suc: 1, name: "Mayorautos (Calle 40A #26 - 25)", lat: 7.119700, lng: -73.115391, telefono: "60(7) 632-3434", urlWeb: "https://mayorautos.com/", email: "servicioalcliente@mayorautos.com", dir: "Calle 40A No. 26-25" },
+                //Cali
+                { id_city: 6, cod_conce: 620, cod_suc: 1, name: "Mazko (Carrera 100 #  12 - 90)", lat: 3.371179, lng: -76.538211, telefono: "", urlWeb: "https://mazkomazda.com/", email: "contactenos.mazda@massygroup.com", dir: "Carrera 100 No. 12-90" },
+                { id_city: 6, cod_conce: 620, cod_suc: 2, name: "Mazko (Avenida 3 Norte # 34 - 46)", lat: 3.471983, lng: -76.520805, telefono: "", urlWeb: "https://mazkomazda.com/", email: "contactenos.mazda@massygroup.com", dir: "Avenida 3 Norte No. 34-46C" },
+                //Cartagena
+                { id_city: 7, cod_conce: 300, cod_suc: 2, name: "Vardi(Calle 30 # 37 - 07 Av Pedro de Heredia)", lat: 10.409304, lng: -75.516153, telefono: "60(1) 486-6874", urlWeb: "https://www.mazdavardi.com.co/", email: "mazdavardi@grupovardi.com.co", dir: "Avenida Pedro de Heredia Calle 30 No. 37-07" },
+                //Chia
+                { id_city: 24, cod_conce: 300, cod_suc: 1, name: "Vardi (Km 2.5 Variante Cajicá- Chia Bojacá Tres Esquinas)", lat: 4.880635, lng: -74.038063, telefono: "18000411919", urlWeb: "https://www.mazdavardi.com.co/", email: "contacto@grupovardi.com.co", dir: "Km 2.5 Via Chí­a Cajica Costado Occidental CHÍA CO" },
+                //Cucuta
+                { id_city: 8, cod_conce: 270, cod_suc: 2, name: "Mayorautos (Autopista Internacional vía San Antonio Km 3 # 25N - 125 Lomitas)", lat: 7.8609700, lng: -72.479725, telefono: "60(7) 596-0260", urlWeb: "https://mayorautos.com/", email: "servicioalcliente@mayorautos.com", dir: "Autopista Internacional Vía San Antonio Km. 3 No. 25N-125, Lomitas" },
+                //Ibagué
+                { id_city: 9, cod_conce: 340, cod_suc: 6, name: "CasaToro (Carrera 48 Sur # 116 - 43)", lat: 4.407658, lng: -75.166069, telefono: "60(1) 743-0815", urlWeb: "https://mazda.casatoro.com/", email: "nuestroclienteespecial@casatoro.com", dir: "Carrera 48 Sur No. 116-143, Entrada Villa Marina" },
+                //Manizales
+                { id_city: 10, cod_conce: 420, cod_suc: 1, name: "Colautos (Carrera 23 # 36 - 65)", lat: 5.067242, lng: -75.506993, telefono: "01-8000-423-317", urlWeb: "https://colautosdelcafe.com/", email: "servicioalcliente@colautos.co", dir: "Carrera 23 No. 36-65 Avenida Santander" },
+                //Medellín
+                { id_city: 11, cod_conce: 130, cod_suc: 1, name: "Automontaña (Calle 29 # 43A - 05)", lat: 6.227427, lng: -75.569793, telefono: "60(4) 354-7800", urlWeb: "https://www.automontana.com/", email: "", dir: "Calle 29 No. 43A-05, Diagonal a Premium Plaza" },
+                { id_city: 11, cod_conce: 130, cod_suc: 2, name: "Automontaña (CC. Mayorca - Calle 51 Sur # 48 – 57)", lat: 6.160566, lng: -75.604654, telefono: "60(4) 366-5690", urlWeb: "https://www.automontana.com/", email: "", dir: "Calle 51 Sur No. 48-57 C.C. Mayorca Local: 4057" },
+                { id_city: 11, cod_conce: 375, cod_suc: 3, name: "Somerauto (Carrera 48 # 10 - 168)", lat: 6.215084, lng: -75.575685, telefono: "60(4) 448-2102", urlWeb: "http://www.somerauto.com.co/", email: "somerauto@somerauto.com.co", dir: "Carrera 48 No. 10-168" },
+                { id_city: 11, cod_conce: 375, cod_suc: 4, name: "Somerauto (CC. Viva Envigado - Carrera 48 # 32B Sur -139)", lat: 6.177064, lng: -75.592174, telefono: "", urlWeb: "http://www.somerauto.com.co/", email: "somerauto@somerauto.com.co", dir: "C.C. Viva Envigado Piso 3" },
+                { id_city: 11, cod_conce: 560, cod_suc: 3, name: "Autoland(Avenida El poblado)", lat: 6.219850, lng: -75.569775, telefono: "#848 Opc. 4 - WhatsApp: 300-912-0618", urlWeb: "https://www.autoland.com.co/", email: "ventas@autoland.com.co - citas@autoland.com.co", dir: "Avenida El Poblado Carrera 43B No. 17-221" },
+                { id_city: 11, cod_conce: 560, cod_suc: 5, name: "Autoland(Llanogrande)", lat: 6.123440, lng: -75.423559, telefono: "#848 Opc. 4 - WhatsApp: 300-912-0618", urlWeb: "https://www.autoland.com.co/", email: "ventas@autoland.com.co - citas@autoland.com.co", dir: "Sede Llanogrande – Sector Tres Puertas" },
+                //Montería
+                { id_city: 12, cod_conce: 300, cod_suc: 4, name: "Vardí (Calle 77 # 5 - 172 Urbanización San Francisco)", lat: 8.785550, lng: -75.859773, telefono: "60(1) 486-6874 - #258", urlWeb: "https://www.mazdavardi.com.co/", email: "mazdavardi@grupovardi.com.co", dir: "Calle 77 No. 5-172, Barrio San Francisco" },
+                //Neiva
+                { id_city: 13, cod_conce: 340, cod_suc: 5, name: "CasaToro (Carrera 5 # 26 - 212 sur)", lat: 2.901853, lng: -75.281691, telefono: "60(1) 743-0815", urlWeb: "https://www.casatoro.com/", email: "nuestroclienteespecial@casatoro.com", dir: "Carrera 5 No. 26-212 Sur" },
+                //Pasto
+                { id_city: 14, cod_conce: 710, cod_suc: 1, name: "Automotriz Del Sur (Avenida Panamericana - Calle 2 # 26 - 52)", lat: 1.209312, lng: -77.289929, telefono: "60(2) 731-4106 Opc 1", urlWeb: "https://automotrizdelsur.com/mazda/", email: "mercadeodigital@autosur.com.co", dir: "Calle 2 No. 26-52, Avenida Panamericana" },
+                //Pereira
+                { id_city: 15, cod_conce: 420, cod_suc: 3, name: "Colautos (Avenida 30 de Agosto # 41 - 71)", lat: 4.813698, lng: -75.713537, telefono: "01-8000-423-317", urlWeb: "https://colautosdelcafe.com/", email: "servicioalcliente@colautos.co", dir: "Avenida 30 de Agosto No. 41-71" },
+                //Popayán
+                { id_city: 16, cod_conce: 300, cod_suc: 6, name: "Vardí (Carrera 9 # 17N - 35)", lat: 2.455137, lng: -76.598101, telefono: "60(1) 486-6874 - #258", urlWeb: "https://www.mazdavardi.com.co/", email: "mazdavardi@grupovardi.com.co", dir: "Carrera 9 No. 17N-35, Barrio Antonio Nariño" },
+                //Santa Marta
+                { id_city: 17, cod_conce: 300, cod_suc: 3, name: "Vardí (Avenida del Ferrocarril # 29 - 126)", lat: 11.231823, lng: -74.200396, telefono: "60(1) 486-6874 - #258", urlWeb: "https://www.mazdavardi.com.co/", email: "mazdavardi@grupovardi.com.co", dir: "Avenida Ferrocarril No. 29-126" },
+                //Sincelejo
+                { id_city: 18, cod_conce: 300, cod_suc: 5, name: "Vardí (Transversal 28 # 27A - 40)", lat: 9.303475, lng: -75.379478, telefono: "60(1) 486-6874 - #258", urlWeb: "https://www.mazdavardi.com.co/", email: "mazdavardi@grupovardi.com.co", dir: "Transversal 28 No. 27A-40, Barrio Venecia" },
+                //Tunja
+                { id_city: 19, cod_conce: 720, cod_suc: 1, name: "Carrazos (Calle 53 # 5 - 98)", lat: 5.560631, lng: -73.347766, telefono: "60(8) 740-5803", urlWeb: "https://carrazos.com.co/", email: "callcenter@carrazos.com.co", dir: "Calle 53 No. 5-98 Barrio La Granja" },
+                //Valledupar
+                { id_city: 21, cod_conce: 270, cod_suc: 3, name: "Mayorautos (Carrera 7A # 20D - 29.)", lat: 10.465009, lng: -73.243191, telefono: "60(5) 586-5530", urlWeb: "http://www.mayorautos.com/", email: "servicioalcliente@mayorautos.com", dir: "Carrera 7A No. 20D-29" },
+                //Villavicencio
+                { id_city: 22, cod_conce: 340, cod_suc: 3, name: "CasaToro (Anillo Vial Via Acacias Km 1)", lat: 4.114376, lng: -73.632674, telefono: "60(1) 743-0815", urlWeb: "https://www.casatoro.com/", email: "nuestroclienteespecial@casatoro.com", dir: "Anillo Vial Vía Acacías Km. 1" },
+                //Yopal
+                { id_city: 23, cod_conce: 330, cod_suc: 3, name: "Alciautos (Carrera 19 # 21 - 05)", lat: 5.337545, lng: -72.396100, telefono: "60(1) 307-2020", urlWeb: "https://alciautosmazda.com/", email: "info@alciautos.com.co", dir: "Carrera 19 No. 21-05" }
+            ]
+
+
+            // var conce_return = null;
+
+            // if (sec && con) {
+            //     conce_return = $scope.concecionarios.filter(function (c) {
+            //         return c.cod_suc == sec && c.cod_conce == con;
+            //     });
+            //     if (conce_return.length != 0) {
+            //         $scope.city_selected = conce_return[0].id_city ? conce_return[0].id_city : undefined;
+            //         $scope.conce_selected = conce_return[0] ? conce_return[0] : {};
+            //     }
+            // }
+
+
+            $scope.minCapacityNumber = 5;
+            $scope.maxCapacitynumber = 10;
+            $scope.minFirstname = 3;
+            $scope.minSurname = 3;
+            $scope.changeTypeDoc = function () {
+                if ($scope.dataAgen.legalDocument == "CE") {
+                    $scope.minCapacityNumber = 8;
+                    $scope.maxCapacitynumber = 10;
+                }
+                if ($scope.dataAgen.legalDocument == "CD") {
+                    $scope.minCapacityNumber = 6;
+                    $scope.maxCapacitynumber = 10;
+                }
+                if ($scope.dataAgen.legalDocument == "PD") {
+                    $scope.minCapacityNumber = 8;
+                    $scope.maxCapacitynumber = 10;
+                }
+                if ($scope.dataAgen.legalDocument == "PP") {
+                    $scope.minCapacityNumber = 8;
+                    $scope.maxCapacitynumber = 10;
+                }
+            };
+
+            $scope.randomList = function (list) {
+                return list.sort(function () {
+                    return 0.5 - Math.random();
+                });
+            }
+            $scope.setConce = function () {
+                $scope.concecionarios_random = $scope.randomList($scope.concecionarios);
+            }
+            $scope.setConce();
+
+
+
+
+            /*Create format hour*/
+            var today = new Date();
+            var y = today.getFullYear();
+            var m = today.getMonth() + 1;
+            var d = today.getDate();
+            var hms_ap_pm = today.toLocaleTimeString('en-US', { hour12: true });
+            var dateRegister = m + "/" + d + "/" + y + " " + hms_ap_pm
+            dateRegister = dateRegister.replace('.', '');
+            dateRegister = moment(dateRegister).format("M/D/YYYY h:mm:ss A");
+
+
+            /** Function to return mess validation*/
+            $scope.messValidate = "";
+            $scope.messValidateTel = "";
+
+            $scope.validationMess = function (touched, invalid, error, typeField, minChar) {
+                if (typeField == "doc") {
+                    if (touched == true && invalid == true && error.minlength != true) {
+                        $scope.messValidate = "Ingresa un número de documento";
+                    }
+                    if (touched == true && invalid == true && error.minlength == true) {
+                        $scope.messValidate = "Debe contener minimo " + minChar + " caracteres";
+                    }
+                    if (touched == true && invalid == false) {
+                        $scope.messValidate = "";
+                    }
+                    return $scope.messValidate;
+                }
+                if (typeField == "tel") {
+                    if (touched == true && invalid == true && error.minlength != true) {
+                        $scope.messValidateTel = "Por favor escribe tu celular";
+                    }
+                    if (touched == true && invalid == true && error.pattern == true) {
+                        $scope.messValidateTel = "El número de celular debe tener 10 números ";
+                    }
+                    if (touched == true && invalid == false) {
+                        $scope.messValidateTel = "";
+                    }
+                    return $scope.messValidateTel;
+                }
+                if (typeField == "firstname") {
+                    if (touched == true && invalid == true) {
+                        $scope.messValidateName = "Por favor escribe tu nombre";
+                    }
+                    if (touched == true && invalid == true && error.minlength == true && error.minlength != undefined) {
+                        $scope.messValidateName = "El nombre debe tener mínimo 3 caracteres";
+                    }
+                    if (touched == true && invalid == false) {
+                        $scope.messValidateName = "";
+                    }
+                    return $scope.messValidateName;
+                }
+                if (typeField == "surname") {
+                    if (touched == true && invalid == true) {
+                        $scope.messValidateSurname = "Por favor escribe tu apellido";
+                    }
+                    if (touched == true && invalid == true && error.minlength == true && error.minlength != undefined) {
+                        $scope.messValidateSurname = "El apellido debe tener mínimo 3 caracteres";
+                    }
+                    if (touched == true && invalid == false) {
+                        $scope.messValidateSurname = "";
+                    }
+                    return $scope.messValidateSurname;
+                }
+                if (typeField == "privateEmail") {
+                    if (touched == true && invalid == true) {
+                        $scope.messValidatePrivateEmail = "Por favor escribe tu correo electronico";
+                    }
+                    if (touched == true && invalid == true && error.pattern == true) {
+                        $scope.messValidatePrivateEmail = "Por favor escribe un correo electrónico válido. Ejemplo: usuario@gmail.com";
+                    }
+                    if (touched == true && invalid == false) {
+                        $scope.messValidatePrivateEmail = "";
+                    }
+                    return $scope.messValidatePrivateEmail;
+                }
+
+            }
+           
+             // Lista de códigos de vehículos, por si necesitas hacer validaciones adicionales en el futuro
+             $scope.vehicleCodes = [
+                '8',   // Mazda 2 Sport
+                '26',  // Mazda 2 Sedán
+                '6',   // Mazda 3
+                '27',  // Mazda CX-30
+                '4',   // Mazda CX-5
+                '28',  // Mazda CX-50
+                '30',  // Mazda CX-60
+                '3',   // Mazda CX-9
+                '31',  // Mazda CX-90
+                '2'    // Mazda MX-5
+            ];
+
+            // Inicialización del modelo
+            $scope.dataTest = {
+                modelsOfInterest: ''
+            };
+
+            // Función para establecer el vehículo por defecto basado en el valor actual en el HTML
+            $scope.setDefaultVehicleFromHTML = function () {
+                var selectElement = document.getElementById('modelsOfInterest');
+                if (selectElement) {
+                    var selectedOption = selectElement.options[selectElement.selectedIndex];
+                    if (selectedOption) {
+                        $scope.dataTest.modelsOfInterest = selectedOption.value;
+                    }
+                }
+            };
+
+            // Llamada a la función para establecer el valor por defecto basado en el HTML
+            $scope.setDefaultVehicleFromHTML();
+
+
+            //TODO: Eliminar este codigo cuando este completo el archivo 
+            // $scope.getPixelUrl = function() {
+
+            //     var urlXaxis = "";
+            //     if ($scope.dataTest.modelsOfInterest != undefined && $scope.conce_selected.cod_conce != undefined) {
+            //         urlXaxis = "https://secure.adnxs.com/px?id=1133278&order_id=" + $scope.dataTest.modelsOfInterest + "&value=" + $scope.conce_selected.cod_conce + "&t=2";
+            //     }
+            //     return urlXaxis;
+            // }
+
+
+            $scope.redirectResponse = function (modelinter, flag_redir, modelCarRedir) {
+                var UrlRedirect = "";
+
+                if (modelinter == 26 && flag_redir == false) {
+                    UrlRedirect = "/vehiculos/mazda-2-sedan/gracias-por-tu-registro/";
+                } else if (modelinter == 8 && flag_redir == false) {
+                    UrlRedirect = "/vehiculos/mazda-2-sport/gracias-por-tu-registro/";
+                } else if (modelinter == 6 && flag_redir == true && modelCarRedir == "M3SP") {
+                    UrlRedirect = "/vehiculos/mazda-3-hatchback/gracias-por-tu-registro/";
+                } else if (modelinter == 6 && flag_redir == true && modelCarRedir == "M3SDG7") {
+                    UrlRedirect = "/vehiculos/mazda-3-sedan-nueva-generacion/gracias-por-tu-registro/";
+                } else if (modelinter == 6 && flag_redir == true && modelCarRedir == "M3SPG7") {
+                    UrlRedirect = "/vehiculos/mazda-3-sport-nueva-generacion/gracias-por-tu-registro/";
+                } else if (modelinter == 6 && flag_redir == false) {
+                    UrlRedirect = "/vehiculos/mazda-3-sedan/gracias-por-tu-registro/";
+                } else if (modelinter == 1 && flag_redir == false) {
+                    UrlRedirect = "/vehiculos/mazda-6/gracias-por-tu-registro/";
+                } else if (modelinter == 25 && flag_redir == false) {
+                    UrlRedirect = "/vehiculos/mazda-cx-3/gracias-por-tu-registro/";
+                } else if (modelinter == 4 && flag_redir == false) {
+                    UrlRedirect = "/vehiculos/mazda-cx-5/gracias-por-tu-registro/";
+                } else if (modelinter == 3 && flag_redir == false) {
+                    UrlRedirect = "/vehiculos/mazda-cx-9/gracias-por-tu-registro/";
+                } else if (modelinter == 2 && flag_redir == false) {
+                    UrlRedirect = "/vehiculos/mazda-mx-5/gracias-por-tu-registro/";
+                } else if (modelinter == 27 && flag_redir == false) {
+                    UrlRedirect = "/vehiculos/mazda-cx-30/gracias-por-tu-registro/";
+                } else {
+                    UrlRedirect = "/";
+                }
+
+                return window.location.href = UrlRedirect;
+            }
+
+            $scope.city_selected = null; // Inicializa la ciudad seleccionada
+            $scope.conce_selected = null; // Inicializa el concesionario seleccionado
+
+            $scope.seleccionarCiudad = function (cityId) {
+                clearMarkers(); // Limpia los marcadores existentes
+                var selectedCity = $scope.citys_array.find(city => city.id === cityId);
+                if (selectedCity) {
+                    var cityLatLng = new google.maps.LatLng(selectedCity.lat, selectedCity.long);
+                    map.setCenter(cityLatLng);
+                    map.setZoom(10);
+                    var filteredConcesionarios = $scope.concecionarios.filter(conce => conce.id_city === cityId);
+
+                    // Crea una única instancia de InfoWindow fuera del bucle
+                    var infowindow = new google.maps.InfoWindow();
+
+                    filteredConcesionarios.forEach(conce => {
+                        var markerLatLng = new google.maps.LatLng(conce.lat, conce.lng);
+                        var marker = new google.maps.Marker({
+                            position: markerLatLng,
+                            map: map,
+                            icon: 'https://www.mazda.com.co/globalassets/maps/local01.png', // Icono por defecto
+                            title: conce.name,
+                            customInfo: conce // Guarda toda la información del concesionario directamente
+                        });
+
+                        // Configura el manejador de evento 'click' para este marcador
+                        google.maps.event.addListener(marker, 'click', function () {
+                            // Restablece el icono del marcador previamente seleccionado
+                            if ($scope.selectedMarker) {
+                                $scope.selectedMarker.setIcon('https://www.mazda.com.co/globalassets/maps/local01.png');
+                            }
+
+                            // Actualiza el marcador seleccionado y cambia su icono
+                            marker.setIcon('https://www.mazda.com.co/globalassets/maps/local03.png'); // Nuevo icono para el concesionario seleccionado
+                            $scope.selectedMarker = marker;
+
+                            // Configura y muestra la ventana de información para el concesionario
+                            var infoContent = '<div class="boxMap"><strong>' + conce.name + '</strong><br>' +
+                                '<span class="boxMapText">' + conce.dir + '<br>' +
+                                conce.email + '<br>' +
+                                'Teléfono: ' + conce.telefono + '<br>' +
+                                '<a href="' + conce.urlWeb + '">' + conce.urlWeb + '</a></span></div>';
+                            infowindow.setContent(infoContent);
+                            infowindow.open(map, marker);
+
+                            // Actualizar el modelo del formulario con el concesionario seleccionado
+                            $scope.$applyAsync(function () {
+                                $scope.conce_selected = conce;
+                                console.log('Concesionario seleccionado desde el mapa:', $scope.conce_selected); // Log para depuración
+                            });
+                        });
+
+                        markers.push(marker); // Añade el marcador al array para futuras referencias
+                    });
+
+                    // Actualizar la ciudad seleccionada y seleccionar el primer concesionario automáticamente
+                    $scope.city_selected = cityId;
+                    $scope.seleccionarPrimerConcesionario(); // Llama a la función para seleccionar el primer concesionario automáticamente si solo hay uno
+                }
+            };
+
+
+
+            $scope.seleccionarPrimerConcesionario = function () {
+                if ($scope.city_selected) {
+                    var filteredConcesionarios = $scope.concecionarios.filter(conce => conce.id_city === $scope.city_selected);
+                    if (filteredConcesionarios.length === 1) {
+                        var primerConcesionario = filteredConcesionarios[0];
+
+                        // Actualizar el modelo del formulario
+                        $scope.conce_selected = primerConcesionario;
+
+                        // Aplicar el cambio dentro del ciclo de Angular
+                        $scope.$applyAsync(function () {
+                            console.log('Concesionario seleccionado automáticamente:', $scope.conce_selected); // Log para depuración
+                        });
+
+                        // Actualizar el mapa con el concesionario seleccionado
+                        $scope.seleccionarConcesionario($scope.conce_selected.cod_conce, $scope.conce_selected.cod_suc);
+                    }
+                }
+            };
+
+
+
+            $scope.seleccionarConcesionario = function (conceId, sucId) {
+                var selectedConce = $scope.concecionarios.find(conce =>
+                    conce.cod_conce === conceId && conce.cod_suc === sucId);
+                if (selectedConce) {
+                    var conceLatLng = new google.maps.LatLng(selectedConce.lat, selectedConce.lng);
+                    if (map) {
+                        map.setCenter(conceLatLng);
+                        map.setZoom(15);
+
+                        markers.forEach(marker => {
+                            marker.setIcon('https://www.mazda.com.co/globalassets/maps/local01.png');
+                        });
+
+                        markers.forEach(marker => {
+                            if (marker.customInfo &&
+                                marker.customInfo.cod_conce === conceId &&
+                                marker.customInfo.cod_suc === sucId) {
+                                marker.setIcon('https://www.mazda.com.co/globalassets/maps/local03.png');
+                                $scope.selectedMarker = marker;
+                            }
+                        });
+                    }
+                } else {
+                    console.log('Concesionario no encontrado: ' + conceId);
+                }
+            };
+
+
+
+            function initMap() {
+                // Coordenadas del centro del mapa (Armenia)
+                var myLatLng = { lat: 4.694807, lng: -74.075512 }; // Reemplaza con las coordenadas reales de Armenia
+
+                // Crear el mapa
+                map = new google.maps.Map(document.getElementById('map'), {
+                    center: myLatLng,
+                    zoom: 12
+                });
+            }
+
+            initMap();
+
+            // Función para limpiar marcadores
+            function clearMarkers() {
+                for (var i = 0; i < markers.length; i++) {
+                    markers[i].setMap(null);
+                }
+                markers = [];
+            }
+
+
+            // This function hides the map and changes the button styles 
+            document.getElementById("mostarMap").addEventListener('click', toggleMap);
+
+            function toggleMap() {
+                const map = document.getElementById("map");
+                const textButtonIconMap = document.querySelector('.text-button-map');
+                const changeClassShowMap = document.getElementById('mostarMap');
+
+
+                map.style.display = (map.style.display === "none") ? "block" : "none";
+                textButtonIconMap.innerHTML = (map.style.display === "none") ? 'mostrar' : 'ocultar';
+                textButtonIconMap.innerHTML = (map.style.display === "none") ? 'mostrar' : 'ocultar';
+                changeClassShowMap.classList = (map.style.display === "none") ? 'boton-toggle-style-red' : 'boton-toggle-style';
+            }
+
+            /*Functión that send data form*/
+            $scope.showGif = false;
+            $scope.showPixel = false;
+            $scope.serviceFormTest = function () {
+                $scope.showGif = true;
+
+                if ($scope.InputpolicyAcceptance != undefined) {
+                    $scope.dataTest.policyAcceptance = "0";
+                } else {
+                    $scope.dataTest.policyAcceptance = "1";
+                }
+
+                /*get name city*/
+                var mycity = $scope.citys_array.filter(function (c) { return c.id == $scope.city_selected })[0];
+
+                /*Change value hostUrlmodel in agreement value model of onterest*/
+                // var hostUrlModel = "";
+
+                // if ($scope.dataTest.modelsOfInterest == 1) {
+                //     hostUrlModel = "inscribeteMediacom";
+                // } else if ($scope.dataTest.modelsOfInterest == 28) {
+                //     $scope.flag_redir = true;
+                //     $scope.dataTest.modelsOfInterest = "6";
+                //     hostUrlModel = "testdriveMediacom";
+                //     $scope.modelCarInit = "M3SP";
+                // } else if ($scope.dataTest.modelsOfInterest == 28) {
+                //     $scope.flag_redir = true;
+                //     $scope.dataTest.modelsOfInterest = "6";
+                //     hostUrlModel = "testdriveMediacomG7";
+                //     $scope.modelCarInit = "M3SPG7";
+                // } else if ($scope.dataTest.modelsOfInterest == 29) {
+                //     $scope.flag_redir = true;
+                //     $scope.dataTest.modelsOfInterest = "6";
+                //     hostUrlModel = "testdriveMediacomG7";
+                //     $scope.modelCarInit = "M3SDG7";
+                // } else {
+                //     hostUrlModel = "testdriveMediacom";
+                // }
+
+                /** Assignment variables to send services MCSINCO*/
+                $scope.dataTest.user = "3Ct0sP561020Rp";
+                $scope.dataTest.password = "{GE!/8V58%24~>v";
+                $scope.dataTest.city = mycity.name;
+                $scope.dataTest.dealerCode = $scope.conce_selected.cod_conce;
+                $scope.dataTest.dealerBranchCode = $scope.conce_selected.cod_suc;
+                $scope.dataTest.dateCreated = dateRegister;
+                $scope.dataTest.hostUrl = "testdriveMediacom";
+                $scope.dataTest.dateEmailSend = dateRegister;
+                $scope.dataTest.token = Math.random().toString(12).substring(2, 23) + Math.random().toString(12).substring(2, 23);
+                $scope.dataTest.ip = ipScript;
+                $scope.dataTest.UtmFuente = UtmFuente;
+                $scope.dataTest.UtmMedio = UtmMedio;
+                $scope.dataTest.UtmCampana = UtmCampana;
+                $scope.dataTest.testDriveAcceptance = "1";
+                $scope.dataTest.engagementScore = "";
+                $scope.dataTest.medioContacto = "";
+                $scope.dataTest.legalDocument = "";
+                $scope.dataTest.legalDocumentNumber = "";
+
+                var dataToSend = {
+                    user: $scope.dataTest.user,
+                    password: $scope.dataTest.password,
+                    city: $scope.dataTest.city,
+                    dealerCode: $scope.dataTest.dealerCode,
+                    dealerBranchCode: $scope.dataTest.dealerBranchCode,
+                    dateCreated: $scope.dataTest.dateCreated,
+                    hostUrl: $scope.dataTest.hostUrl,
+                    dateEmailSend: $scope.dataTest.dateEmailSend,
+                    token: $scope.dataTest.token,
+                    IP: $scope.dataTest.ip,
+                    UtmFuente: $scope.dataTest.UtmFuente,
+                    UtmMedio: $scope.dataTest.UtmMedio,
+                    UtmCampana: $scope.dataTest.UtmCampana,
+                    engagementScore: $scope.dataTest.engagementScore,
+                    medioContacto: $scope.dataTest.medioContacto,
+                    solicitud: $scope.dataTest.solicitud,
+                    legalDocument: $scope.dataTest.legalDocument,
+                    legalDocumentNumber: $scope.dataTest.legalDocumentNumber,
+                    testDriveAcceptance: $scope.dataTest.testDriveAcceptance,
+                };
+
+                var queryString = $.param($scope.dataTest);
+
+                console.log(queryString);
+
+                //Envio de data
+
+                $.ajax({
+                    method: 'POST',
+                    url: 'https://prospectos.mazda.co/prospectosREST?' + queryString,
+                    headers: {
+                        'Accept': '*/*',
+                        'Content-Type': 'application/json'
+                    },
+                    data: JSON.stringify(dataToSend),
+                    type: 'json',
+                    success: function (response) {
+                        if (response.codigo == "OK") {
+                            window.location.href = "https://www.mazda.com.co/formularios/gracias-por-tu-registro/";
+                            $scope.resetForm();
+                        }
+                    },
+                    error: function (error) {
+                        console.error('Error al enviar los datos:', error);
+                        $scope.resetForm();
+                    },
+                    complete: function () {
+                        $("#loading-image").css("display", "none");
+                        $scope.showGif = false;
+                        $scope.$apply();
+                    }
+                });
+
+            }
+        }]).directive("onlyLetters", [function () {
+            return {
+                require: 'ngModel',
+                link: function (scope, element, attr, ngModelCtrl) {
+                    function fromUser(text) {
+                        var transformedInput = text.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ\s]/g, '');
+                        if (transformedInput !== text) {
+                            ngModelCtrl.$setViewValue(transformedInput);
+                            ngModelCtrl.$render();
+                        }
+                        return transformedInput;
+                    }
+                    ngModelCtrl.$parsers.push(fromUser);
+                }
+            };
+        }]).directive("onlyNumbers", [function () {
+            return {
+                require: 'ngModel',
+                link: function (scope, element, attr, ngModelCtrl) {
+                    function fromUser(text) {
+                        var transformedInput = text.replace(/\D/g, '');
+                        //console.log(transformedInput);
+                        if (transformedInput !== text) {
+                            ngModelCtrl.$setViewValue(transformedInput);
+                            ngModelCtrl.$render();
+                        }
+                        return transformedInput;
+                    }
+                    ngModelCtrl.$parsers.push(fromUser);
+                }
+            };
+        }]);
+})()

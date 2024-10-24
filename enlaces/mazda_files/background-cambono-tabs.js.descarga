@@ -1,0 +1,38 @@
+document.addEventListener("DOMContentLoaded", function () {
+    // Verificar si la URL actual comienza con la URL especificada
+    if (window.location.href.startsWith("https://www.mazda.com.co/carbon-edition/")) {
+        // Limpiar cualquier cosa después de 'carbon-edition/'
+        let cleanURL = window.location.href.replace(/(\/carbon-edition\/).*/, '$1');
+        if (cleanURL !== window.location.href) {
+            window.history.replaceState(null, null, cleanURL);
+        }
+        
+        // Seleccionar todos los elementos con la clase 'lazyWrapper-1xSTga'
+        let lazyElements = document.querySelectorAll(".lazyWrapper-1xSTga");
+
+        // Agregar el estilo de fondo negro y texto blanco a cada elemento seleccionado
+        lazyElements.forEach(function (element) {
+            element.style.backgroundColor = "#000";
+            element.style.color = "#fff"; // Cambiar el color del texto a blanco
+        });
+
+        // Seleccionar los elementos con las clases especificadas y cambiar el color del texto a rojo con !important
+        let elementsTabs = document.querySelectorAll(
+            ".Tabs-1EpUX8 .TabsUL-1Y8lqE .TabsLI-mqLerE .Link-3_6E24.LinkActive-3TuLio span, " +
+            ".Tabs-1EpUX8 .TabsUL-1Y8lqE .TabsLI-mqLerE .Link-3_6E24.LinkActive-3TuLio"
+        );
+        
+        elementsTabs.forEach(function (element) {
+            element.style.setProperty('color', '#ff0000', 'important'); // Cambiar el color a rojo con !important
+        });
+
+        // Cambiar el color de los textos específicos a blanco
+        let specificTexts = document.querySelectorAll('.Interactive-1KAQcS.WithDetails-19emlC');
+        
+        specificTexts.forEach(function (text) {
+            if (text.textContent.trim() === 'DETALLES DEPORTIVOS' || text.textContent.trim() === 'INTERIOR REFINADO') {
+                text.style.setProperty('color', '#ffffff', 'important'); // Cambiar el color a blanco con !important
+            }
+        });
+    }
+});

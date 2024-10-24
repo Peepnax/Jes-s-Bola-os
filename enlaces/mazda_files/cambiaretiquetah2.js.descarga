@@ -1,0 +1,40 @@
+function cambiarH3PorH2SiRutaCorrecta() {
+    // Verificar si la URL contiene la ruta "mazda.com.co/propietarios/mantenimiento/"
+    if (window.location.href.includes("mazda.com.co/propietarios/mantenimiento/")) {
+        // Primero, manejar la conversión de h3 a h2
+        var h3Elements = document.querySelectorAll('h3.title.title--h3.title--spacer-m');
+        if (h3Elements.length > 0) {
+            h3Elements.forEach(function(elemento) {
+                var h2Elemento = document.createElement('h2');
+                h2Elemento.className = elemento.className; // Mantener las mismas clases
+                h2Elemento.innerHTML = elemento.innerHTML;
+                
+                // Reemplazar el h3 por el h2 en el DOM
+                elemento.parentNode.replaceChild(h2Elemento, elemento);
+            });
+        } else {
+            console.error('No se encontraron elementos h3 con la clase especificada.');
+        }
+
+        // Luego, manejar la conversión de h4 a h3
+        var h4Elements = document.querySelectorAll('h4.mxp-Promo-title-1X7SM.title--h4.mxp-Promo-title-1X7SM');
+        if (h4Elements.length > 0) {
+            h4Elements.forEach(function(elemento) {
+                var h3Elemento = document.createElement('h3');
+                // Asumiendo que quieres mantener alguna clase y posiblemente ajustar otras
+                h3Elemento.className = elemento.className.replace('title--h4', 'title--h3'); // Ajustar según necesidad
+                h3Elemento.innerHTML = elemento.innerHTML;
+                
+                // Reemplazar el h4 por el h3 en el DOM
+                elemento.parentNode.replaceChild(h3Elemento, elemento);
+            });
+        } else {
+            console.log('No se encontraron elementos h4 con la clase especificada para la conversión a h3.');
+        }
+    }
+}
+
+// Llamar a la función al cargar la página
+window.addEventListener('DOMContentLoaded', (event) => {
+    cambiarH3PorH2SiRutaCorrecta();
+});

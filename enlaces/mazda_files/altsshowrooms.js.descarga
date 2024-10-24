@@ -1,0 +1,26 @@
+function AltsShowroom() {
+    // Agrega un retraso de 5 segundos (5000 ms) antes de ejecutar el código
+    setTimeout(function () {
+        // Verifica si el usuario está en la URL específica
+        if (window.location.href === "https://www.mazda.com.co/vehiculos/mazda-cx-30/") {
+            // Selecciona la imagen cuyo src contiene la parte de la URL proporcionada
+            const img = document.querySelector('img[src*="/globalassets/cars/mazda-cx-30-2023/360/turing-at/exterior/rojo-diamante/01.jpg?blur=10&quality=0.1"]');
+
+            // Verifica si encontró la imagen
+            if (img) {
+                // Si la imagen ya tiene un 'alt', lo elimina
+                if (img.hasAttribute('alt')) {
+                    img.removeAttribute('alt');
+                }
+                // Asigna un nuevo valor al atributo 'alt'
+                img.setAttribute('alt', 'Mazda CX-30 2023 exterior en color rojo diamante');
+                
+                // Asigna también el atributo 'title'
+                img.setAttribute('title', 'Mazda CX-30 2023 exterior en color rojo diamante');
+            }
+        }
+    }, 5000); // 5 segundos = 5000 milisegundos
+}
+
+// Llama a la función para que se ejecute
+AltsShowroom();

@@ -1,0 +1,310 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+ 
+}
+.boxMap{
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 4px;
+    border: solid 1px;
+    border-radius: 3px;
+    font-size: 16px;
+    font-weight: 100;
+}
+.boxMap a{
+    text-decoration: none;
+    color: #000;
+    border-bottom: solid 1px;
+    font-weight: bold;
+}
+
+.boxMapText{
+    text-align: center;
+    font-size: 13px;
+}
+
+.gm-ui-hover-effect{
+    top: -5px!important;
+    right: -5px!important;
+}
+#map{
+    margin-top: 2%;
+}
+
+.boton-toggle{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 14%;
+    margin-bottom: 2%;
+}
+
+.boton-toggle-style{
+    padding: 8px;
+    color: #fff;
+    background: #000;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-size: 10px;
+    cursor: pointer;
+    border: none;
+    margin-top: 17px;
+}
+.boton-toggle-style-red{
+    padding: 8px;
+    color: #fff;
+    background: #910A2D;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-size: 10px;
+    cursor: pointer;
+    border: none;
+    margin-top: 5px;
+}
+
+.color-icon-map{
+    font-size: 19px;
+    margin-bottom: 5px;
+}
+
+.contenedor-formulario-testDrive {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    width: 85%;
+}
+
+.modern-box-testDrive {
+    width: 80%;
+    justify-content: center;
+    align-items: center;
+}
+
+.control-testDrive {
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;  
+    color: #757575;  
+    margin-bottom: 15px;
+}
+
+.form-row-testDrive {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+    width: 100%;
+    gap: 10px;
+}
+
+.form-col-testDrive {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.control-test-drive {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 104px;
+    color: #757575;  
+}
+
+.form-options-contact {
+    width: 100%;
+    padding: 15px 0px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    color: #757575; 
+    margin-bottom: 25px;
+}
+
+.input-rigth-spice{
+    margin-right:20px ;
+}
+
+.text-button-map{
+    font-size: 8px;
+}
+
+/* .button-forms{
+    width: 24%;
+    padding: 15px 0px;
+} */
+
+/* .button-forms-red{
+    width: 24%;
+    background: #000;
+    color: #fff;
+    border: none;
+    border-radius: 3PX;
+    transition: background 0.5s ease;
+    padding: 15px 0px;
+    font-size: 14px;
+    cursor: pointer;
+}
+.button-forms-red:hover{
+    background: #910A2D;
+    color: #fff;
+    border: none;
+} */
+
+.formT .button-forms.disabled,.formT .button-forms:disabled,.formT .button-forms[disabled] {
+    background-color: #d8d8d8;
+    color: #fff;
+    cursor: not-allowed;
+    border-radius: 3px;
+    pointer-events: none;
+    letter-spacing: 1pt;
+    user-select: none
+}
+
+.color-star{
+    color: #910A2D;
+}
+
+.terms-text {
+    color: #757575;
+    text-decoration: none;
+}
+
+.spiceInter {
+    padding: 12px 8px;
+}
+
+.terms-item-vin {
+    margin: 20px 0;
+    padding-left: 15px;
+}
+
+.form-actionsTest {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.textColorLight {
+    color: #757575;
+}
+
+.form-small {
+    margin-left: 22px;
+}
+
+.mess-error {
+    color: red;
+}
+
+.error {
+    color: red;    
+}
+
+.error-select {
+    color: red;
+    border: solid 2px red ;
+}
+.error-text {
+    color: red;
+    border: solid 2px red ;
+}
+.error-text::placeholder {
+    color: red;
+}
+
+.margin-inter{
+    margin-bottom: 25px;
+}
+
+.inputs-felx{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+@media only screen and (max-width: 900px) {
+    .form-row-testDrive{
+        flex-direction: column;
+    }
+    .form-col-testDrive{
+        flex-direction: column;
+    }
+    .boton-toggle{
+        width: 50%;
+    }
+    .inputs-felx{
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    .control-test-drive{
+        height: auto;
+        gap: 8px;
+    }
+    
+}
+
+/* Ocultar el checkbox original */
+.custom-checkbox input {
+    display: none;
+  }
+
+  .custom-checkbox{
+    /* display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row-reverse; */
+  }
+  
+  /* Estilo para cuando el checkbox no está chequeado */
+  .custom-checkbox .checkmark {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    background: white;
+    border: 1px solid #757575;
+    cursor: pointer;
+    margin-right: 3px;
+    position: relative;
+    top: 7px;
+
+  }
+  
+  /* Estilo para cuando el checkbox está chequeado */
+  .custom-checkbox input:checked + .checkmark {
+    background: black;
+    position: relative;
+  }
+  
+  /* Crear el chulo (tick mark) */
+  .custom-checkbox .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  /* Mostrar el chulo cuando el checkbox está chequeado */
+  .custom-checkbox input:checked + .checkmark:after {
+    display: block;
+  }
+  
+  /* Estilo del chulo (tick mark) */
+  .custom-checkbox .checkmark:after {
+    left: 4px;
+    top: -2px;
+    width: 6px;
+    height: 14px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+  }

@@ -1,0 +1,29 @@
+document.addEventListener("DOMContentLoaded", function () {
+    function cambiarEtiqueta() {
+        // Seleccionar el elemento span usando la clase
+        let spanElement = document.querySelectorAll('.mxp-main-header-text-3bglp span');
+        console.log(spanElement.length);
+
+        // Verificar si se encontró el elemento span
+        if (spanElement.length !== 0) {
+
+            spanElement.forEach(e => {
+                // Crear un nuevo elemento h3
+                let h3Element = document.createElement('h3');
+                console.log(h3Element);
+
+                // Copiar el contenido del span al h3
+                h3Element.innerHTML = e.innerHTML;
+
+
+                // Reemplazar el span con el nuevo h3
+                e.parentNode.replaceChild(h3Element, e);
+            });
+
+        } else {
+            console.error('No se encontró un elemento span con la clase proporcionada.');
+        }
+    }
+
+    cambiarEtiqueta();
+});

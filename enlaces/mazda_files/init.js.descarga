@@ -1,0 +1,437 @@
+(function () {
+    if (window.zt_wp) return;
+    let ZMP_BOOMTRAIN_URL = 'boomtrain_url';
+
+    window.addScriptNode = function (urlpage, env=null, siteid=null) {
+        let scriptNode = document.createElement('script');
+        if (env && siteid) {
+            scriptNode.setAttribute('src','https://d30o4d63vvluug.cloudfront.net/public/'+env+'/'+siteid+'/'+urlpage);
+        } else {
+            scriptNode.setAttribute('src',urlpage);
+        }
+        document.head.appendChild(scriptNode);
+    };
+
+    window.getIframeNode = function (formId=null, iframeOnly=false) {
+        if (!iframeOnly && !formId)
+            return '';
+
+        const iframes = document.getElementsByTagName('iframe');
+        let iframesArray = Array.prototype.slice.call(iframes);
+        iframesArray = iframesArray.filter((iframe) => {return iframe.id.startsWith('lightbox-iframe')});
+        const whichIframe = (iframesArray.length === 0) ? -1 : (iframesArray.length === 1 ? 0 : 1);
+        if (whichIframe < 0) {
+            return '';
+        } else {
+            let theiFrame = iframesArray[whichIframe];
+            if (iframeOnly) {
+                return theiFrame;
+            } else {
+                let check = theiFrame.contentWindow.document.getElementById(formId);
+                return (!!check) ? check : '';
+            }
+        }
+    };
+
+    window.getMetadataFields = function (metadataKey) {
+        return window.getIframeNode(null,true).contentWindow.document.querySelectorAll("["+metadataKey+"]");
+    };
+
+    window.getMetadataValue = function (metadataKey) {
+        let fields = window.getMetadataFields(metadataKey);
+        // if there are more than 1 field or if there is none then we have problem
+        return fields.length !== 1 ? '' : fields[0].getAttribute(metadataKey);
+    };
+
+    window.getTargetCustomFieldId = function (metadataKey) {
+        let fields = window.getMetadataFields(metadataKey);
+        // if there are more than 1 field or if there is none then we have problem
+        return fields.length !== 1 ? '' : fields[0].id;
+    };
+
+    window.zt_wp = {
+        score: null,
+        segment: null,
+        promiseWithTimeout: async function (promise, timeoutms, defaultval) {
+            const timeoutPromise = new Promise((_, reject) => {
+                setTimeout(() => {
+                    reject(new Error('Request timed out'));
+                },
+                timeoutms); // 5000 for 5 secs
+            }).catch(e => {
+                window.parent.DIGIOH_API.logError(`Issue fetching data: ${e}. Returning default`);
+                return defaultval;
+            })
+            return Promise.race([promise, timeoutPromise]);
+        },
+        getScore: function () {
+            let result;
+            const promiseOrTimeout = zt_wp.promiseWithTimeout(zt_wp.retrieveEventAsync('scores'),
+                2000,
+                {
+                    "data": {
+                        "site_score": 0
+                    }
+                });
+            const score = promiseOrTimeout;
+            result = score;
+            return result;
+        },
+        updateScoreAndSegment: async function () {
+            this.segment = window._bt?._config.segmentEnabled ? await zt_wp.retrieveEventAsync('segments') : [];
+            this.score = await zt_wp.getScore();
+        },
+        setRule: function (value) {
+            let Rule = document.createElement("div");
+            Rule.setAttribute("id", value);
+            Rule.setAttribute("style", "display:none");
+            Rule.setAttribute('digioh', 'digioh_rule');
+            document.body.appendChild(Rule);
+        },
+        checkBtiCookie: function () {
+            try {
+                zt_wp.email = null;
+                const value = window.parent.DIGIOH_API.getCookie("_bti");
+                if (window.parent.DIGIOH_API.contains(value, "email")) {
+                    zt_wp.setRule("Identified");
+                    const jsonData = decodeURIComponent(value);
+                    const jsonObject = JSON.parse(jsonData);
+                    zt_wp.email = jsonObject.email;
+                    window.parent.DIGIOH_API.log("DIGIOH: POLL STEP #1 - found zt_wp.email from _bti cookie.","ZETA");
+                } else {
+                    zt_wp.setRule("Not-Identified");
+                }
+            } catch (err) {
+                window.parent.DIGIOH_API.logError("ZETA -- exception in checkBtiCookie().");
+            }
+        },
+        applyPixelDates: function(pixelKey) {
+            window.parent.DIGIOH_API.log("calling applyPixelDates","ZETA");
+            const dateCheck = window.localStorage.getItem(pixelKey);
+            if (dateCheck == null) {
+                zt_wp.setDateFlag(pixelKey);
+            }
+        },
+        setDateFlag: function(localStorageKey) {
+            window.parent.DIGIOH_API.log("calling setDateFlag","ZETA");
+            window.localStorage.setItem(localStorageKey, new Date().toISOString());
+        },
+        retrieveEventAsync: function (eventType) {
+            return new Promise(resolve => {
+                window.bt(eventType, {
+                    onSuccess: function (response) {
+                        resolve(response);
+                    }
+                });
+            });
+        },
+        checkScore: async function() {
+            window.parent.DIGIOH_API.log("calling checkScore","ZETA");
+            if (typeof window.bt !== undefined) {
+                const response = await zt_wp.getScore();
+                const topInterests = [];
+
+                if (response.data.top_products) {
+                    let returnedInterests = response.data.top_products;
+                    for (const key in returnedInterests) {
+                        window.parent.DIGIOH_API.log(`Interest Score ${key}: ${returnedInterests[key]}`,"ZETA");
+                        const interest = {
+                            "interest": key,
+                            "score": returnedInterests[key],
+                        }
+                        topInterests.push(interest);
+                    }
+                }
+
+                if (topInterests.length > 0) {
+                    const json_str = JSON.stringify(topInterests);
+                    window.localStorage.setItem('topUserInterests', json_str);
+                }
+            } else {
+                setTimeout(checkScore, 250);
+            }
+        },
+        checkSegmentMembership: async function() {
+            window.parent.DIGIOH_API.log('calling checkSegmentMembership',"ZETA");
+
+            try {
+                // Check if window.bt is defined
+                if (typeof window.bt !== 'undefined') {
+                    // Retrieve the segment membership
+                    const response = window._bt?._config.segmentEnabled ? await zt_wp.retrieveEventAsync('segments') : [];
+                    const bt_segments = [];
+
+                    // Log the segment membership
+                    if (response !== undefined) {
+                        window.parent.DIGIOH_API.log(`Segment Membership: ${response}`,"ZETA");
+                        bt_segments.push(...response);
+                    } else {
+                        window.parent.DIGIOH_API.logError('ZETA -- Segment Membership was undefined');
+                    }
+
+                    // Set a rule for each segment
+                    bt_segments.forEach(segment => {
+                        zt_wp.setRule('segment-' + segment);
+                    });
+
+                    // Reload the page
+                    window.parent.DIGIOH_API.reload();
+
+                } else {
+                    // Try again after a short delay if window.bt is not defined yet
+                    setTimeout(zt_wp.checkSegmentMembership, 250);
+                }
+            } catch (error) {
+                window.parent.DIGIOH_API.logError(`An error occurred while retrieving the segment membership:'+ ${error}`);
+            }
+        },
+        openBox: function(boxId){
+            window.parent.DIGIOH_API.openBox(boxId);
+        },
+        openBoxWithInterest: function(boxId,interestId){
+            window.parent.DIGIOH_API.openBoxWithInterest(boxId,interestId);
+        },
+        beforeDisplay: function () {
+            // execute this before any retriggering checks to set the array data
+            if (window.parent.DIGIOH_API.getAccountMetadata('zt_retrigger_prop')) {
+                window.parent.DIGIOH_API.getAccountMetadata('zt_retrigger_prop').split(',').forEach((item) => {
+                    if (item == 'zt_customRule') {
+                        window.parent.getMetadataValue(item).split(',').forEach((a) => {
+                            zt_wp.rezyncArray.push({paramName: a, paramValue: ''});
+                        });
+                    } else if (item == 'zt_organicConv') {
+                        window.parent.getMetadataValue(item).split(',').forEach((a) => {
+                            zt_wp.rezyncArray.push({paramName: a.split("=")[0], paramValue: a.split("=")[1]});
+                            zt_wp.dateCheckArray.push({localStorageKey: a.split("=")[0] + '-' + a.split("=")[1], days: parseInt(window.parent.getMetadataValue(a.split("=")[1]))});
+                        });
+                    } else {
+                        zt_wp.dateCheckArray.push({localStorageKey: item, days: parseInt(window.parent.getMetadataValue(item))});
+                    }
+                });
+            }
+
+            if (window.parent.DIGIOH_API.getAccountMetadata('zt_organic_allowed')) {
+                window.parent.DIGIOH_API.getAccountMetadata('zt_organic_allowed').split(',').forEach((item) => {
+                    zt_wp.organicConversionAllowedArray.push(parseInt(item));
+                });
+            }
+        },
+        triggeringLogic: function () {
+            window.parent.DIGIOH_API.log('calling triggeringLogic',"ZETA");
+            // check if the blocked rule exists, if yes then continue
+            const seenFirstTime = window.localStorage.getItem('zmp_wp_blocked');
+            if(seenFirstTime == null){
+                window.parent.DIGIOH_API.log('Popin has not been seen yet',"ZETA");
+                return 'initial';
+            }
+            window.parent.DIGIOH_API.log('Popin has been seen at least once',"ZETA")
+
+            const retriggerFalse = window.localStorage.getItem('retrigger-false');
+            if (retriggerFalse){
+                window.parent.DIGIOH_API.log('Popin has been retriggered already. Stopping',"ZETA");
+                return 'stop';
+            }
+
+            for (const dateCheck of zt_wp.dateCheckArray) {
+
+                const storedDate = window.localStorage.getItem(dateCheck.localStorageKey);
+                if (storedDate == null) {
+                    continue;
+                }
+                const storedDateObj = new Date(storedDate);
+                const dateDiff = (new Date().getTime() - storedDateObj.getTime()) / (1000 * 3600 * 24);
+
+                if (dateDiff <= dateCheck.days) {
+                    window.parent.DIGIOH_API.log(`Popin date for ${dateCheck.localStorageKey} not yet expired. Please wait another ${dateCheck.days - dateDiff} days`,"ZETA");
+                    zt_wp.retriggeringArray.push(false);
+                    continue;
+                }
+                window.localStorage.setItem('retrigger-true', new Date().toISOString());
+                zt_wp.retriggeringArray.push(true);
+                window.parent.DIGIOH_API.log('rule is set',"ZETA")
+                window.localStorage.removeItem(dateCheck.localStorageKey);
+                window.parent.DIGIOH_API.log(`Removed ${dateCheck.localStorageKey} from LS`,"ZETA");
+                break;
+            }
+            return 'retrigger'
+        },
+        rezyncScanner: function(paramName, paramValue = "") {
+            window.parent.DIGIOH_API.log('calling rezyncScanner',"ZETA");
+            const listOfScriptTags = parent.window.document.getElementsByTagName("script");
+            const popinId = Object.keys(DIGIOH_LIGHTBOX_ANALYTICS.VARS.lightbox_activity)[0];
+            for (let scriptItem of listOfScriptTags) {
+                if (scriptItem.src.includes(paramName + "=") && scriptItem.src.includes("live.rezync.com")) { // make sure it is a parameter in the rezync domain
+                    // get value set to param
+                    let returnValue = (new URLSearchParams(scriptItem.src)).get(paramName);
+                    returnValue = returnValue ? returnValue : '';
+
+                    // grab zt_customRule values and check
+                    if (window.parent.getMetadataValue('zt_customRule').split(',').filter((str)=>{return str.length > 0}).length > 0) {
+                        window.parent.getMetadataValue('zt_customRule').split(',').forEach((item) => {
+                            if (paramName == item) { // the rule and the param match, perform check
+                                const customRule = paramName + "-" + returnValue;
+                                if (window.parent.getMetadataFields(customRule).length > 0) {
+                                    zt_wp.applyPixelDates(paramName + "-" + returnValue);
+                                    zt_wp.customRulesArray.push(true);
+                                    window.parent.DIGIOH_API.log(`Custom Rule ${customRule} rule: true`,"ZETA");
+                                } else {
+                                    zt_wp.customRulesArray.push(false);
+                                    window.parent.DIGIOH_API.log(`Custom Rule ${customRule} rule: false`,"ZETA");
+                                }
+                            }
+                        });
+                    } else { zt_wp.customRulesArray.push(true); } // no custom rules? make it true
+
+                    // now check zt_organicConv if allowed
+                    if (zt_wp.organicConversionAllowedArray.includes(popinId) &&
+                        window.parent.getMetadataValue('zt_organicConv').split(',').filter((str)=>{return str.length > 0}).length > 0) {
+                        //    paramValue.includes('-pixel-'))
+                        window.parent.getMetadataValue('zt_organicConv').split(',').forEach((item) => {
+                            if (paramValue == item.split('=')[1] && window.parent.getMetadataFields(paramValue).length > 0) { // the organic conversion value is matched
+                                zt_wp.applyPixelDates(paramValue);
+                                window.localStorage.setItem('zmp_wp_blocked', new Date().toISOString()); // set the zmp_wp_blocked as this is a retrigger now
+                                window.parent.DIGIOH_API.log(`Organic Conversion ${paramValue} found`,"ZETA");
+                            } else {
+                                window.parent.DIGIOH_API.log(`Organic Conversion ${paramValue} not found`,"ZETA");
+                            }
+                        });
+                    }
+                }
+            }
+        },
+        popinShowAllow: function () {
+            // load the arrays first
+            zt_wp.beforeDisplay();
+
+            // now call rezync scanner
+            for (let i = 0; i < zt_wp.rezyncArray.length; i++) {
+                zt_wp.rezyncScanner(zt_wp.rezyncArray[i].paramName, zt_wp.rezyncArray[i].paramValue);
+            }
+            // call custom rule extra check logic here to make sure boxes that have them were set
+            zt_wp.customRuleExtraCheck();
+
+            // call retriggering logic here
+            const triggerStatus = zt_wp.triggeringLogic();
+
+            if(triggerStatus == 'initial'){
+                window.parent.DIGIOH_API.log('First trigger, allow popin to show if custom rules pass',"ZETA");
+                window.parent.DIGIOH_API.log(`Custom rules: ${zt_wp.customRulesArray.every(Boolean)}`,"ZETA");
+                return zt_wp.customRulesArray.every(Boolean);
+            } else if(triggerStatus == 'stop'){
+                window.parent.DIGIOH_API.log('Stop trigger, triggered twice already',"ZETA");
+                return false;
+            } else { // this is a retrigger, check retrigger array
+                const retrigger = zt_wp.retriggeringArray.concat(zt_wp.customRulesArray);
+                window.parent.DIGIOH_API.log(`This is a retrigger, popin to show as long as retrigger and custom rules okay: ${retrigger.every(Boolean)}`,"ZETA");
+                return retrigger.every(Boolean);
+            }
+        },
+        session_start: function(){
+            window.parent.DIGIOH_API.log('calling session_start',"ZETA");
+            const sessionStart = window.sessionStorage.getItem('zt_wp_session_start');
+            if (sessionStart != null) {
+                window.parent.DIGIOH_API.log('zt_wp_session_start already set',"ZETA");
+            } else {
+                window.sessionStorage.setItem('zt_wp_session_start', new Date().toISOString());
+            }
+        },
+        run_bt_func: function () {
+            if (typeof _bt !== 'undefined' || typeof window._bt !== 'undefined') {
+                if (typeof window._bt === 'undefined') {
+                    window._bt = _bt;
+                } else if (typeof _bt === 'undefined') {
+                    _bt = window._bt;
+                }
+                window.parent.DIGIOH_API.log("DIGIOH: window._bt is defined","ZETA");
+            }
+            /*for (let i = 0; i < zt_wp.rezyncArray.length; i++) {
+                zt_wp.rezyncScanner(zt_wp.rezyncArray[i].paramName, zt_wp.rezyncArray[i].paramValue);
+            }*/
+            zt_wp.session_start();
+            zt_wp.checkBtiCookie();
+            //zt_wp.triggeringLogic();
+            zt_wp.checkScore();
+            zt_wp.checkSegmentMembership();
+            zt_wp.updateScoreAndSegment();
+            // re-apply digioh rule check
+
+            window.parent.DIGIOH_API.reload();
+        },
+        afterSubmit: function () {
+            // last submit
+            window.parent.DIGIOH_API.log("SUBMITTED","ZETA");
+            window.localStorage.setItem('zt_lastSubmitted', new Date().toISOString());
+
+            let seenFirstTime = window.localStorage.getItem('zmp_wp_blocked');
+            if (seenFirstTime == null) {
+                window.localStorage.setItem('zmp_wp_blocked', new Date().toISOString());
+            }
+
+            let retriggerTrue = window.localStorage.getItem('retrigger-true');
+            if (retriggerTrue != null) {
+                window.localStorage.setItem('retrigger-false', new Date().toISOString());
+                window.localStorage.removeItem('retrigger-true');
+            }
+        },
+        afterClose: function () {
+            // last closed
+            window.parent.DIGIOH_API.log("BOX CLOSED","ZETA");
+            window.localStorage.setItem('zt_lastClosed', new Date().toISOString());
+
+            let seenFirstTime = window.localStorage.getItem('zmp_wp_blocked');
+            if (seenFirstTime == null) {
+                window.localStorage.setItem('zmp_wp_blocked', new Date().toISOString());
+            }
+
+            let retriggerTrue = window.localStorage.getItem('retrigger-true');
+            if (retriggerTrue != null) {
+                window.localStorage.setItem('retrigger-false', new Date().toISOString());
+                window.localStorage.removeItem('retrigger-true');
+            }
+        },
+        customRuleExtraCheck: function () {
+            // custom rule extra check
+            window.parent.DIGIOH_API.log("CUSTOM RULE EXTRA CHECK","ZETA");
+            // checks if customRules is enabled, box has it set and if the rules array is empty
+            if (window.parent.DIGIOH_API.getAccountMetadata('zt_retrigger_prop').split(',').includes('zt_customRule') // customRules is active for account
+                &&
+                window.parent.getMetadataValue('zt_customRule').split(',').filter((str)=>{return str.length > 0}).length > 0 // customRules is set for box
+                &&
+                zt_wp.customRulesArray.length == 0) // but for some reason the check array is still empty
+            {
+                zt_wp.customRulesArray.push(false); // insert false 
+            }
+        },
+        rezyncArray: [], // set array of objects for rezync scanning, includes organic conversion keys
+        dateCheckArray: [], // set array of objects for date checks
+        organicConversionAllowedArray: [], // array of popin ids to allow organic conversions to take place
+        retriggeringArray: [], // array of all retriggering checks
+        customRulesArray: [], // array of all custom rules checks
+    }
+
+    window['bt'] = window['bt'] || function () {
+        (window['_bt'] = window['_bt'] || []).push(arguments);
+    };
+
+    let BOOMTRAIN_URL = window.parent.DIGIOH_API.getAccountMetadata(ZMP_BOOMTRAIN_URL)
+
+    setTimeout(function () {
+        if (typeof _bt === 'undefined' && typeof window._bt === 'undefined') {
+            JQUERY_DIGIOH.when(
+                JQUERY_DIGIOH.ajax({
+                    url: BOOMTRAIN_URL,
+                    crossDomain: true,
+                    dataType: "script",
+                    cache: false
+                })
+            ).done(function () {
+                window.parent.DIGIOH_API.log("DIGIOH: Loaded Zync and P13N.js script","ZETA");
+                zt_wp.run_bt_func();
+
+            });
+        } else {
+            window.parent.DIGIOH_API.log("DIGIOH: Zync and P13N.js already defined, so skipping loading a 2nd time.","ZETA");
+            zt_wp.run_bt_func();
+        }
+    }, 500);
+})();

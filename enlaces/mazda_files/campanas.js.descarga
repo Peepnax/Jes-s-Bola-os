@@ -1,0 +1,1312 @@
+angular.module("appCampana", []).controller("CampanasController", ["$scope", "$http", function (e, a) {
+    e.pattern_plate = /^[a-zA-Z]{1,3}[0-9]{1,3}$/,
+        e.campana_selected = null,
+        e.program_selected = null,
+        e.vin_response = "",
+        e.version_response = "",
+        e.modelo_response = "",
+        e.plate_response = "",
+        e.campanas = [{
+            nombre_campana: "Cableado Emisiones",
+            vehiculo: "Mazda3",
+            modelo: "2005 - 2007",
+            fecha: "31/01/2008",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "4402",
+            medida: "Inspeccionar el tubo corrugado protector del cableado de emisiones. Remplazar el tubo protector y ajustar su posici\xf3n, para mejorar el aislamiento del cableado de emisiones al calor que emite la parte superior del motor.",
+            tiempo: "0,8h",
+            razones_texto: "En algunos ramales del cableado de emisiones pueden estar en contacto entre la tapa v\xe1lvulas y la caja del filtro de aire. En el peor de los casos, el tubo corrugado flexible para la protecci\xf3n del cableado se encuentra da\xf1ado y el cableado queda expuesto a un corto circuito con la tapa v\xe1lvulas.  Como resultado, las partes interiores de la PCM se queman.  La posibilidad de que el tubo corrugado se encuentre atrapado, se estima en menos del 5%.",
+            riesgos: "Deterioro prematuro del cableado de emisiones, que podr\xeda causar problemas de funcionamiento del motor, debido al incorrecto posicionamiento del protector del cableado y/o de algunos ramales del cableado (arn\xe9s).",
+            key: "PES0108",
+            type: "1"
+        }, {
+            nombre_campana: "Aplicaci\xf3n Sellante Alojamiento Sensor ABS",
+            vehiculo: "Mazda2",
+            modelo: "2008",
+            fecha: "15/09/2008",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "480",
+            medida: "Aplicar sellante en la base del sensor de ABS y aplicar sellante en la uni\xf3n entre el puente trasero y el plato freno de las ruedas traseras, para eliminar la posibilidad de entrada de agua al cubo y rodamiento de las ruedas traseras.",
+            tiempo: "1h",
+            razones_texto: "Si el agua lluvia, charcos, etc. salpica continuamente en los alrededores del eje trasero durante la conducci\xf3n, puede entrar a la carcasa del rodamiento trasero debido a la insuficiente propiedad impermeable y a la acumulaci\xf3n temporal de agua dentro de la carcasa.  Si el veh\xedculo se maneja repetidamente dentro de estas condiciones, el agua acumulada hace que la pista del rodamiento se oxide, causando ruido.",
+            riesgos: "Deterioro prematuro del rodamiento del cubo de la rueda trasera afectada, debido a la entrada de agua por el posible espacio entre el puente trasero y el plato freno, debido a la inmersi\xf3n de la rueda o salpicadura frecuente.",
+            key: "PES1608",
+            type: "1"
+        }, {
+            nombre_campana: "Distribuidor de Combustible y Tubo de Alta Presi\xf3n ",
+            vehiculo: "Mazda CX-7",
+            modelo: "2007 - 2009",
+            fecha: "15/09/2008",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "496",
+            medida: "Reemplazar el Distribuidor de combustible y el tubo de alta presi\xf3n de combustible, que conducen el combustible a los inyectores, y podr\xedan verse afectados por gasolina con etanol contaminada, con impurezas y/o fuera de las especificaciones. ",
+            tiempo: "4,5h",
+            razones_texto: "A fin de mejorar el producto y aumentar su resistencia ante posibles ataques del combustible con etanol, se debe realizar el reemplazo del distribuidor de combustible y del tubo de alta presi\xf3n.",
+            riesgos: "El uso de combustible con etanol puede generar un debilitamiento al interior del distribuidor de combustible y del tubo de alta presi\xf3n, que podr\xedan resultar en fugas de combustible en el cuarto motor con riesgo de incendio en el veh\xedculo.",
+            key: "PES1708",
+            type: "1"
+        }, {
+            nombre_campana: "Revisi\xf3n Manguera Refrigeraci\xf3n Aceite Caja Autom\xe1tica",
+            vehiculo: "Mazda3",
+            modelo: "2006 - 2010",
+            fecha: "1/05/2010",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "3628",
+            medida: "Recortar la proyecci\xf3n del panel del radiador de refrigeraci\xf3n motor, que podr\xeda interferir con la manguera de refrigeraci\xf3n del aceite de la caja de velocidades.  Inspeccionar la condici\xf3n del protector y de la manguera de refrigeraci\xf3n del aceite de la caja autom\xe1tica.  Remplazar el protector de la manguera de refrigeraci\xf3n del aceite del a caja autom\xe1tica.  Remplazar la manguera de refrigeraci\xf3n del aceite de la caja autom\xe1tica.",
+            tiempo: "0,9h",
+            razones_texto: "Si el veh\xedculo es conducido frecuentemente por v\xedas sin pavimentar, la vibraci\xf3n puede ocasionar que una saliente en el panel frontal, desgaste el recubrimiento de la manguera de refrigeraci\xf3n del aceite de AT y se perfore. En el peor de los casos, es posible que la caja autom\xe1tica pierda aceite ATF, iluminando la luz de advertencia y ocasionando que la transmisi\xf3n no opere.",
+            riesgos: "Desgaste por rozamiento del recubrimiento y-o perforaci\xf3n de la manguera de refrigeraci\xf3n del aceite de AT, debido al contacto por vibraci\xf3n con una saliente en el panel frontal del radiador de refrigeraci\xf3n motor. En el peor de los casos, es posible que la caja autom\xe1tica pierda aceite ATF, iluminando la luz de advertencia y ocasionando que la transmisi\xf3n no opere.",
+            key: "PES0310",
+            type: "1"
+        }, {
+            nombre_campana: "Remplazo Kit Bomba de Aceite y Tubos Direcci\xf3n Electrohidr\xe1ulica",
+            vehiculo: "Mazda3 Mazda5",
+            modelo: "2008 - 2010 - 2008 - 2009",
+            fecha: "10/12/2010",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "3148",
+            medida: "Lavar todas las l\xedneas de fluido de la direcci\xf3n tubos y mangueras.  Remplazar la bomba de aceite de la direcci\xf3n asistida del conjunto de la bomba electrohidr\xe1ulica por una bomba de aceite nueva incluida en el kit.  Instalar el conjunto de la bomba electrohidr\xe1ulica, con la nueva bomba de aceite, y el nuevo ensamble de tubos y mangueras del sistema de direcci\xf3n asistida.",
+            tiempo: "2h",
+            razones_texto: "Algunos clientes pueden reportar la p\xe9rdida de asistencia en el sistema de direcci\xf3n, el indicador en el grupo de instrumentos se ilumina y el c\xf3digo DTC C1099 relacionado con el sistema de direcci\xf3n electro asistida es almacenado en la memoria.",
+            riesgos: "Posible p\xe9rdida de la asistencia de la direcci\xf3n intermitente, temporal o total, debido a que la unidad de control de la direcci\xf3n electrohidr\xe1ulica detecta valores de presi\xf3n en el sistema fuera de especificaci\xf3n y desactiva la asistencia.   La direcci\xf3n normal del veh\xedculo contin\xfaa operando normalmente.",
+            key: "PES0810",
+            type: "1"
+        }, {
+            nombre_campana: "Instalaci\xf3n Cable Masa Motor Limpiaparabrisas",
+            vehiculo: "Mazda3",
+            modelo: "2008 a 2011",
+            fecha: "15/10/2011",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "6566",
+            medida: "Instalar un cable masa adicional requerido para garantizar la operaci\xf3n del motor del limpiaparabrisas",
+            tiempo: "0,9h",
+            razones_texto: "En algunos veh\xedculos con el tiempo puede ocurrir que la resistencia el\xe9ctrica del circuito del motor del limpia parabrisas se incrementa a tal punto que puede quedar fuera de funcionamiento el motor del limpiaparabrisas. Para prevenir tal condici\xf3n se debe instalar un cableado adicional en el motor del limpiaparabrisas.",
+            riesgos: "Posible falla en la operaci\xf3n del motor del limpiaparabrisas, debido al deterioro del circuito el\xe9ctrico del motor en la conexi\xf3n a masa.",
+            key: "PES0311",
+            type: "1"
+        }, {
+            nombre_campana: "Remplazo Inflador Airbag Pasajero",
+            vehiculo: "Mazda6",
+            modelo: "2003 a 2005",
+            fecha: "22/06/2013",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "2399",
+            medida: "Remplazar los Infladores de las bolsas de aire frontales del lado conductor y del lado pasajero, por unos nuevos modificados.  Proveedor del Inflador TAKATA.",
+            tiempo: "0,9h",
+            razones_texto: "Es posible que el airbag del lado del pasajero de algunos Mazda 6 (GG) modelos 2003 – 2004 y 2005 no opere en forma adecuada. La densidad del propelente en el inflador podr\xeda resultar insuficiente debido a condiciones inadecuadas de producci\xf3n y almacenamiento del propelente.",
+            riesgos: "Posible operaci\xf3n incorrecta de la bolsa de aire frontal del lado del pasajero (airbag), la bolsa de aire no ofrecer\xe1 la protecci\xf3n necesaria durante un impacto frontal y las piezas rotas del inflador podr\xedan causar lesiones al pasajero. Es posible que el Inflador de la bolsa de aire no opere de la forma en que fue dise\xf1ado. ",
+            key: "CES0613",
+            type: "2"
+        }, {
+            nombre_campana: "Instalaci\xf3n Protector Canal Guardafangos Delanteros",
+            vehiculo: "Mazda2",
+            modelo: "2016",
+            fecha: "15/08/2015",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "1830",
+            medida: "Instalar el protector en el borde del panel del guardafango delantero al interior del compartimiento motor a ambos lados. ",
+            tiempo: "0,7h",
+            razones_texto: "En los canales de lluvia que se encuentran en el reverso de los guarda fangos delanteros en el compartimento del motor, pueden tener rebabas en el borde del panel. El cliente o el t\xe9cnico pueden lesionar sus dedos al limpiar alrededor de la zona afectada, en el evento que no adviertan la presencia de rebabas o arista cortante.",
+            riesgos: "Posible causa de lesiones (cortes), al realizar operaciones de limpieza, mantenimiento y/o alguna intervenci\xf3n en el compartimento motor, por contacto con el borde interior de los guardafangos delanteros.",
+            key: "CES1815",
+            type: "2"
+        }, {
+            nombre_campana: "Biselado del Borde de la Cubierta Central Tim\xf3n",
+            vehiculo: "Mazda CX-5",
+            modelo: "2012 y 2013",
+            fecha: "15/12/2015",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "353",
+            medida: "Biselar la arista inferior en la tapa central del tim\xf3n, usando una herramienta hexagonal o similar.",
+            tiempo: "0,7h",
+            razones_texto: "Para las versiones de CX-5 con el tim\xf3n con recubrimiento tipo cuero, es posible que un conductor puede sufrir una lesi\xf3n en la mano/dedos al entrar en contacto con el borde de la cubierta central del tim\xf3n en su parte posterior.",
+            riesgos: "Posible causa de lesiones (cortes) al conductor y/o los ocupantes del veh\xedculo, al hacer contacto y/o rozar el filo de la cubierta central del tim\xf3n, durante alg\xfan movimiento, operaci\xf3n y/o manipulaci\xf3n en el \xe1rea del tim\xf3n.",
+            key: "CES4515",
+            type: "2"
+        }, {
+            nombre_campana: "Reparaci\xf3n Molduras Puerta y Protector",
+            vehiculo: "Mazda6",
+            modelo: "2012 - 2014 - 2016",
+            fecha: "15/04/2016",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "504",
+            medida: "Reparar la moldura puerta as\xed: - Verificar que el protector no est\xe9 roto o desubicado. - Aplicaci\xf3n de adhesivo para reforzar zona protector. - Inspecci\xf3n de la saliente (borde) del protector de todas las puertas. ",
+            tiempo: "2,4h",
+            razones_texto: "Es posible que cualquier ocupante del veh\xedculo pueda sufrir una lesi\xf3n en sus manos o en la cara al entrar en contacto con el borde de la moldura puerta, localizado en el extremo posterior o por falta de fuerza de retenci\xf3n del protector.  Si existe espacio entre el protector de resina y el borde posterior del extremo de la moldura de la puerta o si el protector est\xe1 desubicado o roto, permitiendo que la parte met\xe1lica de molde de la moldura puerta quede expuesto.",
+            riesgos: "Se causan lesiones (cortes y/o laceraciones) al conductor y/o los ocupantes del veh\xedculo, al hacer contacto, rozar y/o golpear el borde de la moldura de la puerta en el extremo superior.",
+            key: "CES0416",
+            type: "2"
+        }, {
+            nombre_campana: "Remplazo Inflador Airbag Frontal Conductor",
+            vehiculo: "Mazda BT-50",
+            modelo: "2004 - 2007 - 2007 - 2015",
+            fecha: "15/03/2016",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "29645",
+            medida: "Inspeccionar y confirmar que el veh\xedculo fue equipado durante su fabricaci\xf3n con bolsas de aire frontales como equipo original. Remplazar el Inflador de la bolsa de aire frontal del lado del conductor, por uno nuevo modificado.  Remplazar el Inflador de la bolsa de aire frontal del lado del pasajero, por uno nuevo modificado.  Proveedor del Inflador TAKATA.",
+            tiempo: "0,8h",
+            razones_texto: "Es posible que el airbag del lado del conductor, no opere en forma adecuada. Si esto ocurre, el airbag no ofrecer\xe1 la protecci\xf3n necesaria durante un impacto frontal y las piezas rotas del inflador podr\xedan causar lesiones al conductor y/o pasajeros dentro de la cabina del veh\xedculo.",
+            riesgos: "Posible operaci\xf3n incorrecta de la bolsa de aire frontal del lado del conductor (airbag) y de la bolsa de aire del lado del pasajero, la bolsa de aire no ofrecer\xe1 la protecci\xf3n necesaria durante un impacto frontal y las piezas rotas del inflador podr\xedan causar lesiones al conductor y al pasajero. Es posible que el Inflador de la bolsa de aire no opere de la forma en que fue dise\xf1ado. ",
+            key: "CES0916",
+            type: "2"
+        }, {
+            nombre_campana: "Remplazo Infladores Airbag Frontales Conductor y/o Pasajero",
+            vehiculo: "Mazda6",
+            modelo: "2003 - 2004 - 2009",
+            fecha: "22/03/2016",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "8300",
+            medida: "Inspeccionar y confirmar que el veh\xedculo fue equipado durante su fabricaci\xf3n con bolsas de aire frontales como equipo original. Remplazar el Inflador de la bolsa de aire frontal del lado del conductor, por uno nuevo modificado.  Remplazar el Inflador de la bolsa de aire frontal del lado del pasajero, por uno nuevo modificado.  Proveedor del Inflador TAKATA.",
+            tiempo: "0,9h",
+            razones_texto: "Es posible que el airbag del lado del conductor y/o del lado pasajero, no operen en forma adecuada.  Si esto ocurre, el o los airbag no ofrecer\xe1n la protecci\xf3n necesaria durante un impacto frontal y las piezas rotas del inflador podr\xedan causar lesiones al conductor y/o pasajeros dentro de la cabina del veh\xedculo.",
+            riesgos: "Posible operaci\xf3n incorrecta de la bolsa de aire frontal del lado del conductor (airbag) y de la bolsa de aire del lado del pasajero, la bolsa de aire no ofrecer\xe1 la protecci\xf3n necesaria durante un impacto frontal y las piezas rotas del inflador podr\xedan causar lesiones al conductor y al pasajero. Es posible que el Inflador de la bolsa de aire no opere de la forma en que fue dise\xf1ado. ",
+            key: "CES1116",
+            type: "2"
+        }, {
+            nombre_campana: "Remplazo interruptor de encendido",
+            vehiculo: "VARIOS MODELOS",
+            modelo: "1991 - 2007",
+            fecha: "30/01/2016",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "16059",
+            medida: "Desmontar el Conjunto del Encendido (que incluye el Alojamiento de la llave y el Interruptor del Encendido). Remplazar el Interruptor del Encendido y Montar el Conjunto del Encendido nuevamente.",
+            tiempo: "1,1h",
+            razones_texto: "En algunos interruptores de encendido de los veh\xedculos involucrados en esta campa\xf1a, una cantidad excesiva de grasa pudo haber sido aplicada en los puntos de contacto, dentro del interior del interruptor. La grasa puede carbonizarse debido al calor que se produce por el arco el\xe9ctrico al momento del contacto generado durante el funcionamiento del interruptor.",
+            riesgos: "Posible emisi\xf3n de humo o en el peor de los casos presencia de fuego, por carbonizaci\xf3n de un probable exceso de grasa aplicado a los puntos de contacto del interruptor de encendido durante su fabricaci\xf3n.",
+            key: "CES1616",
+            type: "2"
+        }, {
+            nombre_campana: "Remplazo Mangueras Refrigeraci\xf3n de Aceite ATX",
+            vehiculo: "Mazda BT-50",
+            modelo: "2012 - 2014",
+            fecha: "16/08/2016",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "110",
+            medida: "Inspeccionar las mangueras de refrigerante motor del enfriador de aceite de la caja autom\xe1tica, identificar si corresponden a la producci\xf3n posterior a la modificaci\xf3n de producci\xf3n en masa (marcas amarillas). Remplazar las mangueras de refrigerante del enfriador de aceite de la caja autom\xe1tica que corresponden a la producci\xf3n anterior a la correcci\xf3n de la producci\xf3n en masa, e Instalar el nuevo Kit de protecci\xf3n.",
+            tiempo: "1,8h",
+            razones_texto: "Para algunas versiones de Mazda BT-50 (UP), dependiendo del color de las marcas en las mangueras de entrada y salida de refrigerante que se encuentran en el enfriador de aceite de la caja autom\xe1tica, es necesario realizar el remplazo e instalar un kit de protecci\xf3n en las mangueras. ",
+            riesgos: "Posibles fugas del l\xedquido refrigerante del motor, sobrecalentamiento del motor, y da\xf1os en el motor, debido a la falla en las mangueras de refrigerante que van conectadas al enfriador de aceite de la caja autom\xe1tica de velocidades (transmisi\xf3n).",
+            key: "CES2216",
+            type: "2"
+        }, {
+            nombre_campana: "Remplazo Inflador Airbag Frontal Pasajero",
+            vehiculo: "Mazda2",
+            modelo: "2008 - 2015",
+            fecha: "3/12/2016",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "28202",
+            medida: "Remplazar el Inflador de la bolsa de aire frontal del lado pasajero, por uno nuevo modificado. Proveedor del Inflador TAKATA.",
+            tiempo: "0,9h",
+            razones_texto: "Eventualmente, la carcasa del airbag del lado pasajero puede romperse de forma inapropiada, proyectando fragmentos met\xe1licos hacia los ocupantes del veh\xedculo.  Mazda Motor Corporation ha solicitado implementar las acciones necesarias para realizar el cambio del inflador de la bolsa de aire del lado pasajero de los veh\xedculos Mazda2 (DE) fabricados desde enero de 2008 hasta abril de 2014 y que afecta 28.202 veh\xedculos Mazda2 (DE) ensamblados y comercializados en Colombia por la Compa\xf1\xeda Colombiana Automotriz S.A. – Liquidada, as\xed como algunas unidades importadas desde Jap\xf3n y Tailandia.",
+            riesgos: "Posible operaci\xf3n incorrecta de la bolsa de aire frontal del lado del pasajero (airbag), la bolsa de aire no ofrecer\xe1 la protecci\xf3n necesaria durante un impacto frontal y las piezas rotas del inflador podr\xedan causar lesiones al pasajero. Es posible que el Inflador de la bolsa de aire no opere de la forma en que fue dise\xf1ado. ",
+            key: "CES4016",
+            type: "2"
+        }, {
+            nombre_campana: "Remplazo Inflador Airbag Frontal Pasajero",
+            vehiculo: "Mazda BT-50",
+            modelo: "2006 - 2015",
+            fecha: "15/03/2017",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "26661",
+            medida: "Inspeccionar y confirmar que el veh\xedculo fue equipado durante su fabricaci\xf3n con bolsas de aire frontales como equipo original. Remplazar el Inflador de la bolsa de aire frontal del lado del pasajero, por uno nuevo modificado.  Proveedor del Inflador TAKATA.",
+            tiempo: "0,9h",
+            razones_texto: "En los veh\xedculos expuestos continuamente a altos niveles de humedad absoluta (en el ambiente) podr\xeda presentarse que, en el evento de una colisi\xf3n que cumpla las condiciones para el despliegue de la bolsa de aire frontal, la carcasa del inflador de la bolsa de aire frontal del lado del pasajero se rompa, y la bolsa de aire se despliegue anormalmente.  Una ruptura del inflador puede resultar en fragmentos de metal que impacten y potencialmente produzcan lesiones serias en los ocupantes del veh\xedculo.",
+            riesgos: "Posible operaci\xf3n incorrecta de la bolsa de aire frontal del lado del pasajero (airbag), la bolsa de aire no ofrecer\xe1 la protecci\xf3n necesaria durante un impacto frontal y las piezas rotas del inflador podr\xedan causar lesiones al pasajero. Es posible que el Inflador de la bolsa de aire no opere de la forma en que fue dise\xf1ado. ",
+            key: "CES4116",
+            type: "2"
+        }, {
+            nombre_campana: "Remplazo Seguro Espaldar Silla Trasera",
+            vehiculo: "Mazda BT-50",
+            modelo: "2012 - 2015",
+            fecha: "17/04/2017",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "921",
+            medida: "Remplazar el Seguro del espaldar de la silla trasera (conjunto del mecanismo) por uno nuevo modificado.",
+            tiempo: "0,9h",
+            razones_texto: "En ciertos veh\xedculos BT-50 (UP y UR), el extremo del muelle (resorte) de retorno para el seguro del espaldar del asiento trasero puede romperse, provocando que el mecanismo de bloqueo del asiento no funcione correctamente. Bajo tales condiciones, se producir\xe1 un ruido anormal, y el respaldo del asiento trasero no quedar\xe1 sujetado firmemente en la posici\xf3n vertical y puede caerse durante el frenado.  Cuando se instale un sistema de retenci\xf3n para los ni\xf1os en el espaldar de la silla trasera, el espacio para este sistema de retenci\xf3n quedar\xe1 muy estrecho, si el espaldar de la silla trasera se cae hacia el frente.",
+            riesgos: "Reducci\xf3n del espacio entre la silla de seguridad para ni\xf1os (no incluida con el veh\xedculo) cuando se instala mirando hacia atr\xe1s en el asiento trasero, y el espaldar del asiento trasero cuando este se mueve hacia adelante y abajo.  Posible sujeci\xf3n insegura del espaldar del asiento trasero que puede caer hacia abajo y adelante durante una frenada.  Presencia de ruido desde el seguro del espaldar del asiento trasero.",
+            key: "CES4316",
+            type: "2"
+        }, {
+            nombre_campana: "Inspecci\xf3n y Reparaci\xf3n Tubo Recirculaci\xf3n Tanque Combustible",
+            vehiculo: "Mazda3",
+            modelo: "2016",
+            fecha: "15/03/2017",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "579",
+            medida: "Inspeccionar el No. de Lote del tanque de combustible. Inspeccionar la Soldadura entre el Tubo de Recirculaci\xf3n y el tanque de combustible, solo si el No. de Lote del tanque se encuentra entre los lotes afectados. Remplazar el tanque de combustible si se encuentran Problemas en la soldadura y/o Fugas de Combustible.",
+            tiempo: "3h",
+            razones_texto: "En ciertos Mazda3, la tuber\xeda de recirculaci\xf3n puede no estar soldada apropiadamente al tanque de combustible, existiendo la posibilidad de que exista fuga del carburante por una parte de la soldadura (Componentes de pl\xe1stico “soldados” por la aplicaci\xf3n de calor y presi\xf3n).",
+            riesgos: "Posible soldadura incorrecta entre el Tubo de Recirculaci\xf3n y el Tanque de Combustible (dos partes pl\xe1sticas), en el peor de los casos podr\xeda presentarse fuga de combustible por la uni\xf3n soldada defectuosa.",
+            key: "CES5216",
+            type: "2"
+        }, {
+            nombre_campana: "Inspecci\xf3n y Reparaci\xf3n V\xe1lvula ICV Tanque Combustible",
+            vehiculo: "Mazda3",
+            modelo: "2015 - 2016",
+            fecha: "15/03/2017",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "1480",
+            medida: "Inspeccionar el No. de Lote del tanque de combustible. Inspeccionar la Soldadura entre la V\xe1lvula ICV (v\xe1lvula de retenci\xf3n de entrada) y el tanque de combustible, solo si el No. de Lote del tanque se encuentra entre los lotes afectados. Remplazar el tanque de combustible si se encuentran Problemas en la soldadura y/o Fugas de Combustible.",
+            tiempo: "3h",
+            razones_texto: "En ciertos Mazda3, es posible que la V\xe1lvula de Retenci\xf3n de Entrada (ICV – Inlet Check Valve) pueda no estar soldada adecuadamente al tanque de combustible. Existiendo la posibilidad de fugas por una parte de la soldadura (Componentes de pl\xe1stico “soldados” por la aplicaci\xf3n de calor y presi\xf3n).",
+            riesgos: "Posible soldadura incorrecta entre la V\xe1lvula de Retenci\xf3n de Entrada ICV y el Tanque de Combustible (dos partes pl\xe1sticas), en el peor de los casos podr\xeda presentarse fuga de combustible por la uni\xf3n soldada defectuosa.",
+            key: "CES5516",
+            type: "2"
+        }, {
+            nombre_campana: "Remplazo Espejo Interior Fotocr\xf3mico",
+            vehiculo: "Mazda3",
+            modelo: "2017",
+            fecha: "12/01/2017",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "387",
+            medida: "Inspeccionar la identificaci\xf3n del veh\xedculo y del espejo instalado, para confirmar que el espejo se encuentra entre los afectados. Remplazar el espejo por uno nuevo modificado, y conectarlo al cableado del veh\xedculo.",
+            tiempo: "0,8h",
+            razones_texto: "Posible sonido anormal puede producirse en el espejo retrovisor interior fotocr\xf3mico y puede llegar a presentar humo en la zona del conector de cableado del espejo. En este evento, es probable que el fusible de la unidad de control de 15 A se funda. Si el fusible se funde, el motor del veh\xedculo no puede ser encendido nuevamente.",
+            riesgos: "Posible falla en el arranque del motor despu\xe9s de estar apagado, debido a un cortocircuito al interior del espejo retrovisor interior que puede producir humo y hacer que se funda el fusible de la Unidad de Control del veh\xedculo.  Posible ruido en el espejo retrovisor interior.",
+            key: "CES7416",
+            type: "2"
+        }, {
+            nombre_campana: "Correcci\xf3n Sellos de Conector hacia Unidad ABS",
+            vehiculo: "Allegro",
+            modelo: "2004 - 2008",
+            fecha: "14/10/2008",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "10128",
+            medida: "Inspeccionar el conector del cableado de la Unidad Hidr\xe1ulica de ABS, la condici\xf3n de los terminales, el tipo de sellos de caucho en la parte posterior del conector, el cableado del conector, y la Unidad Hidr\xe1ulica de ABS.  Inspeccionar el Cableado EMI y su conector al la Unidad de ABS.  Remplazar, Reparar y Limpiar  los anteriores componentes que no se encuentren en la condici\xf3n especificada. Aplicar grasa diel\xe9ctric, adicionar cinta sellante y recortar la tapa del conector de la Unidad de ABS.",
+            tiempo: "6,6h",
+            razones_texto: "Se ha detectado una posible filtraci\xf3n de agua hacia la unidad ABS a trav\xe9s del conector del cableado. Esta condici\xf3n puede ocasionar un deterioro en los terminales del cableado y de la unidad electr\xf3nica dando como resultado el mal funcionamiento de la unidad hidr\xe1ulica de ABS. La falla se manifiesta con la iluminaci\xf3n del  testigo del ABS  en el panel de instrumentos.  ",
+            riesgos: "Deterioro del conector del cableado el\xe9ctrico de la Unidad Hidr\xe1ulica del ABS, que podr\xeda afectar su funcionamiento, debido a la entrada de agua recurrente al conector por inmersi\xf3n o salpicadura frecuente.",
+            key: "PES2008",
+            type: "1"
+        }, {
+            nombre_campana: "Cables Sensor Ox\xedgeno",
+            vehiculo: "BT-50",
+            modelo: "2009",
+            fecha: "20/10/2008",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "12",
+            medida: "Inspeccionar la ubicaci\xf3n de los cables en el conector del sensor de ox\xedgeno.  Desensamblar el conector y ubicar en la posici\xf3n correcta los cables, Ensamblar el conector del sensor de ox\xedgeno.",
+            tiempo: "0,7h",
+            razones_texto: "El sensor de ox\xedgeno emite una se\xf1al con un voltaje mayor al m\xe1ximo especificado  el cual con el tiempo puede afectar la unidad de Inyecci\xf3n al efectuar correcciones de mezcla de combustible diferentes a las \xf3ptimas requieras por el veh\xedculo en sus diferentes condiciones de manejo.",
+            riesgos: "Funcionamiento incorrecto del control de la inyecci\xf3n de combustible y las correcciones de la mezcla de combustible que ingresa al motor, debido a la disposici\xf3n invertida de los dos cables del sensor de ox\xedgeno.",
+            key: "PES2108",
+            type: "1"
+        }, {
+            nombre_campana: "Cableado Asiento Conductor",
+            vehiculo: "CX-9",
+            modelo: "2007 - 2009",
+            fecha: "9/03/2009",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "443",
+            medida: "Inspeccionar, Reparar y Asegurar el cableado del asiento con una abrazadera pl\xe1stica a la estructura de la silla para evitar que se genere una por rozamiento cuando se modifica la posici\xf3n del asiento frecuentemente.",
+            tiempo: "0,9h",
+            razones_texto: "En los veh\xedculos CX-9 que cuenten con silla ajustable del conductor y funci\xf3n de memoria, el arn\xe9s de cableado que se encuentra ruteado por debajo del coj\xedn, puede interferir con el soporte de la cubierta que se fija en la parte frontal. Por  esto, el aislamiento del arn\xe9s de cableado resulta da\xf1ado y los cables desnudos pueden hacer contacto con este soporte causando un cortocircuito.  El anterior evento, puede afectar la silla en el ajuste en altura, la reclinaci\xf3n del espaldar, etc. se pueden activar de forma inesperada e incontrolable, causando dificultades durante la conducci\xf3n.",
+            riesgos: "Deterioro del cableado de accionamiento el\xe9ctrico de la silla del conductor, y posible inoperancia del accionamiento el\xe9ctrico de la silla, debido al rozamiento inadecuado del cableado con la estructura del asiento.",
+            key: "PES0609",
+            type: "1"
+        }, {
+            nombre_campana: "Inspecci\xf3n y Ajuste Calefactor Asientos",
+            vehiculo: "CX-9",
+            modelo: "2010",
+            fecha: "5/03/2010",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "68",
+            medida: "Inspeccionar las unidades y circuitos de calefacci\xf3n de los asientos delanteros.  Modificar el circuito de masa de las unidades de calefacci\xf3n de los asientos delanteros el conector ubicado en la parte inferior de la consola central. Remplazar la(s) unidad(es) de calefacci\xf3n afectada(s).",
+            tiempo: "1,4h",
+            razones_texto: "En algunos CX-9 equipados con calefacci\xf3n el\xe9ctrica en asientos delanteros y bajo extremas condiciones de frio, puede ocurrir un sobrecalentamiento en el circuito del calefactor.",
+            riesgos: "Sobrecalentamiento del circuito de calefacci\xf3n el\xe9ctrica de los asientos delanteros en condiciones de extremo fr\xedo, el circuito de calefacci\xf3n se encuentra ubicado bajo la superficie del coj\xedn de la silla.  ",
+            key: "PES0210",
+            type: "1"
+        }, {
+            nombre_campana: "Revisi\xf3n Conector Bomba de Combustible",
+            vehiculo: "Mazda5",
+            modelo: "2010 - 2011",
+            fecha: "15/12/2010",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "139",
+            medida: "Inspeccionar los terminales del conector de la bomba de combustible.  Modificar el cableado del conector de la bomba de combustible, cambiando la porci\xf3n final,  el conector y los terminales por unos nuevos. Remplazar los empaques y la carcasa del filtro de combustible.",
+            tiempo: "1,6h",
+            razones_texto: "La bomba de combustible no opera debido a posible oxidaci\xf3n y/o rotura de pines en el conector de la bomba de combustible y esto no permite arrancar el motor del veh\xedculo.",
+            riesgos: "Falla en el circuito el\xe9ctrico de la bomba de combustible, que impide el encendido y/o funcionamiento del motor, debido a que no llega combustible a la presi\xf3n requerida a los inyectores.",
+            key: "PES0910",
+            type: "1"
+        }, {
+            nombre_campana: "Instalaci\xf3n Calcoman\xeda Cambio de Aceite",
+            vehiculo: "CX-7",
+            modelo: "2007 - 2011",
+            fecha: "14/09/2010",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "782",
+            medida: "Remover  calcoman\xeda que solo informa la viscosidad del aceite (9L0G-69-131). Instalar, en la misma ubicaci\xf3n de la anterior, la nueva calcoman\xeda (9L0G-69-131A) que informa la frecuencia del cambio del filtro y cambio de aceite motor cada 5.000 km o 6 meses (lo que primero ocurra para el Mazda CX-7).",
+            tiempo: "0,6h",
+            razones_texto: "Mazda tiene definidas rutinas m\xe1s frecuentes de mantenimiento seg\xfan las condiciones de funcionamiento en zonas de alta poluci\xf3n o funcionamiento de los veh\xedculos a diferentes altitudes y temperaturas como las que se pueden presentar en muestras carreteras. En atenci\xf3n a lo anterior, Compa\xf1\xeda Colombiana Automotriz S.A. ha decidido ampliar la cobertura de mantenimiento en lo relacionado al cambio del filtro y  aceite motor a cambios cada 5.000 km o 6 meses lo que primero ocurra y exclusivo para motores de inyecci\xf3n directa como el Mazda CX-7.",
+            riesgos: "Deterioro prematuro de los componentes del motor, que son lubricados y refrigerados por el aceite motor.  Debido a las caracter\xedsticas del veh\xedculo y su tren motriz, algunas condiciones particulares de operaci\xf3n y conducci\xf3n  podr\xedan incrementar el consumo de aceite motor y afectar sus propiedades.",
+            key: "PES1110",
+            type: "1"
+        }, {
+            nombre_campana: "Remplazo Cuerpo de Mariposa",
+            vehiculo: "CX-9",
+            modelo: "2010",
+            fecha: "29/09/2010",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "5",
+            medida: "Remplazo del cuerpo de la mariposa (cuerpo acelerador).",
+            tiempo: "0,4h",
+            razones_texto: "Avance de la Campa\xf1a 100% No se dispone de informaci\xf3n",
+            riesgos: "Operaci\xf3n incorrecta del cuerpo acelerador (cuerpo de la mariposa), funcionamiento inapropiado del motor.",
+            key: "PESA110",
+            type: "1"
+        }, {
+            nombre_campana: "Parlante Invertido ",
+            vehiculo: "Mazda3",
+            modelo: "2011 - 2012",
+            fecha: "1/01/2012",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "1946",
+            medida: "Inspeccionar la presencia de distorsi\xf3n en el sonido del sistema de audio. Inspeccionar el estado de la parte posterior de los parlantes, y Limpiar los parlantes Inspeccionar la posici\xf3n de montaje de los parlantes, Reposicionar los parlantes.  Remplazar los parlantes averiados internamente.",
+            tiempo: "1h",
+            razones_texto: "Algunos veh\xedculos pueden presentar con el tiempo, distorsi\xf3n en la se\xf1al de audio y es percibida en uno o varios parlantes (radio sin inconveniente).",
+            riesgos: "Distorsi\xf3n en la calidad del sonido emitido por los parlantes de las puertas, y/o deterioro prematuro del parlante, debido a la instalaci\xf3n en posici\xf3n invertida (verticalmente).",
+            key: "PES0112",
+            type: "1"
+        }, {
+            nombre_campana: "Ajuste Sistema de Audio",
+            vehiculo: "CX-5",
+            modelo: "2013",
+            fecha: "25/07/2012",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "76",
+            medida: "Reprogramar el Sistema de Control del Audio a trav\xe9s de un CD, para evitar consumos de corriente inapropiados y deterioro de la bater\xeda del veh\xedculo.",
+            tiempo: "0,7h",
+            razones_texto: "El veh\xedculo puede presentar descarga profunda de la bater\xeda en bodega de almacenamiento o en vitrina, aun cuando se encuentre apagado el veh\xedculo.",
+            riesgos: "Descarga profunda y recurrente de la bater\xeda, mientras el veh\xedculo se encuentra apagado, debido a un error en la programaci\xf3n del sistema de audio.",
+            key: "PES1712",
+            type: "1"
+        }, {
+            nombre_campana: "Reemplazo Pernos Eje Trasero",
+            vehiculo: "BT-50",
+            modelo: "2012 - 2013",
+            fecha: "1/09/2012",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "195",
+            medida: "Inspeccionar la procedencia de los pernos de las ruedas del eje trasero.  Remplazar los Pernos y las Tuercas de las ruedas del eje trasero, debido a baja dureza superficial en la rosca de los pernos de uno de los cuatro proveedores de la parte.",
+            tiempo: "2,5h",
+            razones_texto: "El propietario o conductor del veh\xedculo, en caso de requerir el desmontaje de alguna de las llantas traseras (Ej.: por un pinchazo, revisi\xf3n frenos, alineaci\xf3n, etc.), se corre el riesgo de atascamiento en las tuercas que fijan las ruedas traseras al eje. En caso extremo puede presentarse fractura de alguno de los pernos en el momento de extraer las tuercas de las llantas.",
+            riesgos: "No pueden soltarse una o varias de las tuercas de la rueda(s) para desmontarla porque la tuerca gira junto con el perno de \xe9sta, debido a la falla por baja dureza en el estriado del perno que se gira sobre su alojamiento en el semieje trasero.",
+            key: "PES1912",
+            type: "1"
+        }, {
+            nombre_campana: "Inspecci\xf3n y Reprogramaci\xf3n HVAC ",
+            vehiculo: "BT-50 Pro",
+            modelo: "2012 - 2014",
+            fecha: "19/12/2013",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "47",
+            medida: "Inspeccionar, en ambos lados, la operaci\xf3n del sistema de calefacci\xf3n, ventilaci\xf3n y acondicionamiento de aire, en busca de ruido y falta de enfriamiento o falta de calefacci\xf3n durante el control de temperatura autom\xe1tico.  Reprogramar el M\xf3dulo HVAC, a trav\xe9s del software de reparaci\xf3n.  Remplazar el actuador del lado donde se presenta el ruido durante la operaci\xf3n del control de temperatura autom\xe1tico. ",
+            tiempo: "1,8h",
+            razones_texto: "El control de temperatura autom\xe1tico puede presentar un ruido y una falta de refrigeraci\xf3n o calefacci\xf3n. Esto puede ser causado por un engranaje de accionamiento roto en la aleta del actuador de temperatura derecho y / o izquierdo.",
+            riesgos: "Funcionamiento incorrecto del control autom\xe1tico de la temperatura interior, y/o deterioro prematuro del actuador del control de temperatura del lado(s) correspondiente(s), debido a un error en la programaci\xf3n del m\xf3dulo de climatizaci\xf3n.",
+            key: "PES2513",
+            type: "1"
+        }, {
+            nombre_campana: "Amortiguadores Compuerta Trasera",
+            vehiculo: "CX-5 - Mazda3 - Mazda5",
+            modelo: "2012 - 2015",
+            fecha: "15/06/2017",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "8694",
+            medida: "Remplazar los amortiguadores de la compuerta trasera por unos nuevos modificados.",
+            tiempo: "0,9h",
+            razones_texto: "En los amortiguadores de gas que sostienen la compuerta trasera, la cubierta anticorrosi\xf3n en el extremo del cilindro del amortiguador, no es la apropiada.  Es posible que el agua produzca corrosi\xf3n en el extremo del cilindro del amortiguador.    Si el veh\xedculo se sigue usando bajo esta condici\xf3n, la corrosi\xf3n progresar\xe1 con el tiempo, haciendo que el espesor de la pared del cilindro externo disminuya y en el peor de los casos, el cilindro externo se pueda romper debido a la presi\xf3n interna del gas que contiene, causando heridas a las personas que se encuentran alrededor del veh\xedculo.",
+            riesgos: "Posible corrosi\xf3n del extremo del cilindro externo del amortiguador de la compuerta trasera, debido a la penetraci\xf3n de agua que contenga sal (de la carretera).  La operaci\xf3n del veh\xedculo en estas condiciones reducir\xe1 el espesor del recubrimiento del cilindro externo, y en el peor de los casos el cilindro externo podr\xeda romperse por efecto de la presi\xf3n del gas, causando posibles lesiones a las personas alrededor y/o en el veh\xedculo.",
+            key: "CES4516",
+            type: "2"
+        }, {
+            nombre_campana: "Remplazo Inflador Airbag Frontal Pasajero  ",
+            vehiculo: "Mazda6 - CX-9  - CX-7",
+            modelo: "2008 - 2010 - 2007 - 2011 - 2007 -* 2009 ",
+            fecha: "5/07/2017",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "616",
+            medida: "Remplazar el Inflador de la bolsa de aire frontal del lado pasajero, por unos nuevo modificado. Proveedor del Inflador TAKATA.",
+            tiempo: "1,4h",
+            razones_texto: "En los veh\xedculos expuestos continuamente a altos niveles de humedad absoluta (en el ambiente) podr\xeda presentarse que, en el evento de una colisi\xf3n que cumpla las condiciones para el despliegue de la bolsa de aire frontal, la carcasa del inflador de la bolsa de aire frontal del lado del pasajero se rompa, y la bolsa de aire se despliegue anormalmente.  Una ruptura del inflador puede resultar en fragmentos de metal que impacten y potencialmente produzcan lesiones serias en los ocupantes del veh\xedculo.",
+            riesgos: "Posible operaci\xf3n incorrecta de la bolsa de aire frontal del lado del pasajero (airbag), la bolsa de aire no ofrecer\xe1 la protecci\xf3n necesaria durante un impacto frontal y las piezas rotas del inflador podr\xedan causar lesiones al pasajero. Es posible que el Inflador de la bolsa de aire no opere de la forma en que fue dise\xf1ado. ",
+            key: "CES7216",
+            type: "2"
+        }, {
+            nombre_campana: "Ajuste presion de inflado llanta de repuesto",
+            vehiculo: "Mazda2 - Mazda3",
+            modelo: "2016 - 2015 - 2016",
+            fecha: "12/05/2017",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "10165",
+            medida: "Revisar la presi\xf3n de inflado de la llanta temporal de repuesto, si la presi\xf3n se encuentra fuera del rango especificado ajustar la presi\xf3n.",
+            tiempo: "0,7h",
+            razones_texto: "La presi\xf3n de aire de la llanta temporal de repuesto, podr\xeda haber sido ajustada por debajo de la especificaci\xf3n.  Posible p\xe9rdida en el desempe\xf1o de la llanta de repuesto cuando se utilice, debido a una presi\xf3n inferior al valor especificado.  ",
+            riesgos: "Posible p\xe9rdida en el desempe\xf1o de la llanta de repuesto cuando se utilice, debido a una presi\xf3n inferior al valor especificado.",
+            key: "PES5616",
+            type: "1"
+        }, {
+            nombre_campana: "Retorqueo Tuercas Lado Cabina Bisagras Compuerta Trasera",
+            vehiculo: "CX-9",
+            modelo: "2017",
+            fecha: "9/02/2017",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "411",
+            medida: "Ajustar el torque de apriete de las tuercas de las bisagras de la compuerta trasera (del lado de la cabina), al valor especificado,  separando ligeramente el tapizado del techo (son 2 tuercas en la bisagra del lado izquierdo y 2 tuercas en la bisagra de lado derecho).",
+            tiempo: "0,7h",
+            razones_texto: "En los veh\xedculos afectados, el torque de apriete de las tuercas de las bisagras de la compuerta trasera del lado de la cabina (carrocer\xeda), se encuentra fuera de la especificaci\xf3n.  Debido a esto, podr\xeda presentarse interferencia entre la carrocer\xeda cuando se cierra/abre la compuerta trasera, o presentarse entrada de agua al interior de la cabina.",
+            riesgos: "Posible interferencia entre la compuerta trasera y la carrocer\xeda del veh\xedculo, posible entrada de agua al interior del veh\xedculo debido al la posici\xf3n incorrecta de la compuerta respecto a la carrocer\xeda.",
+            key: "PES1417",
+            type: "1"
+        }, {
+            nombre_campana: "Inspecci\xf3n y Reparaci\xf3n del Elevador del Asiento Conductor",
+            vehiculo: "Mazda2 - Mazda3",
+            modelo: "2008 - 2011 ",
+            fecha: "22/01/2018",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "11752",
+            medida: "Inspeccionar el mecanismo Elevador del asiento del conductor, la integridad de sus componentes, y soldaduras. Reparar el mecanismo Elevador remplazando o adicionando los componentes nuevos modificados que se suministran en el kit de reparaci\xf3n.",
+            tiempo: "1,4h",
+            razones_texto: "La estructura de la silla del conductor puede presentar rotura, deformaci\xf3n o falla de algunos de sus componentes, en el peor de los casos podr\xeda ocurrir que el conductor no pueda mantener una apropiada posici\xf3n de manejo, de manera que pierda el control del veh\xedculo.",
+            riesgos: "Posible p\xe9rdida de control del veh\xedculo, por falla de la estructura de la silla del conductor.  La estructura del asiento puede presentar rotura, deformaci\xf3n o falla de algunos de sus componentes, haciendo que el conductor pierda el control del veh\xedculo.",
+            key: "CES1717",
+            type: "2"
+        }, {
+            nombre_campana: "Remplazo Polea Intermedia de la Transmisi\xf3n del Motor",
+            vehiculo: "BT-50 Pro",
+            modelo: "2016",
+            fecha: "31/03/2017",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "123",
+            medida: "Inspeccionar el n\xfamero de lote de la Polea Intermedia.  Si el n\xfamero de lote se encuentra entre los afectados, se debe remplazar la polea por una nueva modificada.",
+            tiempo: "1h",
+            razones_texto: "En algunos veh\xedculos BT-50 se ha ensamblado una polea intermedia de la transmisi\xf3n del motor que no cumple con la especificaci\xf3n, lo que causa que la polea se torne ruidosa y/o falle.",
+            riesgos: "Posible falla de la Polea intermedia de la transmisi\xf3n del motor, o generaci\xf3n de rudio en la polea, debido a que algunos lotes de la polea instalada no cumplen con la especificaci\xf3n.",
+            key: "PES3317",
+            type: "1"
+        }, {
+            nombre_campana: "Remplazo Bolsa de Aire Lateral",
+            vehiculo: "BT-50 Pro",
+            modelo: "2017 - 2018",
+            fecha: "26/12/2017",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "36",
+            medida: "Reemplazar los m\xf3dulos de las Bolsas de Aire Laterales que requiere(n) ser reemplazado(s).  Verificar la lista de VIN proporcionada separadamente, para determinar cu\xe1l(es) m\xf3dulo(s) de Bolsa de Aire Lateral requiere(n) ser remplazado(s).",
+            tiempo: "2,1h",
+            razones_texto: "Los iniciadores de la Bolsa de Aire dentro de los M\xf3dulos de la Bolsa de Aire Lateral pueden contener una mezcla qu\xedmica incorrecta.  Esta mezcla qu\xedmica incorrecta puede causar que el inflador de la Bolsa de Aire no se inicialice, resultando en que la Bolsa de Aire Lateral no se despliegue en el evento de un choque",
+            riesgos: "Los iniciadores de la Bolsa de Aire dentro de los M\xf3dulos de la Bolsa de Aire Lateral pueden contener una mezcla qu\xedmica incorrecta.  Esta mezcla qu\xedmica incorrecta puede causar que el inflador de la Bolsa de Aire no se inicialice, resultando en que la Bolsa de Aire Lateral no se despliegue en el evento de un choque",
+            key: "CES9417",
+            type: "2"
+        }, {
+            nombre_campana: "Correcci\xf3n De Interferencia Entre El Cable De Control De Cambios Con Eje Propulsor",
+            vehiculo: "BT-50 Pro",
+            modelo: "2015",
+            fecha: "6/06/2018",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "64",
+            medida: "Inspeccionar los veh\xedculos para determinar si hay se\xf1ales de contacto entre la guaya de control de cambios y el eje propulsor. Se requiere asegurar que el clip de retenci\xf3n de la guaya de control de cambios se encuentra correctamente ensamblado y alineado con la parte met\xe1lica de la guaya del freno de estacionamiento. Si el clip no est\xe1 correctamente ensamblado y alineado con la guaya del freno de estacionamiento, el clip debe ser remplazado.",
+            tiempo: "2,1h",
+            razones_texto: "En ciertos veh\xedculos, el clip de retenci\xf3n del cable (guaya) del control de cambios, no queda completamente ensamblado con la parte met\xe1lica del cable de control de freno de estacionamiento.",
+            riesgos: "Se puede producir un  eventual contacto de la guaya de control de cambios con el eje propulsor (cardan). El contacto continuo entre la guaya y el eje propulsor puede da\xf1ar los cables y/o el eje propulsor, pudiendo generar dificultad en el cambio de marchas o dificultando la conducci\xf3n.",
+            key: "CES9717",
+            type: "2"
+        }, {
+            nombre_campana: "Ajuste concentraci\xf3n refrigerante",
+            vehiculo: "Mazda2 - Mazda3",
+            modelo: "2015 - 2016",
+            fecha: "27/06/2018",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "12930",
+            medida: "Inspeccionar la concentraci\xf3n del l\xedquido refrigerante puro, en el refrigerante (diluido en agua) que se encuentra en el sistema de refrigeraci\xf3n del motor (radiador, tanque de expansi\xf3n, calefactor y motor).  Remplazar el l\xedquido refrigerante de todo el sistema de refrigeraci\xf3n del motor, por el refrigerante especificado con la concentraci\xf3n especificada.",
+            tiempo: "1,7h",
+            razones_texto: "En caso que la concentraci\xf3n sea superior o inferior a la especificaci\xf3n, es posible que el refrigerante se congele, y/o se disminuya la capacidad de enfriamiento/calentamiento del refrigerante motor.Debido al pobre desempe\xf1o del sistema de refrigeraci\xf3n del motor, la temperatura del refrigerante podr\xeda incrementarse inusualmente durante altas cargas sobre el motor, resultando en sobrecalentamiento y da\xf1os en el motor (mientras la luz de advertencia por temperatura del refrigerante se enciende o destella).",
+            riesgos: "Posible pobre desempe\xf1o del sistema de refrigeraci\xf3n del motor, la temperatura del refrigerante podr\xeda incrementarse inusualmente durante altas cargas sobre el motor, resultando en sobrecalentamiento y da\xf1os en el motor (mientras la luz de advertencia por temperatura del refrigerante se enciende o destella).",
+            key: "PES5116",
+            type: "1"
+        }, {
+            nombre_campana: "Inspecci\xf3n y Remplazo Elevavidrio Puerta Delantera",
+            vehiculo: "Mazda3",
+            modelo: "2015",
+            fecha: "12/06/2018",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "264",
+            medida: "Remover el (los) Elevavidrio(s), Inspeccionar el n\xfamero de lote del elevavidrio.  Si el n\xfamero de lote se encuentra entre los afectados, se debe remplazar el elevavidrio por uno nuevo modificado.",
+            tiempo: "1,2h",
+            razones_texto: "En algunos veh\xedculos Mazda3 BM se han instalado elevavidrios puerta delantera que durante su producci\xf3n les fue incorrectamente ensamblado el extremo frontal del cable (guaya) del elevavidrio.  Debido a esto es posible que el extremo frontal del cable del elevavidrio se desprenda y el elevavidrio quede inoperante, dejando el vidrio en una posici\xf3n no deseada.",
+            riesgos: "El extremo frontal del cable (guaya) del elevavidrio podr\xeda desprenderse durante la operaci\xf3n de subir/bajar el vidrio causando que el elevavidrio quede inoperante, y el vidrio puerta permanezca en una posici\xf3n no deseada.",
+            key: "PES6717",
+            type: "1"
+        }, {
+            nombre_campana: "Ruido Tipo Crujido/Chirrido Desde La Suspensi\xf3n Trasera Derecha ",
+            vehiculo: "CX-9",
+            modelo: "2016",
+            fecha: "9/07/2018",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "120",
+            medida: " Se debe reemplazar el resorte helicoldial trasero derecho. ",
+            tiempo: "0,9h",
+            razones_texto: "Ciertos vehiculos CX-9 pueden experimentar un ruido tipo crujido/chirrido desde la suspensi\xf3n trasera del lado derecho. El ruido puede ocurrir al viajar a velocidades bajas, al detenerse o al iniciar la marcha desde una parada.  El ruido puede ser causado por la adhesi\xf3n-deslizamiento entre el caucho del asiento superior del resorte y el resorte helicoidal.                                                                                      ",
+            riesgos: "No hay condici\xf3n de riesgo, unicamente el ruido que puede llegar a experimentarse por la adhesi\xf3n o deslizamineto entre el caucho del asiento superior y el resorte helicoidal.",
+            key: "CES2118",
+            type: "2"
+        }, {
+            nombre_campana: "Problemas Con El Perno Actuador De La VVT De Escape",
+            vehiculo: "CX-5",
+            modelo: "2015 - 2016",
+            fecha: "6/06/2018",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "5",
+            medida: "Se debe apretar el tornillo de fijaci\xf3n del VVT de escape usando  la herramienta especializada.",
+            tiempo: "1,4h",
+            razones_texto: "El torque aplicado al perno actuador de la distribuci\xf3n de v\xe1lvulas variable (VVT) hidr\xe1ulico de escape no satisface el m\xednimo especificado. ",
+            riesgos: "Puede ocurrir que el actuador de la VVT de escape no funcione correctamente y el motor presente falta de potencia, adem\xe1s genera el encendido del testigo de revisi\xf3n de motor. ",
+            key: "PES3018",
+            type: "1"
+        }, {
+            nombre_campana: "No Encendido Por Bater\xeda Descargada",
+            vehiculo: "MX-5",
+            modelo: "2016-2017",
+            fecha: "8/03/2018",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "61",
+            medida: "Se debe reprogramar el veloc\xedmetro con el sistema de diagn\xf3stico modular de Mazda (M-MDS).",
+            tiempo: "1h",
+            razones_texto: "Debido a un error de software del veloc\xedmetro del grupo de instrumentos del tipo A, una corriente par\xe1sita de 80 mA contin\xfaa circulando despu\xe9s de que se apaga la ignici\xf3n",
+            riesgos: "El motor no dar\xe1 arranque desp\xfaes de unos d\xedas sin ser encendido, ya que la bateria estar\xe1 descargada ",
+            key: "PES1018",
+            type: "1"
+        }, {
+            nombre_campana: "Haz de las luces frontales es muy bajo al momento de encenderlas",
+            vehiculo: "CX-5 - CX-9",
+            modelo: "2015-2016",
+            fecha: "16/10/2018",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "715",
+            medida: "Si la unidad de luces delanteras presenta un fallo se debe reemplazar el actuador de nivelaci\xf3n por uno nuevo",
+            tiempo: "1,5h",
+            razones_texto: "En algunos veh\xedculos, es posible que la cubierta del eje del actuador de nivelaci\xf3n de luces delanteras se haya roto durante el proceso de iniciaci\xf3n del veh\xedculo cuando se activa el interruptor de encendido. Debido a esto, el haz de las luces frontales es demasiado bajo cuando estas se encienden.                                                       ",
+            riesgos: "Puede ocurrir que el sistema de iluminaci\xf3n no funcione de manera correcta generando una baja iluminaci\xf3n",
+            key: "PES6418",
+            type: "1"
+        }, {
+            nombre_campana: "Ruido el\xe9ctrico en la se\xf1al del selector de velocidades mientras se conduce en la posici\xf3n 'D'",
+            vehiculo: "MX-5",
+            modelo: "2018-2019",
+            fecha: "20/02/2019",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "79",
+            medida: "Se debe reprogramar el modulo de control de la transmisi\xf3n (TCM)",
+            tiempo: "0,8h",
+            razones_texto: "En veh\xedculos autom\xe1ticos se puede detectar un ruido el\xe9ctrico en la se\xf1al del selector de velocidades mientras se conduce en la posici\xf3n 'D', esto causa mala programaci\xf3n del software del m\xf3dulo de control de la transmisi\xf3n (TCM)",
+            riesgos: "Puede afectar de manera negativa la estabilidad diraccional del veh\xedculo, incrementando el riesgo de una p\xe9rdida del control del veh\xedculo y potencialmente resultando en un choque",
+            key: "CES0219",
+            type: "2"
+        }, {
+            nombre_campana: "Se presenta una falla en el Kit eleva-vidrios ",
+            vehiculo: "CX-5 - CX-9",
+            modelo: "2017 - 2018 - 2019",
+            fecha: "20/03/2019",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "201",
+            medida: "Se debe cambiar el kit de eleva-vidrios ",
+            tiempo: "0,9h",
+            razones_texto: "En ocasiones no cierra la ventana de la puerta delantera derecha o intenta cerrarse y se detiene al activarse el bloqueo central.Esto a casua de un mal funcionamiento del software del m\xf3dulo.",
+            riesgos: "La seguridad del veh\xedculo y/o elementos dejados dentro del veh\xedculos pueden verse comprometidos.",
+            key: "PES1119",
+            type: "1"
+        }, {
+            nombre_campana: "Falla en la programaci\xf3n del m\xf3dulo BCM (m\xf3dulo de control de la carrocer\xeda)",
+            vehiculo: "MX-5",
+            modelo: "2018",
+            fecha: "29/03/2019",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "76",
+            medida: "Se debe reprogramar la BCM",
+            tiempo: "0,8h",
+            razones_texto: "La alarma puede activarse mientras se conduce. Esto causa mal funcionamiento del software del m\xf3dulo de control de carrocer\xeda.(BCM)",
+            riesgos: "Se puede generar distracci\xf3n al momento de que ocurra el inconveniente.",
+            key: "PES1419",
+            type: "1"
+        }, {
+            nombre_campana: "En algunos veh\xedculos, la manguera de freno delantera podr\xeda romperse bajo ciertas condiciones de operaci\xf3n.",
+            vehiculo: "BT-50",
+            modelo: "2017 - 2018",
+            fecha: "8/08/2019",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "930",
+            medida: "Reemplazo de las dos manguera freno delanteras y posterior purga de aire de l\xedquido de frenos.",
+            tiempo: "1,3h",
+            razones_texto: "La falla de la manguera de freno delantera podr\xeda provocar una p\xe9rdida de l\xedquido de frenos y la iluminaci\xf3n del testigo de advertencia del sistema de frenos en el tablero de instrumentos electr\xf3nicos, as\xed como un aumento en el recorrido del pedal de freno y el aumento de las distancias de parada, incrementando el riesgo de un choque.Esto sucede debido al material inadecuado de las mangueras de freno, causando que bajo condiciones normales de operaci\xf3n fallen. ",
+            riesgos: "P\xe9rdida de l\xedquido de frenos y la iluminaci\xf3n del testigo de advertencia del sistema de frenos en el tablero de instrumentos electr\xf3nicos, as\xed como un aumento en el recorrido del pedal de freno y el aumento de las distancias de parada, incrementando el riesgo de un choque.",
+            key: "CES3219",
+            type: "2"
+        }, {
+            nombre_campana: "Los limpiabrisas pueden volverse inoperativos debido a un rel\xe9 defectuoso, que interrumpe la corriente el\xe9ctrica del motor del limpiabrisas.",
+            vehiculo: "Mazda 3",
+            modelo: "2016 - 2017",
+            fecha: "9/09/2019",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "17738",
+            medida: "Reemplazar el m\xf3dulo F-BCM por uno modificado, el cual tiene un dise\xf1o mejorado del rel\xe9 limpiabrisas.",
+            tiempo: "0,7h",
+            razones_texto: "El rel\xe9 se vuelve defectuoso cuando se forman dep\xf3sitos de metal a causa del calor generado por la operaci\xf3n normal, lo que ocasiona adhesi\xf3n en los contactos del rel\xe9. Dise\xf1o inadecuado del rel\xe9 del limpiabrisas y baja compatibilidad con el motor del limpiabrisas que pueden causar dep\xf3sitos met\xe1licos en el contacto del rel\xe9.  estos dep\xf3sitos met\xe1licos finalemtne se adhieren en la parte conductora del rel\xe9.",
+            riesgos: "Los conductores pueden experimentar baja visibilidad como consecuencia de los limpiabrisas inoperativos.",
+            key: "CES3519",
+            type: "2"
+        }, {
+            nombre_campana: "Activaci\xf3n inadvertida del sistema de frenado autom\xe1tico de emergencia SBS.",
+            vehiculo: "Mazda 3 ",
+            modelo: "2020",
+            fecha: "17/01/2020",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "791",
+            medida: "Reprogramar el programa de control SBS del m\xf3dulo VCM",
+            tiempo: "1,2h",
+            razones_texto: "Programaci\xf3n inapropiada del software de control SBS que hace que el veh\xedculo detecte falsamente un obst\xe1culo frente al veh\xedculo. El sistema de frenado autom\xe1tico de emergencia SBS se puede activar inesperadamente, el sonido de advertencia de colisi\xf3n y el mensaje de advertencia que se visualiza en la pantalla multi-informaci\xf3n en la pantalla activa de conducci\xf3n. en algunos casos, el software de control SBS puede aplicar los frenos del vehiculo autom\xe1ticamente para prevenir o reducir el da\xf1o de una colision, aun si que exista riesgo de colisi\xf3n.",
+            riesgos: "El veh\xedculo puede tener la activaci\xf3n inadvertida del sistema de frenado autom\xe1tico de emergencia SBS, incrementando el riesgo de una colisi\xf3n en la parte trasera por el veh\xedculo de atr\xe1s",
+            key: "CES0220",
+            type: "2"
+        }, {
+            nombre_campana: "Campa\xf1a de servicio Airbag Takata -Soluci\xf3n permanente cambio de inflador lado pasajero",
+            vehiculo: "Mazda 6",
+            modelo: "2006 - 2008",
+            fecha: "30/01/2020",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "1760",
+            medida: "Reemplazar el inflador de la bolsa de aire frontal lado pasajero, por los infladores de soluci\xf3n permanente.",
+            tiempo: "1h",
+            razones_texto: "Los vehiculos referidos han sido reparados con infladores frontales Takata PSAN no desecados como una soluci\xf3n provisional para evitar  un riesgo  de seguridad inmediato dado una posible ruptura del airbag. Como los infladores PSAN no deseados pueden potencialmente afectar el airbag durante el accionamiento de este dada la degradaci\xf3n del propelente ocurrida por la exposici\xf3n a la alta humedad, alta temperatura y cambios de esta. bajo esta campa\xf1a de servicio, seran reemplazados con infladores de soluci\xf3n permanente.",
+            riesgos: "Es posible que el airbag del lado pasajero no operen en forma adecuada. En caso de ser as\xed, el airbag no ofrecer\xe1 la protecci\xf3n necesaria durante un impacto frontal, causando lesiones adicionales dadas las piezas rotas del inflador.",
+            key: "CES6719",
+            type: "2"
+        }, {
+            nombre_campana: "Luces de marcha diurna(DRL)",
+            vehiculo: "CX-5",
+            modelo: "2014 - 2015",
+            fecha: "16/03/2020",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "617",
+            medida: "Inspeccionar y/o reparar la luz delantera de marcha diurna ",
+            tiempo: "1,9h",
+            razones_texto: "Por una especificaci\xf3n de material inapropiado del empaque de sellado unido al conector del cableado de las luces de marcha diurna (DRL) el empaque pude liberar azufre, el cual puede corroer el circuito LED que controla el circuito de marcha diurna, si se corroe el circuito se puede perder continuidad, causando parpadeo o falla en las luces de marcha diurna, una o ambas luces delanteras de marcha diurna de los veh\xecculos afectados podrian ser afectadas.",
+            riesgos: "Las luces de marcha diurna (DLR)/ luces de posici\xf3n  de tipo LED pueden parpadear o no iluminarse mientras se conduce. El tr\xe1fico y los peatones circundantes pueden tener una capacidad reducida para detectar el veh\xedculo afectado.",
+            key: "CES0620",
+            type: "2"
+        }, {
+            nombre_campana: "Pernos de mordaza de freno del eje delantero se sueltan o se caen ",
+            vehiculo: "Mazda 3                       CX-30",
+            modelo: "2020",
+            fecha: "18/06/2020",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "2832",
+            medida: "Inspecci\xf3n de los pernos de la mordaza, verificando el apriete de los pernos o si alguno est\xe1 ausente reemplazar la mordaza con una nueva.",
+            tiempo: "1,2h",
+            razones_texto: "Debido a un problema de ensamble, algunos pernos de las mordazas de freno delanteras pueden no estar apretadas con el torque apropiado bajo especificaci\xf3n",
+            riesgos: "Los pernos de las mordazas de freno delantero sueltos o perdidos pueden causar una reducci\xf3n en el rendimiento de frenado e interferencia con la rueda en rotaci\xf3n, resultando en la posible p\xe9rdida de control del veh\xedculo, incrementando el riesgo de colisi\xf3n. Se pueden escuchar ruidos (chirrido) o golpeteo dado el cotacto entre la mordaza y la rueda u otros posibles elementos.",
+            key: "CES4120",
+            type: "2"
+        }, {
+            nombre_campana: "Posibilidad de fuga de combustible en la parte trasera del veh\xedculo",
+            vehiculo: "CX-30",
+            modelo: "2021",
+            fecha: "6/08/2020",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "237",
+            medida: "Inspeccionar el correcto ensamble de la manguera de ventilaci\xf3n evaporativa de combustible en el tanque de combustible del veh\xedculo.  Si se encuentra que la manguera est\xe1 desconectada, se debe ensamblar la manguera a la unidad emisora de combustible y proceder con el reemplazo del recipiente de carb\xf3n (canister) y algunas piezas relacionadas por otras nuevas.  Si la manguera est\xe1 conectada correctamente, no es necesario realizar ninguna otra acci\xf3n.",
+            tiempo: "1,6h",
+            razones_texto: "En los veh\xedculos afectados, es posible que la manguera de ventilaci\xf3n evaporativa de combustible no est\xe9 conectada a la unidad emisora de combustible.  Al repostar completamente el veh\xedculo, el combustible l\xedquido eventualmente llenar\xe1 el recipiente de carb\xf3n, lo que resulta en una fuga.",
+            riesgos: "Una fuga del recipiente en presencia de una fuente de ignici\xf3n puede aumentar el riesgo de incendio.  Adem\xe1s, el motor puede detenerse mientras se conduce, lo que aumenta el riesgo de un accidente.",
+            key: "CES4220",
+            type: "2"
+        }, {
+            nombre_campana: "Instalaci\xf3n de tuercas de seguridad de cuadrante equivocado en veh\xedculos Mazda",
+            vehiculo: "CX-3 - CX-30 - CX-5 - CX-9 - Mazda 2 - Mazda 3 - Mazda 6 - MX-5",
+            modelo: "2015 - 2021",
+            fecha: "28/08/2020",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "4808",
+            medida: "Una vez identificado el veh\xedculo sujeto a este Programa, con la llave de pernos del veh\xedculo y la copa de seguridad de los pernos de seguridad instalados, validar que sea posible encajar la llave en el cuadrante de la copa de seguridad y los pernos de las ruedas del veh\xedculo, confirmando de esta manera que la copa de seguridad efectivamente es la que debe corresponder al veh\xedculo.",
+            tiempo: "0,46h",
+            razones_texto: "Desde Octubre de 2018, debido a la implementaci\xf3n por parte de la marca de un tama\xf1o de cuadrante de perno de los rines de diferente medida al que se usaba antes de esta fecha (17mm nueva medida, 21mm medida anterior), se suministra un nuevo Kit de tuercas de seguridad con cuadrante de 17mm.  ",
+            riesgos: "Desde Octubre de 2018 diferentes modelos y versiones de veh\xedculos Mazda han equipado pernos de las ruedas de 17mm y 21mm, pudiendo generar confusi\xf3n en la red a la hora de suministrar los pernos de seguridad a nuestros clientes.  Lo anterior imposibilita realizar el cambio de la llanta en caso de pinchazo.",
+            key: "PES5920",
+            type: "1"
+        }, {
+            nombre_campana: "Bater\xeda descargada tras elevar la puerta electrica ba\xfal",
+            vehiculo: "CX-9 - CX-5",
+            modelo: "2021",
+            fecha: "3/11/2020",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "153",
+            medida: "Reemplazar la unidad d control de la puerta ba\xfal con una unidad modificada",
+            tiempo: "1,1h",
+            razones_texto: "La puerta electrica ba\xfal no hiberna si el veh\xedculo genera alg\xfan tipo de se\xf1al. Como consecuencia la corriente oar\xe1sita drena la bater\xeda del veh\xedculo",
+            riesgos: "Bater\xeda se descarga",
+            key: "PES6120",
+            type: "1"
+        }, {
+            nombre_campana: "Calcoman\xeda cambio Aceite Motor de referencia incorrecta.",
+            vehiculo: "CX-9 - CX-5 - Mazda 6",
+            modelo: "2017 - 2021",
+            fecha: "10/03/2021",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "2180",
+            medida: "Verificar la calcoman\xeda correcta en la parte interna superior del cap\xf3 bas\xe1ndose en la Gu\xeda de Mantenimiento Programado, la cual indica que el lubricante de motor sugerido es Mazda/SAE 5W30 API SN.  Si se evidencia otra calcoman\xeda se debe reemplazar.",
+            tiempo: "0,6h",
+            razones_texto: "En algunos veh\xedculos puede que no se haya instalado la calcoman\xeda de cambio de aceite motor correcta que es Mazda / SAE 5W30 API SN.",
+            riesgos: "Pueden aplicar una referencia de aceite motor incorrecta al veh\xedculo si revisan la calcoman\xeda de cambio de aceite motor que no corresponde.",
+            key: "PES1221",
+            type: "1"
+        }, {
+            nombre_campana: "1. Descargue de Bater\xeda 2. Actualizar MRCC: Mazda Radar Cruise Control",
+            vehiculo: "CX-30 - Mazda 3",
+            modelo: "2020 - 2021",
+            fecha: "24/03/2021",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "6764",
+            medida: "1) Problema con la bater\xeda: BCM, CCU y LFU (unidad de control LF) deben actualizarse. 2) Problema de MRCC: el m\xf3dulo VCM (M\xf3dulo de control del veh\xedculo) y DSC (Control din\xe1mico de estabilidad) deben actualizarse.",
+            tiempo: "1,5h",
+            razones_texto: "1. Programa de control inadecuado de CCU y BCM 2. Trabajando dentro de un rango de velocidad establecido, MRCC ajusta autom\xe1ticamente y mantiene una distancia de seguimiento segura desde el autom\xf3vil de adelante.",
+            riesgos: "1. Bater\xeda se descarga 2. Al utilizar el MRCC puede experimentar una sensaci\xf3n de aceleraci\xf3n o desaceleraci\xf3n fuerte.",
+            key: "PES1321",
+            type: "1"
+        }, {
+            nombre_campana: "Ruido Est\xe1tico y reprogramaci\xf3n amplificador de sonido Bose",
+            vehiculo: "CX-30",
+            modelo: "2021",
+            fecha: "24/03/2021",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "1241",
+            medida: "Actualice el software de control del amplificador de audio con software modificado a trav\xe9s de Mazda Connect, utilizando una memoria USB.",
+            tiempo: "0,8h",
+            razones_texto: "En el amplificador de audio BOSE, el programa de inicio de DSP (procesador de se\xf1al digital) no es apropiado, lo que puede permitir que los datos de la se\xf1al de audio digital dentro del amplificador se corrompan, generando el ruido.",
+            riesgos: "En cierto tipo de audio BOSE, se puede escuchar un ruido est\xe1tico (ruido blanco) desde los altavoces delanteros y traseros al volumen m\xe1ximo. Es posible que el ruido no se detenga incluso si el amplificador de audio est\xe1 apagado.",
+            key: "PES1421",
+            type: "1"
+        }, {
+            nombre_campana: "Compuerta trasera motorizada puede descender parcialmente",
+            vehiculo: "CX-30",
+            modelo: "2021",
+            fecha: "3/05/2021",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "2180",
+            medida: "Verificar la calcoman\xeda correcta en la parte interna superior del cap\xf3 bas\xe1ndose en la Gu\xeda de Mantenimiento Programado, la cual indica que el lubricante de motor sugerido es Mazda/SAE 5W30 API SN.  Si se evidencia otra calcoman\xeda se debe reemplazar.",
+            tiempo: "0,6h",
+            razones_texto: "En algunos veh\xedculos puede que no se haya instalado la calcoman\xeda de cambio de aceite motor correcta que es Mazda / SAE 5W30 API SN.",
+            riesgos: "Pueden aplicar una referencia de aceite motor incorrecta al veh\xedculo si revisan la calcoman\xeda de cambio de aceite motor que no corresponde.",
+            key: "CES1521",
+            type: "2"
+        }, {
+            nombre_campana: "Reemplazo cubierta m\xf3dulo Airbag lado Conductor",
+            vehiculo: "Mazda 3",
+            modelo: "2005 - 2007",
+            fecha: "30/07/2021",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "6777",
+            medida: "Reemplazar la cubierta del m\xf3dulo de Airbag por una pieza mejorada.",
+            tiempo: "1,1h",
+            razones_texto: "Debido a una especificaci\xf3n de material incorrecta, el logotipo de pl\xe1stico puede volverse quebradizo con el tiempo. En esta condici\xf3n, el logotipo puede romperse durante un despliegue normal de la bolsa de aire.",
+            riesgos: "El logotipo de pl\xe1stico en la cubierta del m\xf3dulo Airbag del volante del conductor puede romperse y proyectar fragmentos en el interior del veh\xedculo durante el despliegue de la bolsa de aire en un choque.  Los fragmentos de pl\xe1stico del logotipo roto pueden golpear a los tripulantes, aumentando la posibilidad de lesiones graves.",
+            key: "CES3121",
+            type: "2"
+        }, {
+            nombre_campana: "Asientos de la segunda fila pueden deslizarse",
+            vehiculo: "CX-9",
+            modelo: "2021",
+            fecha: "15/10/2021",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "237",
+            medida: "Reemplazar las partes internas del asiento afectado de la segunda fila por componentes con versiones mejoradas.",
+            tiempo: "2,0h",
+            razones_texto: "En los asientos de la segunda fila que se encuentran divididos en la proporci\xf3n 60/40 de lado conductor, el mecanismo de deslizamiento puede permitir que \xe9ste se deslice hacia adelante durante una colisi\xf3n del veh\xedculo bajo ciertas condiciones.",
+            riesgos: "Si el ocupante de este asiento tiene abrochado el cintur\xf3n de seguridad durante una colisi\xf3n, se puede transferir mayor fuerza al ocupante debido al deslizamiento del asiento, lo cual aumenta la posibilidad de lesiones.",
+            key: "CES4921",
+            type: "2"
+        }, {
+            nombre_campana: "Reemplazo bomba de combustible",
+            vehiculo: "Mazda 2 - Mazda 3 - CX-5 - CX-3 - CX-9 - Mazda 6 - MX-5",
+            modelo: "2019 - 2021",
+            fecha: "29/08/2022",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "15721",
+            medida: "Reemplazar la bomba de combustible de baja presi\xf3n potencialmente afectada, por una parte mejorada.",
+            tiempo: "2,0h",
+            razones_texto: "Debido a una deficiencia en el material de los impulsores de los veh\xedculos sujetos a esta campa\xf1a de seguridad, se pueden provocar grietas en la superficie bajo ciertas condiciones, lo que resulta en la deformaci\xf3n del impulsor.  En algunos casos, el impulsor se puede deformar al punto donde puede interferir con el cuerpo de la bomba de combustible, produciendo la falla de la bomba.",
+            riesgos: "La falla de bomba puede resultar en que el motor no pueda arrancar o que el veh\xedculo se apague mientras se est\xe1 conduciendo a baja velocidad y en muy raras condiciones el veh\xedculo se puede apagar mientras es conducido a altas velocidades, incrementando el riesgo de un accidente.",
+            key: "CES6321",
+            type: "2"
+        }, {
+            nombre_campana: 'Instalaci\xf3n calcoman\xeda "Prohibici\xf3n recarga con cables puente" para veh\xedculos con tecnolog\xeda Mild-Hybrid',
+            vehiculo: "CX-30 - Mazda 3",
+            modelo: "2023",
+            fecha: "26/04/2022",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "332",
+            medida: 'Instalar la calmoman\xeda informativa de "Prohibici\xf3n recarga con cables puente" para veh\xedculos con tecnolog\xeda Mild-Hybrid',
+            tiempo: "0,2h",
+            razones_texto: "Para los veh\xedculos con tecnolog\xeda Mild-Hybrid afectados se debe realizar la instalaci\xf3n de la calcoman\xeda que indica la prohibici\xf3n de recarga con cables puente, dado que es una funci\xf3n no compatible con el veh\xedculo.",
+            riesgos: "La recarga con cables puente en veh\xedculos con tecnolog\xeda Mild-Hybrid no es compatible.",
+            key: "PES2622",
+            type: "1"
+        }, {
+            nombre_campana: "Ruido tipo traqueteo del compartimiento motor al encender en fr\xedo",
+            vehiculo: "Mazda 2",
+            modelo: "2016 - 2020",
+            fecha: "27/12/2022",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "13604",
+            medida: "Reprogramar el PCM con el Sistema de Diagn\xf3stico Modular Mazda utilizando el software actualizado",
+            tiempo: "0,5h",
+            razones_texto: "Debido a un software de control inadecuado del PCM para esta situaci\xf3n espec\xedfica, el pin de bloqueo en el actuador hidr\xe1ulico del variador de tiempo (VVT) puede interferir con el orificio del pasador de bloqueo.",
+            riesgos: "Se puede percibir un ruido tipo traqueteo proveniente del compartimiento motor al encender el veh\xedculo en frio. El ruido permanece durante unos segundos luego de encender el veh\xedculo.",
+            key: "PES6622",
+            type: "1"
+        }, {
+            nombre_campana: "Reprogramaci\xf3n Sintonizador remoto MX-30 (DR)",
+            vehiculo: "MX-30",
+            modelo: "2023 - 2024",
+            fecha: "24/03/2023",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "43",
+            medida: "Actualizaci\xf3n del software de sintonizador remoto (RT)",
+            tiempo: "0,6h",
+            razones_texto: "En algunos Sintonizadores Remotos, el proceso de apagado puede no completarse. En este caso, una corriente el\xe9ctrica puede permanecer alta, permitiendo que la bater\xeda de 12V se descargue y finalmente se agote.",
+            riesgos: "La bater\xeda de 12V se puede descargar",
+            key: "PES1823",
+            type: "1"
+        }, {
+            nombre_campana: "Sistema de Alerta de peatones - Error en sonido de advertencia.",
+            vehiculo: "CX-90",
+            modelo: "2024",
+            fecha: "10/08/2023",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "105",
+            medida: "Reprogramar el software del amplificador AVAS ISB con M-MDS, utilizando MDARS para controlar correctamente la activaci\xf3n del sonido de advertencia.",
+            tiempo: "0,6h",
+            razones_texto: 'Hay un mal funcionamiento del software de control de la caja de sonido del sistema de informaci\xf3n audible de aproximaci\xf3n de veh\xedculo (AVAS ISB), que controla el sonido de alerta de conducci\xf3n en "reversa"',
+            riesgos: 'En el sistema de alerta de peatones, el sonido de alerta de conducci\xf3n marcha atr\xe1s puede activarse en cualquier marcha que no sea "reversa".  Este problema puede producirse cuando la palanca selectora de marchas del veh\xedculo se mueve con relativa rapidez.',
+            key: "PES4823",
+            type: "1"
+        }, {
+            nombre_campana: "Cambio en calcoman\xeda de puesta a punto motor y presi\xf3n de inflado CX-60",
+            vehiculo: "CX-60",
+            modelo: "2024",
+            fecha: "10/10/2023",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "117",
+            medida: "Cambiar la calcoman\xeda por la correcta",
+            tiempo: "0,24h",
+            razones_texto: "Debido a un ajuste de especificaci\xf3n en las m\xednimas (velocidad ralenti) del motor 3.3L T, se hace necesario el reemplazo de la calcoman\xeda de puesta a punto motor y presi\xf3n de inflado de llantas ubicada en el paral B del lado del asiento conductor",
+            riesgos: "Informaci\xf3n inexacta en la calcoman\xeda de puesta a punto motor y presi\xf3n de inflado",
+            key: "PES6123",
+            type: "1"
+        }, {
+            nombre_campana: "Instalaci\xf3n Kit estuche + Gato + llave pernos",
+            vehiculo: "MX-30",
+            modelo: "2022 - 2024",
+            fecha: "10/10/2023",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "131",
+            medida: "Dotar con gato mec\xe1nico tipo tijera con su instructivo de uso y su correspondiente estuche, as\xed como una llave de pernos.",
+            tiempo: "0,12h",
+            razones_texto: "Debido a la necesidad de los clientes de contar con las herrramientas para remover las ruedas en el evento que se pinche una de ellas y no pueda ser reparada con el kit de despinchado con el que viene equipado los veh\xedculos MX-30, Mazda de Colombia ha decidido mediante este programa dotar de un gato mec\xe1nico tipo tijera con su instructivo de uso y su correspondinte estuche, as\xed como una llave de pernos que se ubicar\xe1 en uno de los compartimentos de poliestireno bajo la alfombra del ba\xfal.",
+            riesgos: "No poder desmontar la llanta en caso de una pinchada que no se pueda reparar con el kit de despinche",
+            key: "PES7423",
+            type: "1"
+        }, {
+            nombre_campana: "Advertencia sobre alerta de tr\xe1fico cruzado de carril (FCTA) y activaci\xf3n involuntaria de asistente inteligente de frenado delantero (SBS)",
+            vehiculo: "CX-60",
+            modelo: "2024",
+            fecha: "31/10/2023",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "132",
+            medida: "Reprogramar software del sensor del radar lateral con el M-MDS, utilizando MDARS.  En caso que se pierda el registro de datos del sensor del radar lateral, se debe sustituir por uno mejorado.",
+            tiempo: "0,6h",
+            razones_texto: "Software inadecuado (valor de correcci\xf3n del \xe1ngulo) del sensor de radar lateral",
+            riesgos: "En algunos veh\xedculos CX-60, al conducir cerca de objetos con alta intensidad de reflexi\xf3n, como un veh\xedculo que transite en sentido contrario, la alerta de tr\xe1fico cruzado delantera podr\xeda funcionar de forma err\xf3nea y, en casos excepcionales, la asistencia inteligente de frenado delantero (SBS) puede activarse de manera imprevista si se cumplen determinadas condiciones, provocando una alerta involuntaria.",
+            key: "PES7923",
+            type: "1"
+        }, {
+            nombre_campana: "Las im\xe1genes de la c\xe1mara trasera y de la c\xe1mara 360\xb0 pueden no mostrarse",
+            vehiculo: "CX-60 - CX-90",
+            modelo: "2024",
+            fecha: "31/10/2023",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "318",
+            medida: "Reprogramar el m\xf3dulo de control de la c\xe1mara del monitor de visi\xf3n (VMC) con software mejorado con el  M-MDS, utilizando MDARS.",
+            tiempo: "0,5h",
+            razones_texto: "Una l\xf3gica de procesamiento inadecuado en el m\xf3dulo de control de la c\xe1mara del monitor de visi\xf3n p\xfaeden provocar un deterioro en la imagen",
+            riesgos: "Las im\xe1genes de la c\xe1mara trasera y de la c\xe1mara 360\xb0 pueden parpadear o no mostrarse",
+            key: "PES8023",
+            type: "1"
+        }, {
+            nombre_campana: "Advertencia sobre la sensaci\xf3n de cambio de marchas / conducci\xf3n",
+            vehiculo: "CX-60",
+            modelo: "2024",
+            fecha: "31/10/2023",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "182",
+            medida: "Reprogramar el m\xf3dulo del TCM y realizar el aprendizaje inicial con el  M-MDS, utilizando MDARS.",
+            tiempo: "1,0h",
+            razones_texto: "Insuficiente robustez del software TCM (control de aprendizaje de la presi\xf3n de aceite)",
+            riesgos: "Mala sensaci\xf3n de conducci\xf3n a baja velocidad y contragolpe de cambios y sensaci\xf3n de sacudidas al cambiar la marcha",
+            key: "PES8123",
+            type: "1"
+        }, {
+            nombre_campana: "Inspección y reemplazo de diferencial delantero",
+            vehiculo: "CX-60 - CX-90",
+            modelo: "2024",
+            fecha: "19/09/2023",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "371",
+            medida: "Inspeccionar direferencial delantero y en caso de fuga realizar cambio.",
+            tiempo: "8,0h",
+            razones_texto: "Proceso inapropiado de ensamble del diferencial delantero al cárter que produce una fuga de aceite lubricante.",
+            riesgos: "Posible fuga de lubricante en el diferencial delantero.",
+            key: "PES6823",
+            type: "1"
+        }, {
+            nombre_campana: "Incremento repentino esfuerzo al girar el volante en CX-60 y CX-90",
+            vehiculo: "CX-60 - CX-90",
+            modelo: "2024",
+            fecha: "31/01/2024",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "413",
+            medida: "Engrasar el mecanismo de engranajes y reemplazar el resorte de ajuste de la caja de dirección electroasistida en las unidades potencialmente afectadas por este defecto.",
+            tiempo: "0,8h",
+            razones_texto: "El conjunto del engranaje de dirección lleva incorporado un engranaje sinfín que transmite la fuerza de asistencia generada por el motor de la dirección asistida.  La fuerza de fricción del engranaje sinfín puede ser excesiva, lo que se traduce en un aumento de la fuerza necesaria para girar el volante.",
+            riesgos: "El cambio repentino e inesperado del esfuerzo al girar volante durante la conducción puede aumentar el riesgo de accidente.",
+            key: "CES0624",
+            type: "2"
+        }, {
+            nombre_campana: "Resistencia al girar el volante de dirección",
+            vehiculo: "Mazda 2",
+            modelo: "2021 a 2023",
+            fecha: "11/03/2024",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "35",
+            medida: "Aplicar grasa a la columna de dirección",
+            tiempo: "0,8h",
+            razones_texto: "Durante el uso, puede producirse una lubricación insuficiente entre el engrane sinfín y la corona.",
+            riesgos: "Algunos vehículos pueden exhibir resistencia y/o ruidos inusuales al girar el volante en cualquier dirección.",
+            key: "PES1924",
+            type: "1"
+        }, {
+            nombre_campana: "Reprogramación del módulo PCM",
+            vehiculo: "CX-50",
+            modelo: "2023 a 2024",
+            fecha: "11/07/2024",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "3164",
+            medida: "Reprogramación de la PCM utilizando el software de diagnóstico y reparación MDARS",
+            tiempo: "0,4h",
+            razones_texto: "En algunos vehículos, al arrancar a grandes altitudes o en una pendiente puede encederse el testigo ''check engine'' y puede activarse el modo seguro, lo que provoca aceleración deficiente.",
+            riesgos: "En ciertos casos se puede provocar una aceleración deficiente.",
+            key: "PES3724",
+            type: "1"
+        }, {
+            nombre_campana: "Reprogramación PCM/VCM/DSC",
+            vehiculo: "CX-60",
+            modelo: "2024",
+            fecha: "12/07/2024",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "225",
+            medida: "Reprogramación de la PCM, VCM, VMC o DSC (según sea el caso) con el Sistema de diagnóstico modular Mazda (M-MDS), utilizando el software de diagnóstico y reparación de Mazda (MDARS).",
+            tiempo: "0,8h",
+            razones_texto: "Según la falla, puede deberse a:- Programa de control inadecuado de la valvula de control de gases (EGR) de alta presión.- Criterios inadecuados para la evaluación de fallas del interruptor de freno. - Detección insuficiente de las condiciones de monitoreo programadas en el (VCM). - Debido a un tiempo insuficiente programado en el VCM, el VCM entrará en modo de suspensión después de 15 segundos y la función de personalización del conductor no funcionará. - Debido a un programa de control inadecuado para el diagnóstico inicial en el DSC, el DSC puede juzgar erróneamente la falla debido al ruido eléctrico, el cual se genera durante el diagnóstico inicial inmediatamente después de colocar la ignición en ON.",
+            riesgos: "En ciertos casos se puede presentar: - Testigo ''check engine'' encendido. - Aviso o frenada involuntaria al dar marcha atrás. - El resultado del reconocimiento facial de conductor no se muestra. - El testigo del sistema de control de frenos puede encenderse y la luz indicadora de funcionamiento de TCS/DSC puede parpadear. - El control de velocidad crucero adaptativo (MRCC) puede reducir la velocidad para igualarla al vehículo del carril adyacente.",
+            key: "PES3824",
+            type: "1"
+        }, {
+            nombre_campana: "Reprogramación PCM/VCM",
+            vehiculo: "CX-90",
+            modelo: "2024",
+            fecha: "12/07/2024",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "190",
+            medida: "Reprogramación de la PCM o VCM (según sea el caso) con el Sistema de diagnóstico modular Mazda (M-MDS), utilizando el software de diagnóstico y reparación de Mazda (MDARS).",
+            tiempo: "0,8h",
+            razones_texto: "Según la falla, puede deberse a: - Criterios inadecuados para la evaluación de fallas del interruptor de freno. - Insuficiente programa de control de detección del VCM. - Debido a un tiempo insuficiente programado en el VCM, el VCM entrará en modo de suspensión después de 15 segundos y la función de personalización del conductor no funcionará.",
+            riesgos: "En ciertos casos se puede presentar: \r\n- Testigo ''check engine'' encendido. - El resultado del reconocimiento facial de conductor no se muestra. - El control de velocidad crucero adaptativo (MRCC) puede reducir la velocidad para igualarla al vehículo del carril adyacente.",
+            key: "PES3924",
+            type: "1"
+        }, {
+            nombre_campana: "Reprogramación BCM/VCM",
+            vehiculo: "Mazda 3 y Mazda CX-30",
+            modelo: "2024",
+            fecha: "05/08/2024",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "1076",
+            medida: "Reprogramación de la BCM y VCM  con el Sistema de diagnóstico modular Mazda (M-MDS), utilizando el software de diagnóstico y reparación de Mazda (MDARS).",
+            tiempo: "0,5h",
+            razones_texto: "Falla en el software de módulo de control de la carrocería (BCM) Control de detección indebido por parte del software del módulo de control de vehículo (VCM)",
+            riesgos: "En ciertos casos se puede presentar: - No se visualiza la secuencia de apertura del cuadro de instrumentos tras el encendido. - El control de crucero por radar de Mazda (MRCC) puede reducir la velocidad para coincidir con el vehículo del carril adyacente.",
+            key: "PES5224",
+            type: "1"
+        }, {
+            nombre_campana: "Inspección, corrección o reemplazo de la cámara de reversa (Mazda 3 y Mazda CX-3)",
+            vehiculo: "Mazda 3 (BM/BN) y Mazda CX-3",
+            modelo: "Mazda 3 2016 al 2020 y Mazda CX-3 2017 al 2020",
+            fecha: "2/09/2024",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "7680",
+            medida: "De acuerdo con la condición del vehículo, se debe fijar el cableado de la cámara de reversa, o de ser necesario reemplazarla.",
+            tiempo: "0,6h",
+            razones_texto: "Debido a un diseño inadecuado del sujetador del cableado de la cámara de reversa, el cableado puede dañarse por las vibraciones durante el uso normal o al cerrar la compuerta del baúl. Esto provoca distorsión de la imagen o parpadeo.",
+            riesgos: "En determinados vehículos, la cámara de reversa puede mostrar una imagen distorionada o papardeante. Esto puede afectar el juicio del conductor, aumentando el riesgo de colisión.",
+            key: "CES3623",
+            type: "2"
+        }, {
+            nombre_campana: "Reprogramación del módulo PCM - eje cardánico",
+            vehiculo: "CX-50",
+            modelo: "2023 a 2025",
+            fecha: "10/10/2024",
+            img_path: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/thumb2.jpg",
+            img_path_detail: "http://www.mazdaapps.co/landings/CampanaServicios/php/images/image.jpg",
+            unidades: "2617",
+            medida: "Reprogramación de la PCM utilizando el software de diagnóstico y reparación MDARS",
+            tiempo: "0,4h",
+            razones_texto: "Debido a un programa de control inadecuado de la PCM, el control de prevención de daños por calor no funciona, lo que puede ocasionar que la temperaturaa del guardapolvo de la junta homocinética (Cruceta/CV) del cardán supere la temperatura garantizada y se presente goteo de lubricante y desgaste de ciertas piezas",
+            riesgos: "En ciertos vehículos pueden producirse ruidos/vibraciones en la carrocería.",
+            key: "PES6324",
+            type: "1"
+        }
+        ],
+        e.showMess = !1,
+        e.showMessEM = !1,
+        e.showMessNF = !1,
+        e.showMessPI = !1,
+        e.campanas_filtered = [],
+        e.programas_filtered = [],
+
+        e.setCurrentcampaign = function (a) {
+            e.campana_selected = a;
+        },
+
+        jsonString = JSON.stringify(e.campanas);
+        console.log(jsonString);
+
+    e.setCurrentprogram = function (a) {
+        e.program_selected = a;
+    },
+
+        e.serviceFormCampanas = function () {
+            if (e.dataCamp.vinOrPlaca.length < 6) {
+                e.campanas_filtered = [],
+                    e.showMessPI = !0,
+                    e.showMessPlate = !1,
+                    e.showMess = !1,
+                    e.showMessEM = !1,
+                    e.showMessNFVIN = !1,
+                    e.showMessINVVIN = !1,
+                    e.showMessNF = !1;
+                return;
+            }
+
+            e.dataCamp.user = "C4mp4n@s2015",
+                e.dataCamp.password = "9j6u8s]RQevgO1D",
+                e.code_camps = "";
+
+            // Restablecer las variables antes de la solicitud AJAX
+            e.campanas_filtered = [];
+            e.programas_filtered = [];
+            e.campana_selected = null;
+            e.program_selected = null;
+            e.vin_response = "";
+            e.version_response = "";
+            e.modelo_response = "";
+            e.plate_response = "";
+
+            var a = $.param(e.dataCamp);
+
+            $.ajax({
+                method: "POST",
+                url: "https://campanas.mazda.co/campanasREST?" + a,
+                headers: {
+                    Accept: "*/*",
+                    "Content-Type": "application/json"
+                },
+                data: {},
+                type: "json",
+                success: function (a) {
+                    var o = a.codigo;
+                    if ("1" == o || "2" == o) {
+                        if ("1" == o) code_camps = a.mensaje;
+                        else if ("2" == o) {
+                            var i = a.mensaje.split(", ").map(function (e) {
+                                let a = e.split(":");
+                                var o = {};
+                                return o[a[0]] = a[1], o
+                            });
+                            e.vin_response = i[0].VIN, e.version_response = i[1].Version, e.modelo_response = i[2].Modelo, e.plate_response = i[3].Placa, code_camps = i[4]["Campa\xf1as"], $(".popup").addClass("open")
+                        } else code_camps = "";
+                        for (var n = (code_camps = code_camps.trim()).split(","), d = 0; d < n.length; d++) n[d] = n[d].replace(";0", ""), n[d] = n[d].replace(";1", "");
+                        for (var r = e.campanas.filter(function (e) {
+                            if ("1" == e.type) return n.indexOf(e.key) >= 0
+                        }), s = code_camps.split(","), d = 0; d < s.length; d++) s[d] = s[d].replace(";0", ""), s[d] = s[d].replace(";1", "");
+                        var l = e.campanas.filter(function (e) {
+                            if ("2" == e.type) return s.indexOf(e.key) >= 0
+                        });
+                        r.forEach(a => {
+                            e.campana_title = a.key.substr(0, 3), "PES" == e.campana_title ? e.title_form = "ESPECIAL DE SERVICIO (PES)" : e.title_form = "DE SEGURIDAD (CES)"
+                        }), e.programas_filtered = r, e.campanas_filtered = l, e.showMess = !1, e.showMessEM = !1, e.showMessNF = !1, e.showMessNFVIN = !1, e.showMessINVVIN = !1, e.showMessPI = !1, e.$apply();
+                        var t = document.getElementById("result");
+                        t.scrollIntoView({
+                            behavior: "smooth"
+                        })
+                    } else if ("0" == o) {
+                        if (/^[a-zA-Z]{1,3}[0-9]{1,3}$/.test(e.dataCamp.vinOrEngineNum)) {
+                            e.campanas_filtered = [], e.programas_filtered = [], e.showMessPlate = !0, e.showMess = !1, e.showMessEM = !1, e.showMessNFVIN = !1, e.showMessINVVIN = !1, e.showMessNF = !1, e.showMessPI = !1, e.$apply();
+                            var t = document.getElementById("content_mess");
+                            t.scrollIntoView({
+                                behavior: "smooth"
+                            })
+                        } else {
+                            e.campanas_filtered = [], e.programas_filtered = [], e.showMess = !0, e.showMessPlate = !1, e.showMessEM = !1, e.showMessNFVIN = !1, e.showMessINVVIN = !1, e.showMessNF = !1, e.showMessPI = !1, e.$apply();
+                            var t = document.getElementById("content_mess");
+                            t.scrollIntoView({
+                                behavior: "smooth"
+                            })
+                        }
+                    } else if ("EM" == o) {
+                        e.campanas_filtered = [], e.programas_filtered = [], e.showMessEM = !0, e.showMess = !1, e.showMessPlate = !1, e.showMessNFVIN = !1, e.showMessINVVIN = !1, e.showMessNF = !1, e.showMessPI = !1, e.$apply();
+                        var t = document.getElementById("content_mess");
+                        t.scrollIntoView({
+                            behavior: "smooth"
+                        })
+                    } else if ("NF" == o && 6 == e.dataCamp.vinOrPlaca.length) {
+                        e.campanas_filtered = [], e.programas_filtered = [], e.showMessEM = !1, e.showMessNF = !0, e.showMessNFVIN = !1, e.showMessINVVIN = !1, e.showMess = !1, e.showMessPlate = !1, e.showMessPI = !1, e.$apply();
+                        var t = document.getElementById("content_mess");
+                        t.scrollIntoView({
+                            behavior: "smooth"
+                        })
+                    } else if ("NF" == o && e.dataCamp.vinOrPlaca.length >= 7 && e.dataCamp.vinOrPlaca.length <= 16) {
+                        e.campanas_filtered = [], e.programas_filtered = [], e.showMessEM = !1, e.showMessNF = !1, e.showMessNFVIN = !1, e.showMessINVVIN = !0, e.showMess = !1, e.showMessPlate = !1, e.showMessPI = !1, e.$apply();
+                        var t = document.getElementById("content_mess");
+                        t.scrollIntoView({
+                            behavior: "smooth"
+                        })
+                    } else if ("NF" == o && e.dataCamp.vinOrPlaca.length >= 7) {
+                        e.campanas_filtered = [], e.programas_filtered = [], e.showMessEM = !1, e.showMessNF = !1, e.showMessNFVIN = !0, e.showMessINVVIN = !1, e.showMess = !1, e.showMessPlate = !1, e.showMessPI = !1, e.$apply();
+                        var t = document.getElementById("content_mess");
+                        t.scrollIntoView({
+                            behavior: "smooth"
+                        })
+                    } else console.log("Error al consultar campañas")
+                },
+                error: function (e) {
+                    console.log(e)
+                }
+            });
+        },
+
+        e.sendInfoCar = function (a) {
+            e.dataConfirm = {
+                user: "C4mp4n@s2015",
+                password: "9j6u8s]RQevgO1D",
+                Placa: e.plate_response.trim(),
+                Confirmacion_dato: a
+            };
+            var o = $.param(e.dataConfirm);
+            $.ajax({
+                method: "POST",
+                url: "https://campanas.mazda.co/confirmacionREST?" + o,
+                headers: {
+                    Accept: "*/*",
+                    "Content-Type": "application/json"
+                },
+                data: {},
+                type: "json",
+                success: function (a) {
+                    "NO" == e.dataConfirm.Confirmacion_dato && (e.campanas_filtered = [], e.programas_filtered = [], e.showMessEM = !1, e.showMessNF = !0, e.showMess = !1, e.showMessPlate = !1, e.$apply()), $(".popup").removeClass("open")
+                },
+                error: function (e) {
+                    console.log(e)
+                }
+            })
+        }
+}]);

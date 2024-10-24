@@ -1,0 +1,772 @@
+.Content-3x8GYZ {
+    max-width: 1976px !important
+}
+
+.stry-wrapper {
+    width: 89%
+}
+
+.mxp-main-text-field-hiztT label {
+    margin: 20px 0 !important
+}
+
+.mxp-main-checkbox-group__header-3cBNA>:last-of-type {
+    padding: 20px 0 !important
+}
+
+.mxp-main-dropdown-field-J1WHm .mxp-main-dropdown-label-3KLl3 {
+    display: block;
+    margin: 20px 0 !important
+}
+
+.mxp-container-container-r9Hcg.mxp-container-horizontal-spacing-2Wm5c {
+    padding-bottom: 3% !important
+}
+
+.mxp-main-checkbox__texts-22PFN .mxp-main-checkbox__description-1QQct p {
+    max-width: 90% !important
+}
+
+.mxp-main-form-sectionv2-HRVjS:last-of-type {
+    padding-right: 4%;
+    padding-left: 4%
+}
+
+.mxp-form-form-container-1oJLF .mxp-form-error-PQW3k {
+    text-align: center;
+    padding: 20px 0
+}
+
+#stry-load-more-button {
+    width: 171px !important;
+    margin-bottom: 60px !important
+}
+
+.mxp-main-grade__price-1QvNh {
+    display: none !important;
+    margin-bottom: 10px;
+    
+}
+
+.mxp-numbers-number-block-3fCs8{
+    width: 32%!important;
+}
+
+@media only screen and (max-width: 500px) {
+
+    .titustori,
+    .titustori2 {
+        font-weight: 400 !important
+    }
+
+    .titustori {
+        font-size: 23px !important
+    }
+
+    .titustori2 {
+        font-size: 21px !important
+    }
+
+    .mxp-numbers-number-block-3fCs8{
+        width: 100%!important;
+    }
+
+    .row--justify-center{
+        flex-direction: column;
+    }
+}
+
+.Tabs-1EpUX8 .TabsUL-1Y8lqE {
+    overflow-x: visible !important
+}
+
+@media only screen and (max-width: 530px) {
+
+    .Tabs-1EpUX8 .TabsUL-1Y8lqE,
+    .Tabs-1EpUX8.TabsScrolling-1QU_be .TabsUL-1Y8lqE {
+        overflow-x: auto !important
+    }
+}
+
+@media only screen and (max-width: 900px) {
+    .Tabs-1EpUX8.TabsScrolling-1QU_be .TabsUL-1Y8lqE {
+        flex-wrap: wrap !important
+    }
+}
+
+@media only screen and (max-width: 529px) {
+    .Tabs-1EpUX8.TabsScrolling-1QU_be .TabsUL-1Y8lqE {
+        flex-wrap: nowrap !important
+    }
+}
+
+.sizeFrame {
+    width: 100%;
+    height: 1000px
+}
+
+@media only screen and (max-width: 800px) {
+    .sizeFrame {
+        width: 100%;
+        height: 2900px
+    }
+}
+
+.mxp-cta-btn-wrapper-x73nV.mxp-cta-btn-type-primary-36X1o.mxp-cta-full-desktop-23teK {
+    width: 193px
+}
+
+.mxp-itemHorizontal-control-item-1PJwk.mxp-itemHorizontal--finished-7mIXT .mxp-itemHorizontal-title-MjloZ {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 200px !important
+}
+
+@media only screen and (max-width: 3500px) {
+    .carouCx50 {
+        height: 1125px
+    }
+}
+
+@media only screen and (max-width: 1660px) {
+    .carouCx50 {
+        height: 939px
+    }
+}
+
+@media only screen and (max-width: 1437px) {
+    .carouCx50 {
+        height: 823px
+    }
+}
+
+@media only screen and (max-width: 1252px) {
+    .carouCx50 {
+        height: 737px
+    }
+}
+
+@media only screen and (max-width: 1205px) {
+    .carouCx50 {
+        height: 710px
+    }
+}
+
+@media only screen and (max-width: 1120px) {
+    .carouCx50 {
+        height: 643px
+    }
+}
+
+@media only screen and (max-width: 865px) {
+    .carouCx50 {
+        height: 500px
+    }
+}
+
+.mxp-main-item__footer-3Uvyi {
+    padding: 15px 0 40px !important
+}
+
+.iconMazdaDirecCredit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    padding-top: 6px;
+    width: 70%
+}
+
+.mxp-fullWidthPromo-ctas-21y8U {
+    padding-top: 30px !important
+}
+
+.mxp-main-form-sectionv2-HRVjS .mxp-main-header-1Gwex {
+    text-align: center;
+    padding-bottom: 0 !important
+}
+
+@media only screen and (max-width: 1073px) {
+    .heightTestDrive {
+        height: 450px
+    }
+}
+
+@media only screen and (max-width: 940px) {
+    .heightTestDrive {
+        height: 450px
+    }
+}
+
+@media only screen and (max-width: 870px) {
+    .heightTestDrive {
+        height: 450px
+    }
+}
+
+@media only screen and (max-width: 630px) {
+    .heightTestDrive {
+        height: 410px
+    }
+}
+
+@media only screen and (max-width: 451px) {
+    .heightTestDrive {
+        height: 430px
+    }
+}
+
+@media only screen and (max-width: 390px) {
+    .heightTestDrive {
+        height: 428px
+    }
+}
+
+@media only screen and (max-width: 340px) {
+    .heightTestDrive {
+        height: 490px
+    }
+}
+
+@media only screen and (max-width: 296px) {
+    .heightTestDrive {
+        height: 540px
+    }
+}
+
+.mxp-main-grade__desktop-image-1Sfv1 {
+    display: block !important
+}
+
+.mxp-main-second-level-13vyh {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row-reverse;
+    padding: 40px;
+    gap: 17%
+}
+
+.imgFooterLogo {
+    margin-left: 134px
+}
+
+@media only screen and (min-width: 1201px) {
+    .mxp-main-second-level-13vyh .mxp-main-container-1Uw-d {
+        flex-direction: column !important
+    }
+}
+
+@media only screen and (max-width: 900px) {
+    .mxp-main-second-level-13vyh {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding: 40px;
+        gap: 17%
+    }
+
+    .imgFooterLogo {
+        margin: 0;
+        padding-top: 40px
+    }
+}
+
+.mxp-video-video-hero-player-2gGZf {
+    filter: brightness(.5)
+}
+
+.mxp-container-container-content-2z3XZ.mxp-container-horizontalSpacing-1Ii8c {
+    max-width: 1270px !important;
+}
+
+@media only screen and (min-width: 1201px) {
+    .mxp-container-container-content-2z3XZ.mxp-container-horizontalSpacing-1Ii8c {
+        max-width: 1270px !important;
+    }
+}
+
+.mxp-main-desktop-navigation-3Ta0Q .mxp-main-site-navigation-1u2k8 .mxp-main-logo-1LAob img {
+    display: block;
+    height: 50px !important;
+    max-width: 281px !important
+}
+
+.mxp-heroPromo-hero__footer-3cz_A {
+    width: 5% !important
+}
+
+.mxp-activeCarPane-active-car-pane-1xJ_v .mxp-activeCarPane-text-wrapper-19yxp {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column
+}
+
+#epi-quickNavigator {
+    display: none !important;
+}
+
+/* estos son los estilos de todos los bones de test drive de los vehiculos  */
+
+.testdrive-button-all {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    background: #000 !important;
+    color: #fff !important;
+    padding: 13px !important;
+    border-radius: 5px !important;
+    border: none !important;
+    text-transform: uppercase !important;
+
+}
+
+.testdrive-button-all:hover {
+    background-color: #910a2d !important;
+    color: #fff !important;
+    box-shadow: 0 13px 11px rgba(0, 0, 0, 0.25), 0 9px 7px rgba(0, 0, 0, 0.22) !important;
+}
+
+.testdrive-button-all {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    background: #000 !important;
+    color: #fff !important;
+    padding: 13px !important;
+    border-radius: 5px !important;
+    border: none !important;
+    text-transform: uppercase !important;
+
+}
+
+.testdrive-button-all:hover {
+    background-color: #910a2d !important;
+    color: #fff !important;
+    box-shadow: 0 13px 11px rgba(0, 0, 0, 0.25), 0 9px 7px rgba(0, 0, 0, 0.22) !important;
+}
+
+.testdrive-button-allCTA:hover {
+    
+    color: #910a2d !important;
+
+}
+
+/* estos estilos hacen que los botones que estan maquetdos tengan los mimos estilos del episever  */
+
+.testdrive-button-allV2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    background: #000 !important;
+    color: #fff !important;
+    padding: 13px !important;
+    border-radius: 5px !important;
+    border: none !important;
+    text-transform: uppercase !important;
+    position: relative;
+    overflow: hidden; /* Evita que el contenido salga del botón */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave para el fondo y el color */
+}
+
+.testdrive-button-allV2::before {
+    content: "agenda tu test drive"; /* Texto duplicado para el efecto */
+    position: absolute;
+    top: 100%; /* Inicialmente está fuera del botón, en la parte inferior */
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #fff; /* El texto será blanco */
+    transition: top 0.2s ease; /* Transición suave para el movimiento del texto */
+    margin-top:11px;
+}
+
+.testdrive-button-allV2:hover::before {
+    top: 0; /* El texto se mueve hacia arriba durante el hover */
+}
+
+.testdrive-button-allV2:hover {
+    background-color: #910a2d !important;
+    color: transparent !important; /* El texto original desaparece al hacer hover */
+}
+
+.testdrive-button-allV2 span {
+    transition: transform 0.1s ease, opacity 0.1s ease; /* Transición suave para el movimiento y la opacidad del texto */
+}
+
+.testdrive-button-allV2:hover span {
+    transform: translateY(-100%); /* El texto original se mueve hacia arriba y desaparece */
+    opacity: 0; /* El texto original se desvanece */
+}
+
+.testdrive-button-allV2::after {
+    content: "agenda tu test drive"; /* Texto duplicado para aparecer durante hover */
+    position: absolute;
+    top: 0;
+    left: 0px;
+    right: 0;
+    text-align: center;
+    color: #fff; /* El texto es blanco para estar visible en el fondo rojo */
+    opacity: 0; /* Inicialmente invisible */
+    transition: opacity 0.1s ease, transform 0.1s ease; /* Suavizamos la opacidad y el movimiento */
+    margin-block:70px;
+    
+}
+
+.testdrive-button-allV2:hover::after {
+    opacity: 1; /* Aparece el texto en hover */
+    transform: translateY(0); /* Texto centrado */
+    
+}
+
+
+/* Parallax Mazda 2 */
+.testdrive-button-allM2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    background: #000 !important;
+    color: #fff !important;
+    padding: 13px !important;
+    border-radius: 5px !important;
+    border: none !important;
+    text-transform: uppercase !important;
+    position: relative;
+    overflow: hidden; /* Evita que el contenido salga del botón */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave para el fondo y el color */
+}
+
+.testdrive-button-allM2::before {
+    content: "sorpréndete con su tecnología"; /* Texto duplicado para el efecto */
+    position: absolute;
+    top: 100%; /* Inicialmente está fuera del botón, en la parte inferior */
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #fff; /* El texto será blanco */
+    transition: top 0.2s ease; /* Transición suave para el movimiento del texto */
+    margin-top:11px;
+}
+
+.testdrive-button-allM2:hover::before {
+    top: 0; /* El texto se mueve hacia arriba durante el hover */
+}
+
+.testdrive-button-allM2:hover {
+    background-color: #910a2d !important;
+    color: transparent !important; /* El texto original desaparece al hacer hover */
+}
+
+.testdrive-button-allM2 span {
+    transition: transform 0.1s ease, opacity 0.1s ease; /* Transición suave para el movimiento y la opacidad del texto */
+}
+
+.testdrive-button-allM2:hover span {
+    transform: translateY(-100%); /* El texto original se mueve hacia arriba y desaparece */
+    opacity: 0; /* El texto original se desvanece */
+}
+
+.testdrive-button-allM2::after {
+    content: "sorpréndete con su tecnología"; /* Texto duplicado para aparecer durante hover */
+    position: absolute;
+    top: 0;
+    left: 0px;
+    right: 0;
+    text-align: center;
+    color: #fff; /* El texto es blanco para estar visible en el fondo rojo */
+    opacity: 0; /* Inicialmente invisible */
+    transition: opacity 0.1s ease, transform 0.1s ease; /* Suavizamos la opacidad y el movimiento */
+    margin-block:70px;
+    
+}
+
+.testdrive-button-allM2:hover::after {
+    opacity: 1; /* Aparece el texto en hover */
+    transform: translateY(0); /* Texto centrado */
+    
+}
+
+/* Parallax Mazda 3 */
+.testdrive-button-allM3 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    background: #000 !important;
+    color: #fff !important;
+    padding: 13px !important;
+    border-radius: 5px !important;
+    border: none !important;
+    text-transform: uppercase !important;
+    position: relative;
+    overflow: hidden; /* Evita que el contenido salga del botón */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave para el fondo y el color */
+}
+
+.testdrive-button-allM3::before {
+    content: "emociónate con su desempeño"; /* Texto duplicado para el efecto */
+    position: absolute;
+    top: 100%; /* Inicialmente está fuera del botón, en la parte inferior */
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #fff; /* El texto será blanco */
+    transition: top 0.2s ease; /* Transición suave para el movimiento del texto */
+    margin-top:11px;
+}
+
+.testdrive-button-allM3:hover::before {
+    top: 0; /* El texto se mueve hacia arriba durante el hover */
+}
+
+.testdrive-button-allM3:hover {
+    background-color: #910a2d !important;
+    color: transparent !important; /* El texto original desaparece al hacer hover */
+}
+
+.testdrive-button-allM3 span {
+    transition: transform 0.1s ease, opacity 0.1s ease; /* Transición suave para el movimiento y la opacidad del texto */
+}
+
+.testdrive-button-allM3:hover span {
+    transform: translateY(-100%); /* El texto original se mueve hacia arriba y desaparece */
+    opacity: 0; /* El texto original se desvanece */
+}
+
+.testdrive-button-allM3::after {
+    content: "emociónate con su desempeño"; /* Texto duplicado para aparecer durante hover */
+    position: absolute;
+    top: 0;
+    left: 0px;
+    right: 0;
+    text-align: center;
+    color: #fff; /* El texto es blanco para estar visible en el fondo rojo */
+    opacity: 0; /* Inicialmente invisible */
+    transition: opacity 0.1s ease, transform 0.1s ease; /* Suavizamos la opacidad y el movimiento */
+    margin-block:70px;
+    
+}
+
+.testdrive-button-allM3:hover::after {
+    opacity: 1; /* Aparece el texto en hover */
+    transform: translateY(0); /* Texto centrado */
+    
+}
+
+/* Parallax Mazda CX-30 */
+.testdrive-button-allMCX30 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    background: #000 !important;
+    color: #fff !important;
+    padding: 13px !important;
+    border-radius: 5px !important;
+    border: none !important;
+    text-transform: uppercase !important;
+    position: relative;
+    overflow: hidden; /* Evita que el contenido salga del botón */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave para el fondo y el color */
+}
+
+.testdrive-button-allMCX30::before {
+    content: "apasiónate con su desempeño"; /* Texto duplicado para el efecto */
+    position: absolute;
+    top: 100%; /* Inicialmente está fuera del botón, en la parte inferior */
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #fff; /* El texto será blanco */
+    transition: top 0.2s ease; /* Transición suave para el movimiento del texto */
+    margin-top:11px;
+}
+
+.testdrive-button-allMCX30:hover::before {
+    top: 0; /* El texto se mueve hacia arriba durante el hover */
+}
+
+.testdrive-button-allMCX30:hover {
+    background-color: #910a2d !important;
+    color: transparent !important; /* El texto original desaparece al hacer hover */
+}
+
+.testdrive-button-allMCX30 span {
+    transition: transform 0.1s ease, opacity 0.1s ease; /* Transición suave para el movimiento y la opacidad del texto */
+}
+
+.testdrive-button-allMCX30:hover span {
+    transform: translateY(-100%); /* El texto original se mueve hacia arriba y desaparece */
+    opacity: 0; /* El texto original se desvanece */
+}
+
+.testdrive-button-allMCX30::after {
+    content: "apasiónate con su desempeño"; /* Texto duplicado para aparecer durante hover */
+    position: absolute;
+    top: 0;
+    left: 0px;
+    right: 0;
+    text-align: center;
+    color: #fff; /* El texto es blanco para estar visible en el fondo rojo */
+    opacity: 0; /* Inicialmente invisible */
+    transition: opacity 0.1s ease, transform 0.1s ease; /* Suavizamos la opacidad y el movimiento */
+    margin-block:70px;
+    
+}
+
+.testdrive-button-allMCX30:hover::after {
+    opacity: 1; /* Aparece el texto en hover */
+    transform: translateY(0); /* Texto centrado */
+    
+}
+
+/* Parallax Mazda CX-5 y CX-50*/
+.testdrive-button-allMCX5 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    background: #000 !important;
+    color: #fff !important;
+    padding: 13px !important;
+    border-radius: 5px !important;
+    border: none !important;
+    text-transform: uppercase !important;
+    position: relative;
+    overflow: hidden; /* Evita que el contenido salga del botón */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave para el fondo y el color */
+}
+
+.testdrive-button-allMCX5::before {
+    content: "inspírate con su diseño"; /* Texto duplicado para el efecto */
+    position: absolute;
+    top: 100%; /* Inicialmente está fuera del botón, en la parte inferior */
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #fff; /* El texto será blanco */
+    transition: top 0.2s ease; /* Transición suave para el movimiento del texto */
+    margin-top:11px;
+}
+
+.testdrive-button-allMCX5:hover::before {
+    top: 0; /* El texto se mueve hacia arriba durante el hover */
+}
+
+.testdrive-button-allMCX5:hover {
+    background-color: #910a2d !important;
+    color: transparent !important; /* El texto original desaparece al hacer hover */
+}
+
+.testdrive-button-allMCX5 span {
+    transition: transform 0.1s ease, opacity 0.1s ease; /* Transición suave para el movimiento y la opacidad del texto */
+}
+
+.testdrive-button-allMCX5:hover span {
+    transform: translateY(-100%); /* El texto original se mueve hacia arriba y desaparece */
+    opacity: 0; /* El texto original se desvanece */
+}
+
+.testdrive-button-allMCX5::after {
+    content: "inspírate con su diseño"; /* Texto duplicado para aparecer durante hover */
+    position: absolute;
+    top: 0;
+    left: 0px;
+    right: 0;
+    text-align: center;
+    color: #fff; /* El texto es blanco para estar visible en el fondo rojo */
+    opacity: 0; /* Inicialmente invisible */
+    transition: opacity 0.1s ease, transform 0.1s ease; /* Suavizamos la opacidad y el movimiento */
+    margin-block:70px;
+    
+}
+
+.testdrive-button-allMCX5:hover::after {
+    opacity: 1; /* Aparece el texto en hover */
+    transform: translateY(0); /* Texto centrado */
+    
+}
+
+/* Parallax Mazda CX-60 */
+.testdrive-button-allMCX60 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    background: #000 !important;
+    color: #fff !important;
+    padding: 13px !important;
+    border-radius: 5px !important;
+    border: none !important;
+    text-transform: uppercase !important;
+    position: relative;
+    overflow: hidden; /* Evita que el contenido salga del botón */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave para el fondo y el color */
+}
+
+.testdrive-button-allMCX60::before {
+    content: "impúlsate con su potencia"; /* Texto duplicado para el efecto */
+    position: absolute;
+    top: 100%; /* Inicialmente está fuera del botón, en la parte inferior */
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #fff; /* El texto será blanco */
+    transition: top 0.2s ease; /* Transición suave para el movimiento del texto */
+    margin-top:11px;
+}
+
+.testdrive-button-allMCX60:hover::before {
+    top: 0; /* El texto se mueve hacia arriba durante el hover */
+}
+
+.testdrive-button-allMCX60:hover {
+    background-color: #910a2d !important;
+    color: transparent !important; /* El texto original desaparece al hacer hover */
+}
+
+.testdrive-button-allMCX60 span {
+    transition: transform 0.1s ease, opacity 0.1s ease; /* Transición suave para el movimiento y la opacidad del texto */
+}
+
+.testdrive-button-allMCX60:hover span {
+    transform: translateY(-100%); /* El texto original se mueve hacia arriba y desaparece */
+    opacity: 0; /* El texto original se desvanece */
+}
+
+.testdrive-button-allMCX60::after {
+    content: "impúlsate con su potencia"; /* Texto duplicado para aparecer durante hover */
+    position: absolute;
+    top: 0;
+    left: 0px;
+    right: 0;
+    text-align: center;
+    color: #fff; /* El texto es blanco para estar visible en el fondo rojo */
+    opacity: 0; /* Inicialmente invisible */
+    transition: opacity 0.1s ease, transform 0.1s ease; /* Suavizamos la opacidad y el movimiento */
+    margin-block:70px;
+    
+}
+
+.testdrive-button-allMCX60:hover::after {
+    opacity: 1; /* Aparece el texto en hover */
+    transform: translateY(0); /* Texto centrado */
+    
+}
+
+.Tabs-1EpUX8 .TabsUL-1Y8lqE .TabsLI-mqLerE .Link-3_6E24.LinkLine-lNl0_-.LinkActive-3TuLio {
+    color: #101010;
+    border-bottom: 6px solid #910a2d!important;
+}
+
+.Tabs-1EpUX8 .TabsUL-1Y8lqE .TabsLI-mqLerE .Link-3_6E24.LinkLine-lNl0_-.LinkActive-3TuLio span {
+    color: #910a2c!important;
+}
+

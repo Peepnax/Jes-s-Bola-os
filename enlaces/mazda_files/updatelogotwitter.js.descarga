@@ -1,0 +1,48 @@
+document.addEventListener("DOMContentLoaded", function() {
+    // SVG nuevo para reemplazar
+    const newSvgContent = `
+        <svg version="1.1" baseProfile="basic" id="Layer_1"
+            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 50 50"
+            xml:space="preserve">
+        <g>
+            <path d="M39,4H11c-3.866,0-7,3.134-7,7v28c0,3.866,3.134,7,7,7h28c3.866,0,7-3.134,7-7V11C46,7.134,42.866,4,39,4z M29.978,37
+                l-6.54-9.292L15.5,37H13l9.308-10.897L13.086,13h7.937l5.637,8.009L33.5,13H36l-8.211,9.613L37.914,37H29.978z"/>
+            <polygon points="16.914,15 31.022,35 34.086,35 19.978,15 	"/>
+        </g>
+        </svg>
+    `;
+
+    // Función para actualizar el logo de Twitter
+    function updateTwitterLogo() {
+        const selectors = [
+            '.title.title--h6.mxp-main-social-3c4ro a',
+            '.mxp-main-social-links--item-39QVp a'
+        ];
+
+        selectors.forEach(selector => {
+            const socialItems = document.querySelectorAll(selector);
+
+            socialItems.forEach(function(item) {
+                if (item.href.includes('twitter.com')) {
+                    //console.log("Enlace de Twitter encontrado:", item);
+                    const svgElement = item.querySelector('svg');
+                    if (svgElement) {
+                        //console.log("SVG encontrado:", svgElement);
+                        // Crear un contenedor temporal para el nuevo SVG
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = newSvgContent.trim();
+                        const newSvgElement = tempDiv.firstChild;
+                        // Reemplazar el SVG antiguo con el nuevo
+                        svgElement.parentNode.replaceChild(newSvgElement, svgElement);
+                        //console.log("SVG reemplazado por el nuevo SVG.");
+                    } else {
+                        console.error("No se encontró el elemento SVG dentro del enlace de Twitter.");
+                    }
+                }
+            });
+        });
+    }
+
+    // Ejecutar la función para actualizar el logo de Twitter
+    updateTwitterLogo();
+});

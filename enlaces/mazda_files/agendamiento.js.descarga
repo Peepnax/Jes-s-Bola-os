@@ -1,0 +1,322 @@
+var ipScript = "18.214.74.16",
+    flagDateField = !1;
+function DisplayIP(e) {
+    ipScript = e.ip;
+}
+function validateFormDate() {
+    var e = document.getElementById("dateServiceReg"),
+        a = document.getElementById("SendData"),
+        c = e.value,
+        o = e.parentElement.getElementsByTagName("label"),
+        n = document.getElementById("messageDateError");
+    "" == c
+        ? (o.item(0).classList.add("error"), a.classList.add("disabled"), (n.innerHTML = "ingresa una fecha."), (flagDateField = !1))
+        : (o.item(0).classList.remove("error"), a.classList.remove("disabled"), (n.innerHTML = ""), (flagDateField = !0));
+}
+(getIP = function () {
+    var e = document.createElement("script");
+    (e.type = "text/javascript"), (e.src = "https://api.ipify.org?format=jsonp&callback=DisplayIP");
+    try {
+        document.getElementsByTagName("head")[0].appendChild(e);
+    } catch (a) {
+        console.log(a);
+    }
+})(),
+    (function e(a) {
+        if ("" != window.location.search) {
+            var c = window.location.search.split("?")[1].split("&");
+            if ((c.length > 1 && (c[0].split("=")[1], c[1].split("=")[1]), c.length >= 1))
+                var o = c[0].split("=")[0],
+                    n = c[0].split("=")[1];
+        }
+        angular
+            .module("appAgendamiento", [])
+            .controller("AgendamientoController", [
+                "$scope",
+                "$http",
+                "$compile",
+                function (a, c, i) {
+                    if (
+                        ((a.pattern_email = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/),
+                            (a.pattern_plate = /^[a-zA-Z]{1,3}[0-9]{1,3}$/),
+                            (a.pattern_phone = /^([0-9]{7})$|(^[0-9]{10})$/),
+                            (a.UtmFuente = ""),
+                            (a.UtmMedio = ""),
+                            (a.UtmCampana = ""),
+                            (a.dataAgen = { service: "" }),
+                            (a.Cambio = function () {
+                                e(this.city_selected), a.selectTaller(this.city_selected);
+                            }),
+                            "" != window.location.search)
+                    ) {
+                        var t,
+                            r,
+                            d = window.location.search.split("?")[1].split("&");
+                        if ("servicio_domicilio" !== d[2].split("=")[1] && d.length >= 1) {
+                            var s = d[0].split("=")[0],
+                                m = d[1].split("=")[0],
+                                l = d[2].split("=")[0];
+                            if ("utm_source" == s && "utm_medium" == m && ("utm_campaign" == l || "utm_campaign" == l)) (a.UtmFuente = d[0].split("=")[1]), (a.UtmMedio = d[1].split("=")[1]), (a.UtmCampana = d[2].split("=")[1]);
+                            else
+                                var u = d[0].split("=")[0],
+                                    _ = d[0].split("=")[1];
+                        }
+                    }
+                    var v = new Date();
+                    v.setDate(v.getDate() + 2);
+                    var p = v.getFullYear(),
+                        y = ("0" + (v.getMonth() + 1)).slice(-2),
+                        g = ("0" + v.getDate()).slice(-2);
+                    (a.minDate = p + "-" + y + "-" + g),
+                        (a.citys_array = [
+                            { id: 1, name: "Armenia", serv_dom: 0 },
+                            { id: 2, name: "Barrancabermeja", serv_dom: 0 },
+                            { id: 3, name: "Barranquilla", serv_dom: 0 },
+                            { id: 4, name: "Bogot\xe1 D.C", serv_dom: 0 },
+                            { id: 5, name: "Bucaramanga", serv_dom: 0 },
+                            { id: 6, name: "Cali", serv_dom: 0 },
+                            { id: 7, name: "Cartagena", serv_dom: 0 },
+                            { id: 8, name: "Ch\xeda", serv_dom: 0 },
+                            { id: 9, name: "C\xfacuta", serv_dom: 0 },
+                            { id: 10, name: "Ibagu\xe9", serv_dom: 0 },
+                            { id: 12, name: "Manizales", serv_dom: 0 },
+                            { id: 13, name: "Medell\xedn", serv_dom: 0 },
+                            { id: 14, name: "Monter\xeda", serv_dom: 0 },
+                            { id: 15, name: "Neiva", serv_dom: 0 },
+                            { id: 16, name: "Pasto", serv_dom: 0 },
+                            { id: 17, name: "Pereira", serv_dom: 0 },
+                            { id: 26, name: "Popay\xe1n", serv_dom: 0 },
+                            { id: 19, name: "Santa Marta", serv_dom: 0 },
+                            { id: 20, name: "Sincelejo", serv_dom: 0 },
+                            { id: 21, name: "Tunja", serv_dom: 0 },
+                            { id: 22, name: "Valledupar", serv_dom: 0 },
+                            { id: 23, name: "Villavicencio", serv_dom: 0 },
+                            { id: 24, name: "Yopal", serv_dom: 1 },
+                        ]),
+                        (a.concecionarios_random = []),
+                        (a.concecionarios = [
+                            { id_city: 1, cod_conce: 420, cod_suc: 2, name: "Colautos (Carrera 14 con 44)" },
+                            { id_city: 2, cod_conce: 270, cod_suc: 4, name: "Mayorautos (Km 1 V\xeda Bucaramanga - El Ret\xe9n)" },
+                            { id_city: 3, cod_conce: 560, cod_suc: 1, name: "Autoland (Calle 76 con 54)" },
+                            { id_city: 3, cod_conce: 560, cod_suc: 2, name: "Autoland (V\xeda 40 con 69)" },
+                            { id_city: 4, cod_conce: 330, cod_suc: 1, name: "Alciautos (Autopista Norte Calle 134)" },
+                            { id_city: 4, cod_conce: 330, cod_suc: 4, name: "Alciautos (Av. Boyac\xe1 con 19)" },
+                            { id_city: 4, cod_conce: 340, cod_suc: 2, name: "CasaToro (Carrera 30 con 22B)" },
+                            { id_city: 4, cod_conce: 340, cod_suc: 4, name: "CasaToro (Carrera 7 con 155)" },
+                            { id_city: 4, cod_conce: 340, cod_suc: 7, name: "Casatoro (Calle 170 con av. Boyac\xe1)" },
+                            { id_city: 4, cod_conce: 350, cod_suc: 1, name: "Madiautos (Av. Carrera 70 con 96 - Morato)" },
+                            { id_city: 4, cod_conce: 385, cod_suc: 1, name: "Jorge Cort\xe9s (Av. Suba con 97 A)" },
+                            { id_city: 4, cod_conce: 375, cod_suc: 1, name: "Kyoto Motors (Carrera 68 A con 20 - Salitre Plaza)" },
+                            { id_city: 5, cod_conce: 270, cod_suc: 1, name: "Mayorautos (Carrera 26 con 40)" },
+                            { id_city: 6, cod_conce: 620, cod_suc: 2, name: "Mazko (Avenida 3 N con 34)" },
+                            { id_city: 6, cod_conce: 620, cod_suc: 1, name: "Mazko (Carrera 100 con 12)" },
+                            { id_city: 6, cod_conce: 620, cod_suc: 4, name: "Mazko (Carrera 5 con 67)" },
+                            { id_city: 7, cod_conce: 300, cod_suc: 2, name: "Vard\xed (Av. Pedro de Heredia Calle 30 con 37)" },
+                            { id_city: 8, cod_conce: 300, cod_suc: 1, name: "Vard\xed (km 2.5 variante Ch\xeda-Cajic\xe1) " },
+                            { id_city: 9, cod_conce: 270, cod_suc: 2, name: "Mayorautos (Autopista Internacional V\xeda San Antonio Km 3 con 25N)" },
+                            { id_city: 10, cod_conce: 340, cod_suc: 6, name: "CasaToro (Carrera 48 S con 116)" },
+                            { id_city: 12, cod_conce: 420, cod_suc: 1, name: "Colautos (Carrera 23 con 36) " },
+                            { id_city: 13, cod_conce: 130, cod_suc: 1, name: "Automonta\xf1a (Calle 29 con 43 A)" },
+                            { id_city: 13, cod_conce: 130, cod_suc: 2, name: "Automonta\xf1a (Centro Comercial Mayorca)" },
+                            { id_city: 13, cod_conce: 130, cod_suc: 5, name: "Automontaña (Centro Comercial Unicentro)" },
+                            { id_city: 13, cod_conce: 375, cod_suc: 3, name: "Somerauto (Carrera 48 con 14)" },
+                            { id_city: 13, cod_conce: 560, cod_suc: 3, name: "Autoland(Av. El poblado)" },
+                            { id_city: 13, cod_conce: 560, cod_suc: 5, name: "Autoland(Llanogrande)" },
+                            { id_city: 14, cod_conce: 300, cod_suc: 4, name: "Vard\xed (Calle 77 con 5)" },
+                            { id_city: 15, cod_conce: 340, cod_suc: 5, name: "CasaToro (Carrera 5 con 26 S)" },
+                            { id_city: 16, cod_conce: 710, cod_suc: 1, name: "Automotriz del Sur (Av. Panamericana Calle 2 con 26)" },
+                            { id_city: 17, cod_conce: 420, cod_suc: 3, name: "Colautos (Carrera 11 Bis No. 41 - 72)" },
+                            { id_city: 25, cod_conce: 610, cod_suc: 1, name: "Mazautos " },
+                            { id_city: 26, cod_conce: 300, cod_suc: 6, name: "Vard\xed (Carrera 9 con 17 N)" },
+                            { id_city: 19, cod_conce: 300, cod_suc: 3, name: "Vard\xed (Avenida Ferrocarril No. 29 - 126)" },
+                            { id_city: 20, cod_conce: 300, cod_suc: 5, name: "Vard\xed (Transversal 28 con 27 A)" },
+                            { id_city: 21, cod_conce: 720, cod_suc: 1, name: "Carrazos (Calle 53 con 5) " },
+                            { id_city: 22, cod_conce: 270, cod_suc: 3, name: "Mayorautos (Carrera 7 A con 20 D)" },
+                            { id_city: 23, cod_conce: 340, cod_suc: 3, name: "CasaToro (Anillo Vial V\xeda Acac\xedas Km 1)" },
+                            { id_city: 24, cod_conce: 330, cod_suc: 3, name: "Alciautos (Carrera 19 con 21)" },
+                        ]);
+                    var C = location.search.split("&");
+                    if (C) {
+                        var A = C[0].split("=");
+                        (r = A[0].replace("?", "")),
+                            (t = A[1]),
+                            "servicio_domicilio" == r &&
+                            1 == t &&
+                            ((a.dataAgen.service = "Servicio Mazda en Casa"),
+                                (a.citys_array = a.citys_array.filter(function (e) {
+                                    return 0 == e.serv_dom;
+                                }))),
+                            "profesional_salud" == r && 1 == t && (a.dataAgen.service = "Profesionales de la salud");
+                    }
+                    a.filterCitys = function (e) {
+                        if (
+                            ((a.citys_array = [
+                                { id: 1, name: "Armenia", serv_dom: 0 },
+                                { id: 2, name: "Barrancabermeja", serv_dom: 0 },
+                                { id: 3, name: "Barranquilla", serv_dom: 0 },
+                                { id: 4, name: "Bogot\xe1 D.C", serv_dom: 0 },
+                                { id: 5, name: "Bucaramanga", serv_dom: 0 },
+                                { id: 6, name: "Cali", serv_dom: 0 },
+                                { id: 7, name: "Cartagena", serv_dom: 0 },
+                                { id: 8, name: "Ch\xeda", serv_dom: 0 },
+                                { id: 9, name: "C\xfacuta", serv_dom: 0 },
+                                { id: 10, name: "Ibagu\xe9", serv_dom: 0 },
+                                { id: 12, name: "Manizales", serv_dom: 0 },
+                                { id: 13, name: "Medell\xedn", serv_dom: 0 },
+                                { id: 14, name: "Monter\xeda", serv_dom: 0 },
+                                { id: 15, name: "Neiva", serv_dom: 0 },
+                                { id: 16, name: "Pasto", serv_dom: 0 },
+                                { id: 17, name: "Pereira", serv_dom: 0 },
+                                { id: 26, name: "Popay\xe1n", serv_dom: 0 },
+                                { id: 19, name: "Santa Marta", serv_dom: 0 },
+                                { id: 20, name: "Sincelejo", serv_dom: 0 },
+                                { id: 21, name: "Tunja", serv_dom: 0 },
+                                { id: 22, name: "Valledupar", serv_dom: 0 },
+                                { id: 23, name: "Villavicencio", serv_dom: 0 },
+                                { id: 24, name: "Yopal", serv_dom: 1 },
+                            ]),
+                                "Servicio Mazda en Casa" != e)
+                        )
+                            return a.citys_array;
+                        a.citys_array = a.citys_array.filter(function (e) {
+                            return 0 == e.serv_dom;
+                        });
+                    };
+                    var f = null;
+                    u &&
+                        _ &&
+                        0 !=
+                        (f = a.concecionarios.filter(function (e) {
+                            return e.cod_suc == u && e.cod_conce == _;
+                        })).length &&
+                        ((a.city_selected = f[0].id_city ? f[0].id_city : void 0), (a.conce_selected = f[0] ? f[0] : {})),
+                        "servicio" == o && ("agp" == n || "AGP" == n) && (a.dataAgen.service = "Mantenimiento programado"),
+                        (a.randomList = function (e) {
+                            return e.sort(function () {
+                                return 0.5 - Math.random();
+                            });
+                        }),
+                        (a.setConce = function () {
+                            a.concecionarios_random = a.randomList(a.concecionarios);
+                        }),
+                        a.setConce();
+                    var h = null;
+                    (a.selectTaller = function (e) {
+                        void 0 !== e &&
+                            ((a.selectConce = document.getElementById("conce_selected")),
+                                (a.selectConceList = a.concecionarios_random.filter((a) => a.id_city == e)),
+                                (a.selectConce = a.selectConceList[0]),
+                                1 == a.selectConceList.length &&
+                                ((h = a.selectConceList.filter(function (e) {
+                                    return e.id_city == a.selectConce.id_city;
+                                })),
+                                    (a.conce_selected = h[0] ? h[0] : {})));
+                    }),
+                        a.selectTaller(),
+                        (a.messValidate = ""),
+                        (a.messValidateTel = ""),
+                        (a.messValidatePlate = ""),
+                        (a.messValidateDate = ""),
+                        (a.validationMess = function (e, c, o, n, i) {
+                            return "tel" == n
+                                ? (!0 == e && !0 == c && !0 != o.minlength && (a.messValidateTel = "Ingresa un n\xfamero de tel\xe9fono"),
+                                    !0 == e && !0 == c && !0 == o.minlength && (a.messValidateTel = "Debe contener m\xednimo 7 d\xedgitos en caso de t\xe9lefono fijo, celular 10 d\xedgitos"),
+                                    !0 == e && !0 == c && !0 == o.pattern && (a.messValidateTel = "Debe contener exactamente 7 o 10 d\xedgitos"),
+                                    !0 == e && !1 == c && (a.messValidateTel = ""),
+                                    a.messValidateTel)
+                                : "plate" == n
+                                    ? (!0 == e && !0 == c && !0 == o.required && (a.messValidatePlate = "Ingresa una placa."),
+                                        !0 == e && !0 == c && !0 == o.pattern && (a.messValidatePlate = "Formato de placa incorrecto: Ejemplo  ABC123"),
+                                        !0 == e && !1 == c && (a.messValidatePlate = ""),
+                                        a.messValidatePlate)
+                                    : void 0;
+                        });
+                    var M,
+                        V = new Date(),
+                        T = V.getFullYear(),
+                        S = V.getMonth() + 1,
+                        D = S + "/" + V.getDate() + "/" + T + " " + V.toLocaleTimeString("en-US", { hour12: !0 });
+                    (D = moment((D = D.replace(".", ""))).format("M/D/YYYY h:mm:ss A")),
+                        (a.showGif = !1),
+                        (a.serviceFormAgenda = function () {
+                            (a.showGif = !0), void 0 != a.InputpolicyAcceptance ? (a.dataAgen.policyAcceptance = "0") : (a.dataAgen.policyAcceptance = "1");
+                            var e = a.citys_array.filter(function (e) {
+                                return e.id == a.city_selected;
+                            })[0];
+                            (a.dataAgen.dateCreated = D),
+                                (a.dataAgen.user = "3Ct0sP561020Rp"),
+                                (a.dataAgen.password = "{GE!/8V58%24~>v"),
+                                (a.dataAgen.hostUrl = "citasTaller"),
+                                (a.dataAgen.source = "P\xc1GINA WEB"),
+                                (a.dataAgen.dealerCode = a.conce_selected.cod_conce),
+                                (a.dataAgen.dealerBranchCode = a.conce_selected.cod_suc),
+                                (a.dataAgen.city = e.name),
+                                (a.dataAgen.dateEmailSend = D),
+                                (a.dataAgen.token = Math.random().toString(12).substring(2, 23) + Math.random().toString(12).substring(2, 23)),
+                                (a.dataAgen.ip = ipScript),
+                                (a.dataAgen.UtmFuente = a.UtmFuente),
+                                (a.dataAgen.UtmMedio = a.UtmMedio),
+                                (a.dataAgen.UtmCampana = a.UtmCampana),
+                                (a.dataAgen.estadoSend = "");
+
+                            // Verificar la URL actual y ajustar el campo service
+                            var currentUrl = window.location.href;
+                            if (currentUrl === "https://www.mazda.com.co/formularios/solicita-un-servicio/?utm_source=Mailing&utm_medium=Organico&utm_campaign=Agendar_cita_para_atender_PES3724_Reprogramacion_de_modulos&utm_id=Programa_especial_Mazda_CX-50") {
+                                a.dataAgen.service = "Agendar cita para atender PES3724 Reprogramación de módulos";
+                            } else if (currentUrl === "https://www.mazda.com.co/formularios/solicita-un-servicio/?utm_source=Mailing&utm_medium=Organico&utm_campaign=Agendar_cita_para_atender_PES5224_Reprogramacion_de_modulos&utm_id=Programa_especial_Mazda_CX-30" || currentUrl === "https://www.mazda.com.co/formularios/solicita-un-servicio/?utm_source=Mailing&utm_medium=Organico&utm_campaign=Agendar_cita_para_atender_PES5224_Reprogramacion_de_modulos&utm_id=Programa_especial_Mazda_3") {
+                                a.dataAgen.service = "Agendar cita para atender PES5224 Reprogramación de módulos";
+                            } else if(currentUrl === "https://www.mazda.com.co/formularios/solicita-un-servicio/?utm_source=Mailing&utm_medium=Organico&utm_campaign=Agendar_cita_para_atender_CES3623_Reprogramacion_de_modulos&utm_id=Programa_especial_Mazda_3" || currentUrl === "https://www.mazda.com.co/formularios/solicita-un-servicio/?utm_source=Mailing&utm_medium=Organico&utm_campaign=Agendar_cita_para_atender_CES3623_Reprogramacion_de_modulos&utm_id=Programa_especial_Mazda_CX-3"){
+                                a.dataAgen.service = "Agendar_cita_para_atender_CES3623_Reprogramacion_de_modulos";
+                            }
+                            else {
+                                a.dataAgen.service = ""; // Mantener vacío si no coincide la URL
+                            }
+                            var c = $.param(a.dataAgen);
+                            $.ajax({
+                                method: "POST",
+                                url: "https://prospectos.mazda.co/citasTallerREST?" + c,
+                                cache: !1,
+                                headers: { Accept: "*/*", "Content-Type": "application/json" },
+                                data: {},
+                                type: "json",
+                                success: function (e) {
+                                    if ((console.log(e), "OK" == e.codigo))
+                                        return (
+                                            (UrlRedirect = "/formularios/solicita-un-servicio/gracias-por-agendar-tu-cita/?utm_source=formulario_solicita_un_servicio_boton_enviar_thank_you_page&utm_medium=web&utm_campaign=organico"),
+                                            (window.location.href = UrlRedirect)
+                                        );
+                                },
+                                error: function (e) {
+                                    console.log(e);
+                                },
+                            });
+                        });
+                },
+            ])
+            .directive("onlyLetters", [
+                function () {
+                    return {
+                        require: "ngModel",
+                        link: function (e, a, c, o) {
+                            o.$parsers.push(function e(a) {
+                                var c = a.replace(/[^a-zA-ZñÑáéíóúÁÉÍÓÚ\s]/g, "");
+                                return c !== a && (o.$setViewValue(c), o.$render()), c;
+                            });
+                        },
+                    };
+                },
+            ])
+            .directive("onlyNumbers", [
+                function () {
+                    return {
+                        require: "ngModel",
+                        link: function (e, a, c, o) {
+                            o.$parsers.push(function e(a) {
+                                var c = a.replace(/\D/g, "");
+                                return c !== a && (o.$setViewValue(c), o.$render()), c;
+                            });
+                        },
+                    };
+                },
+            ]);
+    })();

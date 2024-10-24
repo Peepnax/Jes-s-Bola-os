@@ -1,0 +1,24 @@
+(function () {
+    document.addEventListener("DOMContentLoaded", function () {
+        //Code        
+
+        function addClassToTestDriveButton() {
+            // Obtén todos los elementos con la clase 'mxp-main-headingLink-BmoKz'
+            const elements = document.querySelectorAll('.mxp-main-headingLink-BmoKz');
+
+            // Itera sobre los elementos
+            elements.forEach(element => {
+                const text = element.textContent.trim();
+                if (text === 'Agenda tu test drive' || text === 'Solicita información') {
+                    // Agrega la clase 'testdrive-button-all' al elemento
+                    element.classList.add('testdrive-button-all');
+                }
+            });
+        }
+
+        // Llama a la función para realizar la acción
+        addClassToTestDriveButton();
+
+    });
+
+}());

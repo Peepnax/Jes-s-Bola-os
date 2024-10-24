@@ -1,0 +1,121 @@
+$(document).ready(function () {
+  $("#content-map").html(`
+    <div class="form map-form">
+      <div class="control">
+        <label for="">Por favor, introduce una ubicación</label>
+        <select name="city" id="city" ng-model="city_selected" required>
+          <option ng-repeat="citys in citys_array" ng-value="citys.id">{{citys.name}}</option>
+        </select>
+      </div>
+      <div class="control">
+        <label for="">Elige una categoría</label>
+        <label class="tag-filter" ng-class="{'active': filters.serv_venta }" ng-click="checkOne('serv_venta')">
+          <span>Ventas</span>
+        </label>
+        <label class="tag-filter" ng-class="{'active': filters.serv_taller }" ng-click="checkOne('serv_taller')">
+          <span>Taller</span>
+        </label>
+      </div>
+    </div>
+  
+    <ng-map default-style="true" center="{{getCenter()}}" zoom="12">
+      <marker ng-repeat="concessionarie in connFiltered()" class="marker{{concessionarie.id}}" id="foo{{concessionarie.id}}" icon="https://www.mazda.com.co/globalassets/maps/pointericon.png" position="{{concessionarie.lat}},{{concessionarie.long}}" on-click="showSites(event, concessionarie)"></marker>
+      <info-window id="bar" max-width="700">
+        <div ng-non-bindable>
+          <div id="siteNotice"></div>
+          <h1 id="firstHeading" class="firstHeading">{{con.name}}</h1>
+          <div id="bodyContent">
+            <div class="map-list-info" style="display:inline-block" ng-if="con.check_osv == true">
+              Ventas:
+              <span ng-if="con.osv == true" style="color:#008F39; display:inline-block; font-weight: bold;"><u>{{con.open_showcase}}</u></span>
+              <span ng-if="con.osv == false" style="color:#910A2D; display:inline-block; font-weight: bold;"><u>{{con.open_showcase}}</u></span>
+            </div>
+            <div class="map-list-info" style="display:inline-block" ng-if="con.osv == true ">
+              Horario de atención: {{con.schedule_showcase}}
+            </div>
+            <p ng-show="con.dir_vent">Dirección ventas: {{con.dir_vent}}</p>
+            <p ng-show="con.tel_ventas">Teléfono: {{con.tel_ventas}}</p>
+            <p ng-show="con.cel_ventas">Celular: {{con.cel_ventas}}</p>
+            <p ng-show="con.whatp_ventas">WhatsApp: {{con.whatp_ventas}}</p>
+            <div class="map-list-info"  ng-if="con.check_owv == true">
+              Taller:
+              <span ng-if="con.owv == true" style="color:#008F39; display:inline-block; font-weight: bold;">
+                <u>{{con.open_workshop}}</u>
+              </span>
+              <span ng-if="con.owv == false" style="color:#910A2D; display:inline-block; font-weight: bold;">
+                <u>{{con.open_workshop}}</u>
+              </span>
+            </div>
+            <div class="map-list-info" style="display:inline-block" ng-if="con.owv == true ">
+              Horario de atención: {{con.schedule_workshop}}
+            </div>
+            <p ng-show="con.sitio_web">Sitio web: <a href="{{con.sitio_web}}" target="_blank">{{con.sitio_web}}</a></p>
+            <p ng-show="con.Asesor"><strong>Asesor Mazda Collection:</strong><a href="{{con.link_whatsapp_asesor}}" target="_blank" style="color: green !important;">{{con.Asesor}}</a></p>
+          </div>
+        </div>
+      </info-window>
+    </ng-map>
+  
+    <div class="map-list">
+      <div class="map-list-item" ng-repeat="concessionarie in connFiltered() | orderBy:'name'" id="foo" ng-click="customShowSites($event, concessionarie)">
+        <div class="map-list-title" ng-show="concessionarie.name">{{ concessionarie.name }}</div>
+        <div class="map-list-info" style="display:inline-block" ng-if="concessionarie.check_osv == true">
+          Ventas:
+          <span ng-if="concessionarie.osv == true" style="color:#008F39; display:inline-block; font-weight: bold;"><u>{{concessionarie.open_showcase}}</u></span>
+          <span ng-if="concessionarie.osv == false" style="color:#910A2D; display:inline-block; font-weight: bold;"><u>{{concessionarie.open_showcase}}</u></span>
+        </div>
+        <div class="map-list-info" ng-show="concessionarie.dir_vent">Dirección Ventas: {{ concessionarie.dir_vent }}</div>
+        <div class="map-list-info" ng-show="concessionarie.tel_ventas">Teléfono: {{ concessionarie.tel_ventas }}</div>
+        <div class="map-list-info" ng-show="concessionarie.cel_ventas">Celular: {{ concessionarie.cel_ventas }}</div>
+        <div class="map-list-info" ng-show="concessionarie.whatp_ventas">WhatsApp: {{ concessionarie.whatp_ventas }}</div>
+        <div class="map-list-info" style="display:inline-block" ng-if="concessionarie.osv == true ">
+          Horario de atención: {{concessionarie.schedule_showcase}}
+        </div>
+        <div class="map-list-info" ng-if="concessionarie.Cita_Previa != false ">
+          Cita previa: {{ concessionarie.Cita_Previa }}
+        </div>
+        <div class="map-list-info"  ng-if="concessionarie.check_owv == true">
+          Taller:
+          <span ng-if="concessionarie.owv == true" style="color:#008F39; display:inline-block; font-weight: bold;"><u>{{concessionarie.open_workshop}}</u></span>
+          <span ng-if="concessionarie.owv == false" style="color:#910A2D; display:inline-block; font-weight: bold;"><u>{{concessionarie.open_workshop}}</u></span>
+        </div>
+        <div class="map-list-info" ng-if="concessionarie.dir_taller != false">
+          Dirección Taller: {{ concessionarie.dir_taller }}
+        </div>
+        <div class="map-list-info" ng-if="concessionarie.tel_taller != false">
+          Teléfono Taller: {{ concessionarie.tel_taller }}
+        </div>
+        <div class="map-list-info" style="display:inline-block" ng-if="concessionarie.owv == true ">
+          Horario de atención: {{concessionarie.schedule_workshop}}
+        </div>
+        <div class="map-list-info" ng-if="concessionarie.email_ventas != false">
+          Email: {{ concessionarie.email_ventas }}
+        </div>
+        <div class="map-list-info" ng-if="concessionarie.sitio_web != false">
+          Sitio Web: <a href="{{concessionarie.sitio_web}}" target="_blank">{{ concessionarie.sitio_web }}</a>
+        </div>
+        <div class="map-list-info" ng-if="concessionarie.Asesor != false"><strong>
+        Asesor Mazda Collection: </strong>
+        <a href="{{concessionarie.link_whatsapp_asesor}}" target="_blank" style="color: green !important;">{{ concessionarie.Asesor }}</a>
+        </div>
+        <div ng-show="concessionarie.id == 22 || concessionarie.id == 51">
+          <p style="font-size: 11px; line-height:17px">
+            *Motovalle dejará de pertenecer a la red de concesionarios Mazda, a partir del 1 de abril de 2022.
+            Contamos con 38 vitrinas y 37 talleres de servicio a nivel nacional, preparados para ofrecer atención especializada.
+          </p>
+        </div>
+      </div>
+    </div>
+  
+    <div class="map-actions">
+      <div ng-if="filters.serv_venta == false" class="mxp-cta-btn-wrapper-x73nV buttons mxp-cta-btn-type-primary-36X1o mxp-cta-btn-theme-light-xtH-2 mxp-cta-full-mobile-2wcl9" style="margin: 10px;">
+        <a class="custom-btn mxp-cta-button-2A2qd" href="/formularios/solicita-un-servicio/?utm_source=encuentra_un_concesionario_boton_solicita_un_servicio&utm_medium=web&utm_campaign=organico" target="_blank">Solicita un Servicio</a>
+      </div>
+      <div ng-if="filters.serv_taller == false" class="mxp-cta-btn-wrapper-x73nV buttons mxp-cta-btn-type-primary-36X1o mxp-cta-btn-theme-light-xtH-2 mxp-cta-full-mobile-2wcl9" style="margin: 10px;">
+        <a class="custom-btn mxp-cta-button-2A2qd" href="/formularios/solicita-un-test-drive/?utm_source=encuentra_un_concesionario_boton_contacta_un_asesor&utm_medium=web&utm_campaign=organico" target="_blank">Contacta Un Asesor</a>
+      </div>
+    </div>
+  `);
+
+  angular.bootstrap(document.getElementById("conn"), ["appMaps"]);
+});

@@ -1,0 +1,1 @@
+﻿function AddDownloadAttribute(){$("a[data-download-title]").each(function(t){$(this).attr("download",$(this).data("download-title"))})}$(document).ready(function(){AddDownloadAttribute()}),$(window).bind("resize",function(t){AddDownloadAttribute()});

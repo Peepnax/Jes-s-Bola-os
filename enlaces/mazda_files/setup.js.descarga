@@ -1,0 +1,13 @@
+
+window.mxp_aft='ojJI7iFgjz__gMhGW2zVZgP87WTyrrsgfYyxZK3vMKtUXsCoN4ytGclCArG9jCjgOpQGzgHaO22X8jvC3DcQqVSBs7A-IvxjBomESVXaeg41';
+
+window.mioxConfig.cookieName='';
+window.mioxConfig.expiryPeriod='0';
+window.mioxConfig.printLogo='/assets/images/pdf_print_logo.png';
+window.mioxConfig.printStyleSheet='/assets/styles/print.css';
+window.mioxConfig.printZoomZoom='/assets/images/pdf_print_zoomzoom.png';
+window.mioxConfig.defaultGDPROptIn='True';
+window.mioxConfig.baseUrl='https://gws-integration-mazda.syzygy.de/';
+window.mioxConfig.baseStyleUrl='https://gws-integration-mazda.syzygy.de/';
+window.mioxConfig.locale='en';
+window.mioxConfig.latestPrivacyVersion={version:''};
